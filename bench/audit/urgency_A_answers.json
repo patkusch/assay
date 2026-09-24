@@ -1,0 +1,907 @@
+{
+ "urgency-test-001": {
+  "label": "1",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-002": {
+  "label": "5",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-003": {
+  "label": "5",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-dev-001": {
+  "label": "4",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-004": {
+  "label": "5",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-005": {
+  "label": "1",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-006": {
+  "label": "5",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-007": {
+  "label": "4",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-008": {
+  "label": "3",
+  "ambiguous": true,
+  "note": "2 vs 3: reset emails missing, no workaround, still logged in"
+ },
+ "urgency-test-009": {
+  "label": "3",
+  "ambiguous": true,
+  "note": "2 vs 3: wrong late fee, single account"
+ },
+ "urgency-test-010": {
+  "label": "4",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-011": {
+  "label": "1",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-012": {
+  "label": "5",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-dev-002": {
+  "label": "5",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-013": {
+  "label": "2",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-014": {
+  "label": "4",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-015": {
+  "label": "5",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-016": {
+  "label": "3",
+  "ambiguous": true,
+  "note": "2 vs 3: sandbox data, restore by end of week"
+ },
+ "urgency-dev-003": {
+  "label": "3",
+  "ambiguous": true,
+  "note": "3 vs 4: dev blocked but release two weeks away"
+ },
+ "urgency-test-017": {
+  "label": "3",
+  "ambiguous": true,
+  "note": "2 vs 3: can rewrite, wants restore tomorrow"
+ },
+ "urgency-dev-004": {
+  "label": "1",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-018": {
+  "label": "3",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-019": {
+  "label": "2",
+  "ambiguous": true,
+  "note": "2 vs 3: recreate this week, no deadline"
+ },
+ "urgency-test-020": {
+  "label": "2",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-dev-005": {
+  "label": "4",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-dev-006": {
+  "label": "2",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-021": {
+  "label": "2",
+  "ambiguous": true,
+  "note": "2 vs 3: cosmetic, wait until tomorrow"
+ },
+ "urgency-dev-007": {
+  "label": "3",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-dev-008": {
+  "label": "5",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-022": {
+  "label": "2",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-023": {
+  "label": "5",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-024": {
+  "label": "5",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-dev-009": {
+  "label": "2",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-025": {
+  "label": "3",
+  "ambiguous": true,
+  "note": "2 vs 3: half board, search workaround"
+ },
+ "urgency-test-026": {
+  "label": "1",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-dev-010": {
+  "label": "4",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-dev-011": {
+  "label": "2",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-027": {
+  "label": "5",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-dev-012": {
+  "label": "1",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-dev-013": {
+  "label": "1",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-dev-014": {
+  "label": "5",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-dev-015": {
+  "label": "4",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-028": {
+  "label": "1",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-dev-016": {
+  "label": "2",
+  "ambiguous": true,
+  "note": "2 vs 3: phone login fails, laptop works"
+ },
+ "urgency-test-029": {
+  "label": "1",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-030": {
+  "label": "3",
+  "ambiguous": true,
+  "note": "2 vs 3: wrong tax ID, ten days to fix"
+ },
+ "urgency-dev-017": {
+  "label": "2",
+  "ambiguous": true,
+  "note": "1 vs 2: demo data wrong, told to ignore"
+ },
+ "urgency-dev-018": {
+  "label": "5",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-031": {
+  "label": "5",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-032": {
+  "label": "5",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-033": {
+  "label": "4",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-034": {
+  "label": "2",
+  "ambiguous": true,
+  "note": "2 vs 3: rebuild filter, restore this week"
+ },
+ "urgency-test-035": {
+  "label": "1",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-dev-019": {
+  "label": "2",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-036": {
+  "label": "2",
+  "ambiguous": true,
+  "note": "1 vs 2: cosmetic only"
+ },
+ "urgency-dev-020": {
+  "label": "5",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-dev-021": {
+  "label": "2",
+  "ambiguous": true,
+  "note": "1 vs 2: preference with easy workaround"
+ },
+ "urgency-test-037": {
+  "label": "4",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-dev-022": {
+  "label": "3",
+  "ambiguous": true,
+  "note": "2 vs 3: duplicate receipt line, one charge"
+ },
+ "urgency-test-038": {
+  "label": "2",
+  "ambiguous": true,
+  "note": "2 vs 3: manage without, this week"
+ },
+ "urgency-dev-023": {
+  "label": "4",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-039": {
+  "label": "1",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-040": {
+  "label": "5",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-041": {
+  "label": "1",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-042": {
+  "label": "5",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-dev-024": {
+  "label": "2",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-043": {
+  "label": "4",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-dev-025": {
+  "label": "3",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-dev-026": {
+  "label": "5",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-044": {
+  "label": "3",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-045": {
+  "label": "2",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-046": {
+  "label": "1",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-047": {
+  "label": "4",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-dev-027": {
+  "label": "2",
+  "ambiguous": true,
+  "note": "1 vs 2: minor cosmetic border"
+ },
+ "urgency-dev-028": {
+  "label": "1",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-048": {
+  "label": "5",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-dev-029": {
+  "label": "3",
+  "ambiguous": true,
+  "note": "2 vs 3: only mine, tomorrow fine, sync stopped"
+ },
+ "urgency-test-049": {
+  "label": "3",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-050": {
+  "label": "4",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-051": {
+  "label": "5",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-052": {
+  "label": "1",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-053": {
+  "label": "2",
+  "ambiguous": true,
+  "note": "1 vs 2: small typo"
+ },
+ "urgency-test-054": {
+  "label": "3",
+  "ambiguous": true,
+  "note": "2 vs 3: one customer, order history hidden"
+ },
+ "urgency-test-055": {
+  "label": "4",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-056": {
+  "label": "4",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-057": {
+  "label": "5",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-dev-030": {
+  "label": "3",
+  "ambiguous": true,
+  "note": "2 vs 3: cannot open template, deadline three weeks"
+ },
+ "urgency-test-058": {
+  "label": "4",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-059": {
+  "label": "3",
+  "ambiguous": true,
+  "note": "2 vs 3: missing credit, fix this week"
+ },
+ "urgency-test-060": {
+  "label": "3",
+  "ambiguous": true,
+  "note": "2 vs 3: import fails, needed next week"
+ },
+ "urgency-dev-031": {
+  "label": "2",
+  "ambiguous": true,
+  "note": "1 vs 2: typo on pricing page"
+ },
+ "urgency-test-061": {
+  "label": "2",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-062": {
+  "label": "5",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-063": {
+  "label": "3",
+  "ambiguous": true,
+  "note": "2 vs 3: billed extra seat, reply in days"
+ },
+ "urgency-test-064": {
+  "label": "1",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-065": {
+  "label": "4",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-066": {
+  "label": "1",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-067": {
+  "label": "2",
+  "ambiguous": true,
+  "note": "2 vs 3/5: security weakness, no abuse seen"
+ },
+ "urgency-test-068": {
+  "label": "2",
+  "ambiguous": true,
+  "note": "1 vs 2: blurry logo, cosmetic"
+ },
+ "urgency-test-069": {
+  "label": "4",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-dev-032": {
+  "label": "2",
+  "ambiguous": true,
+  "note": "2 vs 3: can ask colleague directly, day's wait"
+ },
+ "urgency-dev-033": {
+  "label": "4",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-070": {
+  "label": "3",
+  "ambiguous": true,
+  "note": "2 vs 3: wrong company name, month-end need"
+ },
+ "urgency-test-071": {
+  "label": "2",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-072": {
+  "label": "5",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-073": {
+  "label": "4",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-dev-034": {
+  "label": "2",
+  "ambiguous": true,
+  "note": "2 vs 3: banner only, keeps working"
+ },
+ "urgency-test-074": {
+  "label": "2",
+  "ambiguous": true,
+  "note": "2 vs 3: sync wrong, manual double check"
+ },
+ "urgency-dev-035": {
+  "label": "5",
+  "ambiguous": true,
+  "note": "4 vs 5: wrong bank details to 2,000 customers"
+ },
+ "urgency-test-075": {
+  "label": "2",
+  "ambiguous": true,
+  "note": "1 vs 2: duplicates ignorable"
+ },
+ "urgency-dev-036": {
+  "label": "5",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-076": {
+  "label": "2",
+  "ambiguous": true,
+  "note": "2 vs 3: views broken, default works"
+ },
+ "urgency-test-077": {
+  "label": "4",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-078": {
+  "label": "4",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-dev-037": {
+  "label": "5",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-dev-038": {
+  "label": "4",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-079": {
+  "label": "1",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-080": {
+  "label": "5",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-081": {
+  "label": "4",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-dev-039": {
+  "label": "1",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-dev-040": {
+  "label": "5",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-082": {
+  "label": "5",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-083": {
+  "label": "5",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-084": {
+  "label": "4",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-085": {
+  "label": "2",
+  "ambiguous": true,
+  "note": "1 vs 2: missing address line on receipt"
+ },
+ "urgency-test-086": {
+  "label": "4",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-087": {
+  "label": "2",
+  "ambiguous": true,
+  "note": "2 vs 3: VPN crash, office network workaround"
+ },
+ "urgency-test-088": {
+  "label": "2",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-089": {
+  "label": "2",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-090": {
+  "label": "2",
+  "ambiguous": true,
+  "note": "1 vs 2: low-rated header, no login pages"
+ },
+ "urgency-test-091": {
+  "label": "4",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-dev-041": {
+  "label": "3",
+  "ambiguous": true,
+  "note": "2 vs 3 vs 5: security weakness, no abuse, this week"
+ },
+ "urgency-test-092": {
+  "label": "3",
+  "ambiguous": true,
+  "note": "2 vs 3: $60 invoice difference, no rush"
+ },
+ "urgency-test-093": {
+  "label": "1",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-dev-042": {
+  "label": "4",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-dev-043": {
+  "label": "1",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-094": {
+  "label": "2",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-dev-044": {
+  "label": "2",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-095": {
+  "label": "3",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-dev-045": {
+  "label": "2",
+  "ambiguous": true,
+  "note": "2 vs 3: email workaround, day's wait"
+ },
+ "urgency-dev-046": {
+  "label": "4",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-dev-047": {
+  "label": "1",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-dev-048": {
+  "label": "1",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-096": {
+  "label": "2",
+  "ambiguous": true,
+  "note": "1 vs 2: missing timestamps, cosmetic"
+ },
+ "urgency-test-097": {
+  "label": "5",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-098": {
+  "label": "5",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-dev-049": {
+  "label": "5",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-099": {
+  "label": "4",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-100": {
+  "label": "2",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-101": {
+  "label": "5",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-102": {
+  "label": "2",
+  "ambiguous": true,
+  "note": "1 vs 2: wrong-language link, switch exists"
+ },
+ "urgency-test-103": {
+  "label": "1",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-104": {
+  "label": "4",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-dev-050": {
+  "label": "1",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-105": {
+  "label": "4",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-106": {
+  "label": "1",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-107": {
+  "label": "5",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-dev-051": {
+  "label": "1",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-108": {
+  "label": "2",
+  "ambiguous": true,
+  "note": "1 vs 2: grey weekend, legible"
+ },
+ "urgency-test-109": {
+  "label": "1",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-110": {
+  "label": "3",
+  "ambiguous": true,
+  "note": "2 vs 3: repeat $15 charge, no rush"
+ },
+ "urgency-dev-052": {
+  "label": "5",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-111": {
+  "label": "2",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-112": {
+  "label": "2",
+  "ambiguous": true,
+  "note": "1 vs 2: progress bar cosmetic"
+ },
+ "urgency-test-113": {
+  "label": "5",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-dev-053": {
+  "label": "3",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-114": {
+  "label": "2",
+  "ambiguous": true,
+  "note": "2 vs 3: mobile blocked, web fine"
+ },
+ "urgency-test-115": {
+  "label": "2",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-116": {
+  "label": "4",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-117": {
+  "label": "5",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-118": {
+  "label": "4",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-119": {
+  "label": "1",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-dev-054": {
+  "label": "5",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-dev-055": {
+  "label": "4",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-120": {
+  "label": "4",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-121": {
+  "label": "2",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-dev-056": {
+  "label": "2",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-122": {
+  "label": "3",
+  "ambiguous": true,
+  "note": "2 vs 3: one person, work continues"
+ },
+ "urgency-test-123": {
+  "label": "5",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-dev-057": {
+  "label": "2",
+  "ambiguous": false,
+  "note": ""
+ },
+ "urgency-test-124": {
+  "label": "4",
+  "ambiguous": false,
+  "note": ""
+ }
+}

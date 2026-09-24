@@ -1,0 +1,897 @@
+{
+ "phishing-dev-001": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-002": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-001": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-002": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-003": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-004": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-003": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-005": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-004": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-005": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-006": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-006": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-007": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-008": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-007": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-009": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-008": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-009": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-010": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-010": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-011": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-011": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-012": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-013": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-012": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-013": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-014": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-015": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-016": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-017": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-018": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-014": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-019": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-020": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-021": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-022": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-023": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-024": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-015": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-025": {
+  "label": "yes",
+  "ambiguous": true,
+  "note": "Ticket reopen login on lookalike domain; could be legit helpdesk"
+ },
+ "phishing-dev-016": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-026": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-027": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-028": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-029": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-017": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-030": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-031": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-018": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-032": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-033": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-034": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-035": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-019": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-036": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-020": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-037": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-038": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-021": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-022": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-023": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-039": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-024": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-025": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-026": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-040": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-041": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-027": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-028": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-029": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-042": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-043": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-030": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-044": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-031": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-045": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-046": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-047": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-048": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-032": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-049": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-050": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-051": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-052": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-033": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-034": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-053": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-054": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-055": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-035": {
+  "label": "yes",
+  "ambiguous": true,
+  "note": "Internal-domain payroll bank change asking no call; could be genuine"
+ },
+ "phishing-dev-036": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-056": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-057": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-058": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-059": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-060": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-037": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-061": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-062": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-063": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-064": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-038": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-065": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-066": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-039": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-067": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-040": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-068": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-069": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-070": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-071": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-041": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-042": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-072": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-073": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-074": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-043": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-075": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-076": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-077": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-078": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-044": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-079": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-080": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-081": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-045": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-082": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-046": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-083": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-084": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-085": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-086": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-087": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-047": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-048": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-049": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-088": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-050": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-089": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-090": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-091": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-092": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-051": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-093": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-094": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-052": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-095": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-053": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-096": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-097": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-054": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-098": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-055": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-099": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-100": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-101": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-102": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-056": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-057": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-103": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-058": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-104": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-105": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-106": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-107": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-108": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-109": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-110": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-111": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-112": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-113": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-059": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-114": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-115": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-116": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-117": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-118": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-060": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-119": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ }
+}

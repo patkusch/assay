@@ -1,0 +1,902 @@
+{
+ "phishing-test-120": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-061": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-121": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-122": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-123": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-124": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-125": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-126": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-127": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-128": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-062": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-129": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-130": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-063": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-064": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-131": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-132": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-133": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-065": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-066": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-134": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-067": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-068": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-135": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-069": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-070": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-136": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-137": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-071": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-138": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-072": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-139": {
+  "label": "no",
+  "ambiguous": true,
+  "note": "Urgent leave verification, no link; probably legitimate HR"
+ },
+ "phishing-dev-073": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-074": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-140": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-141": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-142": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-143": {
+  "label": "yes",
+  "ambiguous": true,
+  "note": "Discloses not your registrar; overpriced solicitation, deceptive"
+ },
+ "phishing-test-144": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-145": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-075": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-146": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-147": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-148": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-076": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-149": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-150": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-151": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-152": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-153": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-154": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-155": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-156": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-157": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-158": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-159": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-160": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-077": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-161": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-162": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-078": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-163": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-079": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-080": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-164": {
+  "label": "yes",
+  "ambiguous": true,
+  "note": "Training login on lookalike-ish domain; could be genuine vendor"
+ },
+ "phishing-test-165": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-166": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-167": {
+  "label": "yes",
+  "ambiguous": true,
+  "note": "Bank change request; no proof it is fake, classic invoice fraud"
+ },
+ "phishing-dev-081": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-168": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-169": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-082": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-170": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-171": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-083": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-172": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-084": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-173": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-174": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-175": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-085": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-086": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-176": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-177": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-178": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-179": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-087": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-180": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-088": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-181": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-089": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-090": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-182": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-091": {
+  "label": "yes",
+  "ambiguous": true,
+  "note": "Solicitor account change; no proof fake, classic conveyancing fraud"
+ },
+ "phishing-test-183": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-092": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-184": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-185": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-186": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-187": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-188": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-093": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-189": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-190": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-094": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-095": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-191": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-192": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-193": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-194": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-096": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-097": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-195": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-196": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-197": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-098": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-198": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-199": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-200": {
+  "label": "yes",
+  "ambiguous": true,
+  "note": "Internal IT asks to approve MFA prompts; claimed test"
+ },
+ "phishing-test-201": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-099": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-100": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-202": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-101": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-102": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-203": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-204": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-205": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-206": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-207": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-208": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-103": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-104": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-209": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-105": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-106": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-107": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-210": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-211": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-212": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-213": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-214": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-215": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-108": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-109": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-216": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-217": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-218": {
+  "label": "yes",
+  "ambiguous": true,
+  "note": "Bank change in attached PDF; no proof it is fake, invoice fraud pattern"
+ },
+ "phishing-test-219": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-220": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-110": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-221": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-222": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-223": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-224": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-225": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-226": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-227": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-111": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-228": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-112": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-113": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-114": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-115": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-229": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-116": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-230": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-231": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-232": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-233": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-117": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-234": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-235": {
+  "label": "yes",
+  "ambiguous": true,
+  "note": "Vendor onboarding asking bank, tax ID, ID scan; could be genuine"
+ },
+ "phishing-dev-118": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-119": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-dev-120": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-236": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-237": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-238": {
+  "label": "yes",
+  "ambiguous": false,
+  "note": ""
+ },
+ "phishing-test-239": {
+  "label": "no",
+  "ambiguous": false,
+  "note": ""
+ }
+}

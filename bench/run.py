@@ -363,8 +363,12 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--limit", type=int, default=0, help="only the first N items of each split (quick runs)")
     ap.add_argument("--timeout", type=float, default=120.0)
     ap.add_argument("--no-baseline", action="store_true", help="skip the generate-and-parse baseline")
+    ap.add_argument("--tasks-dir", default=None, help="folder with tasks.json and <task>.jsonl (default bench/tasks; v2 set is bench/tasks_v2)")
     ap.add_argument("--out", default=None, help="receipts path; default bench/receipts/<backend>-<model>.json")
     args = ap.parse_args(argv)
+    if args.tasks_dir:
+        global TASKS_DIR
+        TASKS_DIR = (BENCH_DIR.parent / args.tasks_dir).resolve() if not Path(args.tasks_dir).is_absolute() else Path(args.tasks_dir)
 
     names = None if args.tasks == "all" else [t.strip() for t in args.tasks.split(",") if t.strip()]
     tasks = load_tasks(names, args.limit or None)

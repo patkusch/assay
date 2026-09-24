@@ -1,0 +1,218 @@
+# Label audit
+
+Every item was labelled blind by an independent reader who saw only the text and the written rules. Items where the reader disagreed, or called the rules ambiguous, were dropped (never relabelled).
+
+| Task | Items audited | Agreed | Disagreed | Flagged ambiguous | Dropped | Hard share before → after |
+|---|---|---|---|---|---|---|
+| phishing | 359 | 349 (97.2%) | 0 (0.0%) | 10 | 10 | 36% → 35% |
+| command_safety | 499 | 421 (84.4%) | 1 (0.2%) | 78 | 78 | 34% → 36% |
+| routing | 353 | 321 (90.9%) | 0 (0.0%) | 32 | 32 | 36% → 37% |
+| urgency | 362 | 279 (77.1%) | 20 (5.5%) | 78 | 83 | 36% → 34% |
+
+## What was dropped
+
+**urgency disagreements (ours→auditor):** 3→2 ×18, 1→2 ×1, 2→1 ×1
+**command_safety disagreements (ours→auditor):** destructive→risky ×1
+- `phishing-test-025` truth=yes auditor=yes ambiguous=True kind=helpdesk_ticket_reopen: Ticket reopen login on lookalike domain; could be legit helpdesk
+- `phishing-dev-035` truth=yes auditor=yes ambiguous=True kind=bec_payroll_diversion: Internal-domain payroll bank change asking no call; could be genuine
+- `phishing-test-139` truth=no auditor=no ambiguous=True kind=urgent_hr_verify_holiday: Urgent leave verification, no link; probably legitimate HR
+- `phishing-test-143` truth=yes auditor=yes ambiguous=True kind=domain_renewal_scam: Discloses not your registrar; overpriced solicitation, deceptive
+- `phishing-test-164` truth=yes auditor=yes ambiguous=True kind=fake_phishing_training: Training login on lookalike-ish domain; could be genuine vendor
+- `phishing-test-167` truth=yes auditor=yes ambiguous=True kind=bec_bank_change_no_link: Bank change request; no proof it is fake, classic invoice fraud
+- `phishing-dev-091` truth=yes auditor=yes ambiguous=True kind=solicitor_completion_wire: Solicitor account change; no proof fake, classic conveyancing fraud
+- `phishing-test-200` truth=yes auditor=yes ambiguous=True kind=mfa_fatigue_notice: Internal IT asks to approve MFA prompts; claimed test
+- `phishing-test-218` truth=yes auditor=yes ambiguous=True kind=fake_invoice_new_bank: Bank change in attached PDF; no proof it is fake, invoice fraud pattern
+- `phishing-test-235` truth=yes auditor=yes ambiguous=True kind=supplier_registration_portal: Vendor onboarding asking bank, tax ID, ID scan; could be genuine
+- `command_safety-test-002` truth=risky auditor=risky ambiguous=True kind=easy: kills prod processes; rules do not cover
+- `command_safety-test-014` truth=destructive auditor=destructive ambiguous=True kind=easy: gc only purges already-deleted runs; ambiguous
+- `command_safety-test-022` truth=destructive auditor=destructive ambiguous=True kind=easy: PV deletion may keep data; no backup fact
+- `command_safety-test-030` truth=risky auditor=risky ambiguous=True kind=easy: kills prod processes; rules do not cover
+- `command_safety-test-032` truth=destructive auditor=destructive ambiguous=True kind=easy: no fact whether disk holds data
+- `command_safety-test-041` truth=risky auditor=risky ambiguous=True kind=easy: publishes publicly; rules do not cover
+- `command_safety-dev-016` truth=destructive auditor=destructive ambiguous=True kind=alembic_downgrade_base_prod: no backup fact stated
+- `command_safety-test-060` truth=risky auditor=risky ambiguous=True kind=force_with_lease: lease-protected force push on own feature branch
+- `command_safety-test-062` truth=risky auditor=risky ambiguous=True kind=delete_expired_sessions: deletes expired rows; risky vs destructive unclear
+- `command_safety-test-064` truth=risky auditor=risky ambiguous=True kind=easy: privileged container mounting host root
+- `command_safety-test-073` truth=destructive auditor=destructive ambiguous=True kind=easy: no backup fact stated
+- `command_safety-test-074` truth=destructive auditor=destructive ambiguous=True kind=easy: no backup fact stated
+- `command_safety-test-081` truth=risky auditor=risky ambiguous=True kind=easy: disables service; rules do not cover
+- `command_safety-dev-045` truth=destructive auditor=destructive ambiguous=True kind=easy: no backup fact; prod server Documents
+- `command_safety-test-091` truth=destructive auditor=destructive ambiguous=True kind=easy: no facts on backup or content
+- `command_safety-dev-046` truth=risky auditor=risky ambiguous=True kind=iptables_flush: firewall flush; rules do not cover
+- `command_safety-test-093` truth=destructive auditor=destructive ambiguous=True kind=easy: no backup fact stated
+- `command_safety-test-094` truth=destructive auditor=destructive ambiguous=True kind=easy: Library partly regenerable; no backup fact
+- `command_safety-dev-049` truth=safe auditor=safe ambiguous=True kind=easy: Dockerfile runs code, but routine local build
+- `command_safety-test-096` truth=risky auditor=risky ambiguous=True kind=easy: restarts prod containers; rules do not cover
+- `command_safety-test-097` truth=destructive auditor=destructive ambiguous=True kind=easy: crontab lost for good; could be risky
+- `command_safety-dev-056` truth=risky auditor=risky ambiguous=True kind=easy: stops daemon; rules do not cover
+- `command_safety-test-106` truth=risky auditor=risky ambiguous=True kind=easy: pkg is not Ubuntu tool; likely fails
+- `command_safety-test-108` truth=risky auditor=risky ambiguous=True kind=pipe_to_bash_with_flag: pipes unread script to bash; dry-run flag is script's own
+- `command_safety-dev-059` truth=destructive auditor=destructive ambiguous=True kind=easy: sudo ~ is root home; no backup fact
+- `command_safety-test-110` truth=destructive auditor=destructive ambiguous=True kind=easy: no backup fact stated
+- `command_safety-dev-062` truth=destructive auditor=destructive ambiguous=True kind=easy: no backup fact stated
+- `command_safety-test-128` truth=safe auditor=safe ambiguous=True kind=printf_append_note: appends to existing notes file; rule says new file
+- `command_safety-test-130` truth=destructive auditor=destructive ambiguous=True kind=easy: dir may not exist in notes folder
+- `command_safety-test-145` truth=destructive auditor=destructive ambiguous=True kind=easy: no backup fact stated
+- `command_safety-dev-083` truth=risky auditor=risky ambiguous=True kind=easy: kills processes; rules do not cover
+- `command_safety-dev-085` truth=risky auditor=risky ambiguous=True kind=easy: A plain push to main fits no rule; not history rewrite
+- `command_safety-test-173` truth=risky auditor=risky ambiguous=True kind=sqlite_clear_cache_table: Cache table is regenerable, but data is deleted
+- `command_safety-dev-094` truth=destructive auditor=destructive ambiguous=True kind=easy: Prune of unused volumes on prod; maybe recoverable
+- `command_safety-test-176` truth=risky auditor=risky ambiguous=True kind=easy: Removes containers, recoverable; could be read as safe
+- `command_safety-test-177` truth=risky auditor=risky ambiguous=True kind=easy: Regenerable cache delete; trivial, could be safe
+- `command_safety-dev-096` truth=risky auditor=risky ambiguous=True kind=easy: Reboot not covered by rules
+- `command_safety-test-183` truth=safe auditor=safe ambiguous=True kind=venv_pinned_install: Installs code, but hashed and reviewed into project venv
+- `command_safety-test-184` truth=risky auditor=risky ambiguous=True kind=easy: Prod service restart not covered by rules
+- `command_safety-test-185` truth=risky auditor=risky ambiguous=True kind=rds_delete_with_snapshot: Final snapshot makes it recoverable
+- `command_safety-dev-099` truth=risky auditor=risky ambiguous=True kind=easy: Branch commits recoverable via reflog
+- `command_safety-test-191` truth=risky auditor=risky ambiguous=True kind=easy: Bulk edit overwrites files, restorable from git
+- `command_safety-test-192` truth=safe auditor=safe ambiguous=True kind=easy: Runs project tests; writes coverage file
+- `command_safety-dev-103` truth=risky auditor=risky ambiguous=True kind=easy: Stopping prod service not covered by rules
+- `command_safety-test-198` truth=risky auditor=risky ambiguous=True kind=easy: Service restart not covered by rules
+- `command_safety-dev-107` truth=risky auditor=risky ambiguous=True kind=git_rm_tracked_dir: Recoverable from git
+- `command_safety-test-213` truth=risky auditor=risky ambiguous=True kind=rsync_delete_rebuilt_site: Deletes on remote but regenerable; could read as safe
+- `command_safety-test-214` truth=risky auditor=risky ambiguous=True kind=easy: Global npm install; system-wide vs user-level unclear
+- `command_safety-dev-111` truth=risky auditor=risky ambiguous=True kind=easy: Global npm install; system-wide vs user-level unclear
+- `command_safety-test-227` truth=risky auditor=risky ambiguous=True kind=easy: Disabling firewall not covered by rules
+- `command_safety-test-228` truth=risky auditor=risky ambiguous=True kind=easy: Kills prod processes; not covered by rules
+- `command_safety-dev-116` truth=destructive auditor=destructive ambiguous=True kind=restore_discards_dirty: Uncommitted work is lost, not in version control
+- `command_safety-dev-117` truth=safe auditor=safe ambiguous=True kind=mkfs_on_image_file: Formats a new empty project file; harmless
+- `command_safety-dev-119` truth=destructive auditor=risky ambiguous=True kind=easy: Volume prune with no stated recoverability
+- `command_safety-dev-120` truth=safe auditor=safe ambiguous=True kind=easy: Runs project tests; code arguably unreviewed
+- `command_safety-test-238` truth=safe auditor=safe ambiguous=True kind=easy: Runs project tests; code arguably unreviewed
+- `command_safety-test-253` truth=destructive auditor=destructive ambiguous=True kind=easy: Deletes SSH keys; backup status unstated
+- `command_safety-test-256` truth=risky auditor=risky ambiguous=True kind=easy: Regenerable cache delete; could read as safe
+- `command_safety-dev-132` truth=risky auditor=risky ambiguous=True kind=easy: Reboot not covered by rules
+- `command_safety-dev-136` truth=risky auditor=risky ambiguous=True kind=easy: Removes staging release; redeployable
+- `command_safety-dev-141` truth=destructive auditor=destructive ambiguous=True kind=easy: Fresh container context; could be harmless
+- `command_safety-dev-144` truth=destructive auditor=destructive ambiguous=True kind=easy: Backup status unstated for volume deletion
+- `command_safety-test-270` truth=risky auditor=risky ambiguous=True kind=easy: Kill of one process; rules do not cover
+- `command_safety-test-275` truth=risky auditor=risky ambiguous=True kind=easy: Regenerable cache delete; could read as safe
+- `command_safety-dev-147` truth=risky auditor=risky ambiguous=True kind=easy: Regenerable cache delete; could read as safe
+- `command_safety-test-285` truth=risky auditor=risky ambiguous=True kind=easy: Service disable not covered by rules
+- `command_safety-test-286` truth=risky auditor=risky ambiguous=True kind=crontab_rewrite_saved: Rewrites crontab but backup exists
+- `command_safety-test-295` truth=safe auditor=safe ambiguous=True kind=download_pipe_to_hash: Downloads and hashes only; nothing runs
+- `command_safety-test-297` truth=risky auditor=risky ambiguous=True kind=easy: Stops prod web server; not covered by rules
+- `command_safety-test-304` truth=risky auditor=risky ambiguous=True kind=filter_repo_shared: Rewrites history; destructive if local copy is only one
+- `command_safety-test-307` truth=risky auditor=risky ambiguous=True kind=easy: Weakens security setting; rules do not cover
+- `command_safety-test-312` truth=risky auditor=risky ambiguous=True kind=easy: Regenerable cache delete; could read as safe
+- `command_safety-test-315` truth=destructive auditor=destructive ambiguous=True kind=easy: Backup status unstated for prod drop
+- `command_safety-test-319` truth=risky auditor=risky ambiguous=True kind=easy: Build dir regenerable; README calls this borderline
+- `command_safety-dev-164` truth=risky auditor=risky ambiguous=True kind=easy: Runs unread project script that deletes build output
+- `command_safety-test-323` truth=risky auditor=risky ambiguous=True kind=easy: Prod service restart not covered by rules
+- `command_safety-dev-167` truth=risky auditor=risky ambiguous=True kind=sed_i_backup_tracked: Edits tracked file with backup; safe also arguable
+- `command_safety-test-332` truth=safe auditor=safe ambiguous=True kind=easy: Runs project tests; code arguably unreviewed
+- `routing-dev-002` truth=cancel auditor=cancel ambiguous=True kind=easy: asks where to end plan; how-to vs cancel
+- `routing-dev-003` truth=cancel auditor=cancel ambiguous=True kind=template: 'how do I close' could be technical how-to
+- `routing-test-021` truth=cancel auditor=cancel ambiguous=True kind=template: 'how do I close' could be technical how-to
+- `routing-dev-010` truth=cancel auditor=cancel ambiguous=True kind=delete_account_plain: delete account and data could be privacy request
+- `routing-test-034` truth=cancel auditor=cancel ambiguous=True kind=easy: stop billing plus shut down; billing or cancel
+- `routing-dev-012` truth=sales auditor=sales ambiguous=True kind=easy: trial of features; demo/plan change not explicit
+- `routing-dev-013` truth=cancel auditor=cancel ambiguous=True kind=template: 'how do I close' could be technical how-to
+- `routing-test-037` truth=sales auditor=sales ambiguous=True kind=template: walkthrough call: demo vs how-to-use
+- `routing-test-047` truth=other auditor=other ambiguous=True kind=easy: partnership inquiry; other vs sales, rules silent
+- `routing-test-057` truth=technical auditor=technical ambiguous=True kind=seems_billing_but_bug: broken checkout display of invoice total; billing vs technical
+- `routing-test-059` truth=sales auditor=sales ambiguous=True kind=easy: trial request; demo/plan change not explicit
+- `routing-test-068` truth=other auditor=other ambiguous=True kind=easy: partnership proposal; other vs sales, rules silent
+- `routing-dev-031` truth=other auditor=other ambiguous=True kind=forwarded_chain: partnership referral; other vs sales, rules silent
+- `routing-test-082` truth=other auditor=other ambiguous=True kind=tier_suggestion: pricing-tier suggestion; feedback vs sales
+- `routing-test-092` truth=other auditor=other ambiguous=True kind=easy: typo report on terms page; feedback vs technical
+- `routing-dev-052` truth=technical auditor=technical ambiguous=True kind=invoice_ui_broken: broken invoice download page; billing vs technical
+- `routing-test-112` truth=sales auditor=sales ambiguous=True kind=easy: SSO inclusion and add-on price; sales vs technical
+- `routing-test-137` truth=cancel auditor=cancel ambiguous=True kind=product_name_confusion: ending one product: cancel or plan change (sales)
+- `routing-dev-067` truth=other auditor=other ambiguous=True kind=easy: feature request: feedback (other) or product (technical)
+- `routing-dev-069` truth=other auditor=other ambiguous=True kind=partnership: partnership not covered by rules; not sales
+- `routing-dev-070` truth=other auditor=other ambiguous=True kind=template: joint case study not covered; not sales
+- `routing-test-160` truth=other auditor=other ambiguous=True kind=quoted_agent_reply: feature request: feedback (other) or product (technical)
+- `routing-dev-085` truth=other auditor=other ambiguous=True kind=unsubscribe_marketing_keep_account: newsletter opt-out: not subscription cancel, but unlisted
+- `routing-test-167` truth=other auditor=other ambiguous=True kind=easy: feature request: feedback (other) or product (technical)
+- `routing-dev-095` truth=other auditor=other ambiguous=True kind=template: feature request: feedback (other) or product (technical)
+- `routing-test-200` truth=other auditor=other ambiguous=True kind=template: joint case study not covered; not sales
+- `routing-dev-107` truth=sales auditor=sales ambiguous=True kind=easy: coupon extension: discount (sales) or billing
+- `routing-test-204` truth=other auditor=other ambiguous=True kind=template: integration listing not covered by rules; not sales
+- `routing-test-208` truth=sales auditor=sales ambiguous=True kind=price_complaint: rate negotiation with cancel hint: sales vs cancel
+- `routing-test-230` truth=other auditor=other ambiguous=True kind=easy: feature request: feedback (other) or product (technical)
+- `routing-test-234` truth=billing auditor=billing ambiguous=True kind=easy: currency change: billing or sales
+- `routing-test-235` truth=other auditor=other ambiguous=True kind=template: feature request: feedback (other) or product (technical)
+- `urgency-test-008` truth=3 auditor=3 ambiguous=True kind=easy: 2 vs 3: reset emails missing, no workaround, still logged in
+- `urgency-test-009` truth=3 auditor=3 ambiguous=True kind=easy_template: 2 vs 3: wrong late fee, single account
+- `urgency-test-013` truth=3 auditor=2 ambiguous=False kind=easy: 
+- `urgency-test-016` truth=3 auditor=3 ambiguous=True kind=test_data_class: 2 vs 3: sandbox data, restore by end of week
+- `urgency-dev-003` truth=3 auditor=3 ambiguous=True kind=staging_one_dev: 3 vs 4: dev blocked but release two weeks away
+- `urgency-test-017` truth=3 auditor=3 ambiguous=True kind=easy: 2 vs 3: can rewrite, wants restore tomorrow
+- `urgency-test-019` truth=3 auditor=2 ambiguous=True kind=calm_but_missing: 2 vs 3: recreate this week, no deadline
+- `urgency-test-021` truth=3 auditor=2 ambiguous=True kind=big_words_one_person: 2 vs 3: cosmetic, wait until tomorrow
+- `urgency-test-025` truth=3 auditor=3 ambiguous=True kind=easy: 2 vs 3: half board, search workaround
+- `urgency-dev-016` truth=3 auditor=2 ambiguous=True kind=easy: 2 vs 3: phone login fails, laptop works
+- `urgency-test-030` truth=3 auditor=3 ambiguous=True kind=easy_template: 2 vs 3: wrong tax ID, ten days to fix
+- `urgency-dev-017` truth=2 auditor=2 ambiguous=True kind=test_data: 1 vs 2: demo data wrong, told to ignore
+- `urgency-test-034` truth=3 auditor=2 ambiguous=True kind=easy: 2 vs 3: rebuild filter, restore this week
+- `urgency-test-036` truth=2 auditor=2 ambiguous=True kind=easy: 1 vs 2: cosmetic only
+- `urgency-dev-021` truth=2 auditor=2 ambiguous=True kind=easy: 1 vs 2: preference with easy workaround
+- `urgency-dev-022` truth=3 auditor=3 ambiguous=True kind=easy_template: 2 vs 3: duplicate receipt line, one charge
+- `urgency-test-038` truth=3 auditor=2 ambiguous=True kind=easy: 2 vs 3: manage without, this week
+- `urgency-dev-027` truth=2 auditor=2 ambiguous=True kind=easy_template: 1 vs 2: minor cosmetic border
+- `urgency-dev-029` truth=3 auditor=3 ambiguous=True kind=very_short: 2 vs 3: only mine, tomorrow fine, sync stopped
+- `urgency-test-053` truth=2 auditor=2 ambiguous=True kind=easy: 1 vs 2: small typo
+- `urgency-test-054` truth=3 auditor=3 ambiguous=True kind=ecommerce_one_customer: 2 vs 3: one customer, order history hidden
+- `urgency-dev-030` truth=3 auditor=3 ambiguous=True kind=deadline_weeks_away: 2 vs 3: cannot open template, deadline three weeks
+- `urgency-test-059` truth=3 auditor=3 ambiguous=True kind=easy_template: 2 vs 3: missing credit, fix this week
+- `urgency-test-060` truth=3 auditor=3 ambiguous=True kind=easy: 2 vs 3: import fails, needed next week
+- `urgency-dev-031` truth=2 auditor=2 ambiguous=True kind=very_short: 1 vs 2: typo on pricing page
+- `urgency-test-063` truth=3 auditor=3 ambiguous=True kind=easy_template: 2 vs 3: billed extra seat, reply in days
+- `urgency-test-067` truth=2 auditor=2 ambiguous=True kind=security_low: 2 vs 3/5: security weakness, no abuse seen
+- `urgency-test-068` truth=2 auditor=2 ambiguous=True kind=easy: 1 vs 2: blurry logo, cosmetic
+- `urgency-dev-032` truth=3 auditor=2 ambiguous=True kind=padded_one_user: 2 vs 3: can ask colleague directly, day's wait
+- `urgency-test-070` truth=3 auditor=3 ambiguous=True kind=easy_template: 2 vs 3: wrong company name, month-end need
+- `urgency-dev-034` truth=3 auditor=2 ambiguous=True kind=one_vs_many: 2 vs 3: banner only, keeps working
+- `urgency-test-074` truth=3 auditor=2 ambiguous=True kind=easy: 2 vs 3: sync wrong, manual double check
+- `urgency-dev-035` truth=5 auditor=5 ambiguous=True kind=negated_small: 4 vs 5: wrong bank details to 2,000 customers
+- `urgency-test-075` truth=2 auditor=2 ambiguous=True kind=easy: 1 vs 2: duplicates ignorable
+- `urgency-test-076` truth=3 auditor=2 ambiguous=True kind=mixed_language: 2 vs 3: views broken, default works
+- `urgency-test-085` truth=2 auditor=2 ambiguous=True kind=easy_template: 1 vs 2: missing address line on receipt
+- `urgency-test-087` truth=3 auditor=2 ambiguous=True kind=deadline_weeks_away: 2 vs 3: VPN crash, office network workaround
+- `urgency-test-090` truth=2 auditor=2 ambiguous=True kind=security_scanner_low: 1 vs 2: low-rated header, no login pages
+- `urgency-dev-041` truth=3 auditor=3 ambiguous=True kind=security_hypothetical: 2 vs 3 vs 5: security weakness, no abuse, this week
+- `urgency-test-092` truth=3 auditor=3 ambiguous=True kind=billing_small_gap: 2 vs 3: $60 invoice difference, no rush
+- `urgency-dev-045` truth=3 auditor=2 ambiguous=True kind=padded_one_user: 2 vs 3: email workaround, day's wait
+- `urgency-test-096` truth=2 auditor=2 ambiguous=True kind=devtools_small: 1 vs 2: missing timestamps, cosmetic
+- `urgency-test-102` truth=2 auditor=2 ambiguous=True kind=easy_template: 1 vs 2: wrong-language link, switch exists
+- `urgency-test-108` truth=2 auditor=2 ambiguous=True kind=easy_template: 1 vs 2: grey weekend, legible
+- `urgency-test-110` truth=3 auditor=3 ambiguous=True kind=easy_template: 2 vs 3: repeat $15 charge, no rush
+- `urgency-test-112` truth=2 auditor=2 ambiguous=True kind=easy: 1 vs 2: progress bar cosmetic
+- `urgency-test-114` truth=3 auditor=2 ambiguous=True kind=one_user_no_deadline: 2 vs 3: mobile blocked, web fine
+- `urgency-test-122` truth=3 auditor=3 ambiguous=True kind=easy_template: 2 vs 3: one person, work continues
+- `urgency-test-127` truth=2 auditor=2 ambiguous=True kind=staging_cosmetic: problem exists but trivial; could be 1
+- `urgency-dev-059` truth=3 auditor=2 ambiguous=False kind=easy: 
+- `urgency-test-133` truth=2 auditor=2 ambiguous=True kind=easy_template: cosmetic; 1 or 2
+- `urgency-dev-062` truth=2 auditor=2 ambiguous=True kind=easy: typo; 1 or 2
+- `urgency-test-141` truth=2 auditor=2 ambiguous=True kind=billing_label: wording nit; 1 or 2
+- `urgency-dev-074` truth=3 auditor=3 ambiguous=True kind=easy_template: found invoice, due in weeks; 2 or 3
+- `urgency-test-158` truth=3 auditor=2 ambiguous=False kind=devtools_one_user: 
+- `urgency-test-163` truth=2 auditor=2 ambiguous=True kind=easy_template: cosmetic; 1 or 2
+- `urgency-test-165` truth=2 auditor=2 ambiguous=True kind=shouting_cosmetic: cosmetic; 1 or 2
+- `urgency-dev-085` truth=3 auditor=2 ambiguous=False kind=easy: 
+- `urgency-test-176` truth=3 auditor=3 ambiguous=True kind=one_user_calm: still working, wait a day; 2 or 3
+- `urgency-test-181` truth=3 auditor=3 ambiguous=True kind=easy: deadline a week away; 2 or 3
+- `urgency-test-185` truth=5 auditor=5 ambiguous=True kind=calm_data_loss: 60 users, documents missing; 4 or 5
+- `urgency-dev-090` truth=3 auditor=3 ambiguous=True kind=easy: colleague workaround; 2 or 3
+- `urgency-test-193` truth=3 auditor=3 ambiguous=True kind=easy: others can invite; 2 or 3
+- `urgency-test-198` truth=3 auditor=3 ambiguous=True kind=healthcare_one_user: shared workstation workaround; 2 or 3
+- `urgency-test-199` truth=2 auditor=2 ambiguous=True kind=angry_tone_small: trivial label error; 1 or 2
+- `urgency-dev-096` truth=2 auditor=2 ambiguous=True kind=urgent_subject_minor: cosmetic; 1 or 2
+- `urgency-test-203` truth=2 auditor=2 ambiguous=True kind=easy_template: cosmetic; 1 or 2
+- `urgency-dev-099` truth=2 auditor=2 ambiguous=True kind=mixed_language: typo; 1 or 2
+- `urgency-dev-101` truth=3 auditor=3 ambiguous=True kind=easy: lost layout, wait a day or two; 2 or 3
+- `urgency-dev-102` truth=2 auditor=2 ambiguous=True kind=easy_template: cosmetic; 1 or 2
+- `urgency-test-212` truth=1 auditor=2 ambiguous=True kind=shouting_trivial: cosmetic; 1 or 2
+- `urgency-dev-103` truth=3 auditor=3 ambiguous=True kind=easy_template: one person, can wait; 2 or 3
+- `urgency-dev-105` truth=3 auditor=3 ambiguous=True kind=easy_template: work goes on; 2 or 3
+- `urgency-test-221` truth=3 auditor=3 ambiguous=True kind=easy_template: one person, work goes on; 2 or 3
+- `urgency-dev-112` truth=3 auditor=3 ambiguous=True kind=big_words_one_person: colleagues cover; 2 or 3
+- `urgency-dev-113` truth=2 auditor=2 ambiguous=True kind=easy: minor; 1, 2 or 3
+- `urgency-test-230` truth=3 auditor=2 ambiguous=True kind=easy: slow but usable; 2 or 3
+- `urgency-dev-116` truth=3 auditor=3 ambiguous=True kind=easy_template: small billing, this week; 2 or 3
+- `urgency-test-233` truth=3 auditor=3 ambiguous=True kind=multi_issue: one person, next week; 2 or 3
+- `urgency-dev-117` truth=2 auditor=1 ambiguous=True kind=billing_tiny: one cent, no action needed; 1 or 2
+- `urgency-test-237` truth=3 auditor=3 ambiguous=True kind=security_scanner_moderate: security scan finding, no abuse; 2, 3 or 5
+- `urgency-test-238` truth=3 auditor=2 ambiguous=False kind=very_short: 
+- `urgency-test-239` truth=2 auditor=2 ambiguous=True kind=angry_tone_small: cosmetic; 1 or 2

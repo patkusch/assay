@@ -1,0 +1,882 @@
+{
+ "routing-test-001": {
+  "label": "billing",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-002": {
+  "label": "cancel",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-003": {
+  "label": "other",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-001": {
+  "label": "technical",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-004": {
+  "label": "sales",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-005": {
+  "label": "cancel",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-006": {
+  "label": "technical",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-002": {
+  "label": "cancel",
+  "ambiguous": true,
+  "note": "asks where to end plan; how-to vs cancel"
+ },
+ "routing-dev-003": {
+  "label": "cancel",
+  "ambiguous": true,
+  "note": "'how do I close' could be technical how-to"
+ },
+ "routing-test-007": {
+  "label": "cancel",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-004": {
+  "label": "cancel",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-008": {
+  "label": "technical",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-009": {
+  "label": "sales",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-010": {
+  "label": "technical",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-011": {
+  "label": "sales",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-005": {
+  "label": "billing",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-012": {
+  "label": "technical",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-013": {
+  "label": "other",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-014": {
+  "label": "cancel",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-006": {
+  "label": "other",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-007": {
+  "label": "other",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-015": {
+  "label": "cancel",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-016": {
+  "label": "cancel",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-008": {
+  "label": "sales",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-017": {
+  "label": "cancel",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-018": {
+  "label": "other",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-019": {
+  "label": "technical",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-020": {
+  "label": "cancel",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-021": {
+  "label": "cancel",
+  "ambiguous": true,
+  "note": "'how do I close' could be technical how-to"
+ },
+ "routing-test-022": {
+  "label": "other",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-009": {
+  "label": "sales",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-023": {
+  "label": "sales",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-010": {
+  "label": "cancel",
+  "ambiguous": true,
+  "note": "delete account and data could be privacy request"
+ },
+ "routing-test-024": {
+  "label": "other",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-011": {
+  "label": "sales",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-025": {
+  "label": "sales",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-026": {
+  "label": "cancel",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-027": {
+  "label": "other",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-028": {
+  "label": "cancel",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-029": {
+  "label": "other",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-030": {
+  "label": "technical",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-031": {
+  "label": "technical",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-032": {
+  "label": "technical",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-033": {
+  "label": "other",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-034": {
+  "label": "cancel",
+  "ambiguous": true,
+  "note": "stop billing plus shut down; billing or cancel"
+ },
+ "routing-dev-012": {
+  "label": "sales",
+  "ambiguous": true,
+  "note": "trial of features; demo/plan change not explicit"
+ },
+ "routing-dev-013": {
+  "label": "cancel",
+  "ambiguous": true,
+  "note": "'how do I close' could be technical how-to"
+ },
+ "routing-test-035": {
+  "label": "billing",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-014": {
+  "label": "technical",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-036": {
+  "label": "sales",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-037": {
+  "label": "sales",
+  "ambiguous": true,
+  "note": "walkthrough call: demo vs how-to-use"
+ },
+ "routing-test-038": {
+  "label": "sales",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-039": {
+  "label": "billing",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-015": {
+  "label": "cancel",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-040": {
+  "label": "sales",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-016": {
+  "label": "billing",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-017": {
+  "label": "technical",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-041": {
+  "label": "cancel",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-018": {
+  "label": "billing",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-019": {
+  "label": "sales",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-020": {
+  "label": "sales",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-021": {
+  "label": "sales",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-042": {
+  "label": "sales",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-043": {
+  "label": "sales",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-022": {
+  "label": "other",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-044": {
+  "label": "cancel",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-045": {
+  "label": "technical",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-023": {
+  "label": "billing",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-046": {
+  "label": "technical",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-047": {
+  "label": "other",
+  "ambiguous": true,
+  "note": "partnership inquiry; other vs sales, rules silent"
+ },
+ "routing-test-048": {
+  "label": "other",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-049": {
+  "label": "billing",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-024": {
+  "label": "other",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-050": {
+  "label": "cancel",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-051": {
+  "label": "billing",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-052": {
+  "label": "cancel",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-053": {
+  "label": "sales",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-054": {
+  "label": "technical",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-055": {
+  "label": "technical",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-025": {
+  "label": "technical",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-056": {
+  "label": "technical",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-026": {
+  "label": "sales",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-027": {
+  "label": "technical",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-057": {
+  "label": "technical",
+  "ambiguous": true,
+  "note": "broken checkout display of invoice total; billing vs technical"
+ },
+ "routing-test-058": {
+  "label": "technical",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-028": {
+  "label": "other",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-059": {
+  "label": "sales",
+  "ambiguous": true,
+  "note": "trial request; demo/plan change not explicit"
+ },
+ "routing-test-060": {
+  "label": "cancel",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-061": {
+  "label": "sales",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-062": {
+  "label": "billing",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-063": {
+  "label": "billing",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-064": {
+  "label": "sales",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-065": {
+  "label": "technical",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-066": {
+  "label": "cancel",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-067": {
+  "label": "cancel",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-068": {
+  "label": "other",
+  "ambiguous": true,
+  "note": "partnership proposal; other vs sales, rules silent"
+ },
+ "routing-dev-029": {
+  "label": "billing",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-069": {
+  "label": "technical",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-030": {
+  "label": "technical",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-031": {
+  "label": "other",
+  "ambiguous": true,
+  "note": "partnership referral; other vs sales, rules silent"
+ },
+ "routing-test-070": {
+  "label": "other",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-071": {
+  "label": "technical",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-072": {
+  "label": "cancel",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-073": {
+  "label": "sales",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-032": {
+  "label": "cancel",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-074": {
+  "label": "sales",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-075": {
+  "label": "technical",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-076": {
+  "label": "other",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-077": {
+  "label": "technical",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-078": {
+  "label": "sales",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-033": {
+  "label": "billing",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-079": {
+  "label": "technical",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-080": {
+  "label": "cancel",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-081": {
+  "label": "billing",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-082": {
+  "label": "other",
+  "ambiguous": true,
+  "note": "pricing-tier suggestion; feedback vs sales"
+ },
+ "routing-test-083": {
+  "label": "other",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-034": {
+  "label": "cancel",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-035": {
+  "label": "cancel",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-036": {
+  "label": "cancel",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-084": {
+  "label": "sales",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-085": {
+  "label": "sales",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-086": {
+  "label": "technical",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-037": {
+  "label": "technical",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-087": {
+  "label": "cancel",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-088": {
+  "label": "other",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-089": {
+  "label": "cancel",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-038": {
+  "label": "cancel",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-090": {
+  "label": "technical",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-039": {
+  "label": "other",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-091": {
+  "label": "billing",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-040": {
+  "label": "billing",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-041": {
+  "label": "billing",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-092": {
+  "label": "other",
+  "ambiguous": true,
+  "note": "typo report on terms page; feedback vs technical"
+ },
+ "routing-dev-042": {
+  "label": "billing",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-093": {
+  "label": "cancel",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-043": {
+  "label": "billing",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-094": {
+  "label": "billing",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-095": {
+  "label": "sales",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-096": {
+  "label": "cancel",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-044": {
+  "label": "sales",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-045": {
+  "label": "technical",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-097": {
+  "label": "cancel",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-098": {
+  "label": "cancel",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-099": {
+  "label": "sales",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-100": {
+  "label": "technical",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-101": {
+  "label": "cancel",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-102": {
+  "label": "other",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-046": {
+  "label": "billing",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-047": {
+  "label": "cancel",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-103": {
+  "label": "technical",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-104": {
+  "label": "sales",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-048": {
+  "label": "billing",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-049": {
+  "label": "other",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-105": {
+  "label": "technical",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-050": {
+  "label": "cancel",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-106": {
+  "label": "technical",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-107": {
+  "label": "cancel",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-108": {
+  "label": "technical",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-051": {
+  "label": "billing",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-052": {
+  "label": "technical",
+  "ambiguous": true,
+  "note": "broken invoice download page; billing vs technical"
+ },
+ "routing-test-109": {
+  "label": "technical",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-053": {
+  "label": "billing",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-110": {
+  "label": "billing",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-111": {
+  "label": "cancel",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-112": {
+  "label": "sales",
+  "ambiguous": true,
+  "note": "SSO inclusion and add-on price; sales vs technical"
+ },
+ "routing-test-113": {
+  "label": "cancel",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-054": {
+  "label": "cancel",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-114": {
+  "label": "cancel",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-115": {
+  "label": "cancel",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-116": {
+  "label": "sales",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-117": {
+  "label": "cancel",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-055": {
+  "label": "cancel",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-118": {
+  "label": "billing",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-056": {
+  "label": "billing",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-test-119": {
+  "label": "other",
+  "ambiguous": false,
+  "note": ""
+ },
+ "routing-dev-057": {
+  "label": "sales",
+  "ambiguous": false,
+  "note": ""
+ }
+}

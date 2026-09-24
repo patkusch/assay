@@ -1,0 +1,907 @@
+{
+"urgency-test-125": {
+"label": "2",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-126": {
+"label": "1",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-127": {
+"label": "2",
+"ambiguous": true,
+"note": "problem exists but trivial; could be 1"
+},
+"urgency-dev-058": {
+"label": "3",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-128": {
+"label": "4",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-059": {
+"label": "2",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-060": {
+"label": "4",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-129": {
+"label": "1",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-130": {
+"label": "2",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-131": {
+"label": "5",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-132": {
+"label": "2",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-133": {
+"label": "2",
+"ambiguous": true,
+"note": "cosmetic; 1 or 2"
+},
+"urgency-dev-061": {
+"label": "5",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-134": {
+"label": "1",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-062": {
+"label": "2",
+"ambiguous": true,
+"note": "typo; 1 or 2"
+},
+"urgency-test-135": {
+"label": "5",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-136": {
+"label": "4",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-137": {
+"label": "5",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-063": {
+"label": "1",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-064": {
+"label": "2",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-065": {
+"label": "5",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-066": {
+"label": "4",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-138": {
+"label": "3",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-139": {
+"label": "4",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-140": {
+"label": "3",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-141": {
+"label": "2",
+"ambiguous": true,
+"note": "wording nit; 1 or 2"
+},
+"urgency-test-142": {
+"label": "1",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-143": {
+"label": "3",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-067": {
+"label": "2",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-068": {
+"label": "4",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-144": {
+"label": "2",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-069": {
+"label": "5",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-145": {
+"label": "5",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-070": {
+"label": "4",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-071": {
+"label": "4",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-072": {
+"label": "1",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-073": {
+"label": "5",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-146": {
+"label": "2",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-074": {
+"label": "3",
+"ambiguous": true,
+"note": "found invoice, due in weeks; 2 or 3"
+},
+"urgency-test-147": {
+"label": "1",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-148": {
+"label": "1",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-149": {
+"label": "3",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-150": {
+"label": "5",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-151": {
+"label": "1",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-152": {
+"label": "3",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-153": {
+"label": "1",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-154": {
+"label": "4",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-155": {
+"label": "1",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-075": {
+"label": "4",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-076": {
+"label": "3",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-156": {
+"label": "4",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-157": {
+"label": "2",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-158": {
+"label": "2",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-159": {
+"label": "1",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-160": {
+"label": "4",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-161": {
+"label": "3",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-162": {
+"label": "4",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-163": {
+"label": "2",
+"ambiguous": true,
+"note": "cosmetic; 1 or 2"
+},
+"urgency-dev-077": {
+"label": "1",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-078": {
+"label": "4",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-164": {
+"label": "1",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-079": {
+"label": "1",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-165": {
+"label": "2",
+"ambiguous": true,
+"note": "cosmetic; 1 or 2"
+},
+"urgency-dev-080": {
+"label": "2",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-166": {
+"label": "2",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-081": {
+"label": "1",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-167": {
+"label": "4",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-082": {
+"label": "1",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-168": {
+"label": "2",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-169": {
+"label": "5",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-170": {
+"label": "3",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-083": {
+"label": "4",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-171": {
+"label": "3",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-172": {
+"label": "2",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-084": {
+"label": "3",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-173": {
+"label": "5",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-085": {
+"label": "2",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-174": {
+"label": "4",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-086": {
+"label": "5",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-175": {
+"label": "4",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-176": {
+"label": "3",
+"ambiguous": true,
+"note": "still working, wait a day; 2 or 3"
+},
+"urgency-dev-087": {
+"label": "4",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-177": {
+"label": "3",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-088": {
+"label": "1",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-178": {
+"label": "5",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-179": {
+"label": "3",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-180": {
+"label": "4",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-089": {
+"label": "5",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-181": {
+"label": "3",
+"ambiguous": true,
+"note": "deadline a week away; 2 or 3"
+},
+"urgency-test-182": {
+"label": "1",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-183": {
+"label": "1",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-184": {
+"label": "1",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-185": {
+"label": "5",
+"ambiguous": true,
+"note": "60 users, documents missing; 4 or 5"
+},
+"urgency-test-186": {
+"label": "1",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-090": {
+"label": "3",
+"ambiguous": true,
+"note": "colleague workaround; 2 or 3"
+},
+"urgency-test-187": {
+"label": "5",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-188": {
+"label": "5",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-091": {
+"label": "1",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-189": {
+"label": "5",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-092": {
+"label": "1",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-190": {
+"label": "5",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-191": {
+"label": "5",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-093": {
+"label": "4",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-094": {
+"label": "1",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-192": {
+"label": "5",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-193": {
+"label": "3",
+"ambiguous": true,
+"note": "others can invite; 2 or 3"
+},
+"urgency-test-194": {
+"label": "1",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-195": {
+"label": "4",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-196": {
+"label": "2",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-197": {
+"label": "4",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-198": {
+"label": "3",
+"ambiguous": true,
+"note": "shared workstation workaround; 2 or 3"
+},
+"urgency-test-199": {
+"label": "2",
+"ambiguous": true,
+"note": "trivial label error; 1 or 2"
+},
+"urgency-test-200": {
+"label": "2",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-095": {
+"label": "1",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-096": {
+"label": "2",
+"ambiguous": true,
+"note": "cosmetic; 1 or 2"
+},
+"urgency-test-201": {
+"label": "1",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-202": {
+"label": "2",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-097": {
+"label": "4",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-203": {
+"label": "2",
+"ambiguous": true,
+"note": "cosmetic; 1 or 2"
+},
+"urgency-dev-098": {
+"label": "3",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-204": {
+"label": "1",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-205": {
+"label": "1",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-099": {
+"label": "2",
+"ambiguous": true,
+"note": "typo; 1 or 2"
+},
+"urgency-test-206": {
+"label": "4",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-207": {
+"label": "1",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-208": {
+"label": "1",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-209": {
+"label": "4",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-100": {
+"label": "5",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-101": {
+"label": "3",
+"ambiguous": true,
+"note": "lost layout, wait a day or two; 2 or 3"
+},
+"urgency-test-210": {
+"label": "2",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-211": {
+"label": "4",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-102": {
+"label": "2",
+"ambiguous": true,
+"note": "cosmetic; 1 or 2"
+},
+"urgency-test-212": {
+"label": "2",
+"ambiguous": true,
+"note": "cosmetic; 1 or 2"
+},
+"urgency-test-213": {
+"label": "1",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-103": {
+"label": "3",
+"ambiguous": true,
+"note": "one person, can wait; 2 or 3"
+},
+"urgency-test-214": {
+"label": "1",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-215": {
+"label": "5",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-216": {
+"label": "2",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-104": {
+"label": "2",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-105": {
+"label": "3",
+"ambiguous": true,
+"note": "work goes on; 2 or 3"
+},
+"urgency-test-217": {
+"label": "4",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-106": {
+"label": "1",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-218": {
+"label": "1",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-219": {
+"label": "2",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-220": {
+"label": "5",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-107": {
+"label": "2",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-108": {
+"label": "4",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-109": {
+"label": "5",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-221": {
+"label": "3",
+"ambiguous": true,
+"note": "one person, work goes on; 2 or 3"
+},
+"urgency-dev-110": {
+"label": "2",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-222": {
+"label": "4",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-223": {
+"label": "2",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-111": {
+"label": "5",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-224": {
+"label": "3",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-225": {
+"label": "4",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-112": {
+"label": "3",
+"ambiguous": true,
+"note": "colleagues cover; 2 or 3"
+},
+"urgency-dev-113": {
+"label": "2",
+"ambiguous": true,
+"note": "minor; 1, 2 or 3"
+},
+"urgency-test-226": {
+"label": "5",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-227": {
+"label": "1",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-114": {
+"label": "1",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-228": {
+"label": "1",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-229": {
+"label": "5",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-115": {
+"label": "5",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-230": {
+"label": "2",
+"ambiguous": true,
+"note": "slow but usable; 2 or 3"
+},
+"urgency-test-231": {
+"label": "4",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-232": {
+"label": "2",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-116": {
+"label": "3",
+"ambiguous": true,
+"note": "small billing, this week; 2 or 3"
+},
+"urgency-test-233": {
+"label": "3",
+"ambiguous": true,
+"note": "one person, next week; 2 or 3"
+},
+"urgency-test-234": {
+"label": "1",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-235": {
+"label": "5",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-236": {
+"label": "5",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-117": {
+"label": "1",
+"ambiguous": true,
+"note": "one cent, no action needed; 1 or 2"
+},
+"urgency-test-237": {
+"label": "3",
+"ambiguous": true,
+"note": "security scan finding, no abuse; 2, 3 or 5"
+},
+"urgency-dev-118": {
+"label": "1",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-238": {
+"label": "2",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-119": {
+"label": "5",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-239": {
+"label": "2",
+"ambiguous": true,
+"note": "cosmetic; 1 or 2"
+},
+"urgency-test-240": {
+"label": "4",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-120": {
+"label": "4",
+"ambiguous": false,
+"note": ""
+},
+"urgency-dev-121": {
+"label": "4",
+"ambiguous": false,
+"note": ""
+},
+"urgency-test-241": {
+"label": "1",
+"ambiguous": false,
+"note": ""
+}
+}
