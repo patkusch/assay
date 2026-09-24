@@ -82,6 +82,12 @@ def make_backend(kind: str, model: str, host: str, timeout: float):
     if kind == "ollama":
         from assay.backends.ollama import OllamaBackend
         return OllamaBackend(model, host, timeout=timeout)
+    if kind == "von":
+        from adapters.von import VonBackend
+        return VonBackend()
+    if kind == "verdict":
+        from adapters.verdict import VerdictBackend
+        return VerdictBackend()
     raise SystemExit(f"unknown backend {kind!r}")
 
 
@@ -354,7 +360,7 @@ def _versions(backend) -> dict:
 # ---------------------------------------------------------------------------------------------------
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Run the assay benchmark and write receipts plus a plain-English scoreboard.")
-    ap.add_argument("--backend", choices=["keyword", "ollama"], default="keyword")
+    ap.add_argument("--backend", choices=["keyword", "ollama", "von", "verdict"], default="keyword")
     ap.add_argument("--model", default="gemma3")
     ap.add_argument("--host", default="http://127.0.0.1:11434")
     ap.add_argument("--tasks", default="all", help="'all' or a comma-separated list of task names")

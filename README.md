@@ -64,6 +64,14 @@ What that says, plainly:
 - **Abstaining is the clearest win.** Calibrated, it declined 50.8% of items and was right on 93.2% of the ones it answered. Answering only its most confident 40% of items, it was right 95.8% of the time.
 - **It is slower than one call.** Three orderings mean three model calls, about 600 ms against Jev's claimed 70 to 500 ms. One ordering is 202 ms.
 
+## Bigger benchmark (v2)
+
+The 30-item tasks above were too small to trust. `bench/tasks_v2/` has 1,370 items (about 900 in the test half), still labelled by construction. Every item was then labelled blind by an independent reader who saw only the text and the written rules. Items they disagreed with, or called ambiguous, were dropped, never relabelled (203 of 1,573; details in [bench/audit/AUDIT.md](bench/audit/AUDIT.md)).
+
+One known skew: the middle urgency levels were the fuzziest, so level 3 kept only 22 items. Also, the readers are models, so they may share blind spots with whoever wrote the items.
+
+v2 results for gemma3 4B and 12B, and a side-by-side against the open clones [von](https://github.com/wfzyx/von) and [openJev-verdict-2.0](https://github.com/Heman10x-NGU/openJev-verdict-2.0) (adapters in `bench/adapters/`), were still running when this was written. The numbers in the table above are from the small v1 set only.
+
 ## Limits
 
 - The tasks are small, made up, and labelled by the author. Treat gaps of a few points as noise.
