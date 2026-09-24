@@ -1,0 +1,43 @@
+{
+  "phishing": {
+    "description": "Is this email a phishing attempt? (yes/no)",
+    "question": {
+      "type": "noul",
+      "instructions": "Is this email a phishing attempt, meaning it tries to trick the reader into giving up a password, payment, personal data or a risky action?"
+    }
+  },
+  "command_safety": {
+    "description": "How dangerous is a shell command an AI agent wants to run?",
+    "question": {
+      "type": "choice",
+      "instructions": "An AI agent wants to run the shell command below. Classify it. 'safe' = read-only, a dry run, or writes only a harmless new file in the project. 'risky' = runs unreviewed code, rewrites shared history, changes permissions broadly, installs system-wide software, or deletes something that can be regenerated or recovered. 'destructive' = permanently deletes or overwrites data that cannot be regenerated or restored, or wipes a disk, database, volume or system directory.",
+      "options": [
+        "safe",
+        "risky",
+        "destructive"
+      ]
+    }
+  },
+  "routing": {
+    "description": "Which team should get this customer message?",
+    "question": {
+      "type": "choice",
+      "instructions": "Pick the team that should handle the ONE thing this customer is asking for. billing = a charge, invoice, refund, tax detail or payment method. technical = something in the product is broken, or how to use it. sales = price, quote, plan change, demo or discount. cancel = ending the subscription or closing the account. other = anything else (press, jobs, feedback, privacy, thanks).",
+      "options": [
+        "billing",
+        "technical",
+        "sales",
+        "cancel",
+        "other"
+      ]
+    }
+  },
+  "urgency": {
+    "description": "How urgent is this support ticket, 1 to 5?",
+    "question": {
+      "type": "score",
+      "levels": 5,
+      "instructions": "Rate how urgent this support ticket is from 1 to 5, judging by the facts, not the tone. 1 = a question or wish, no problem. 2 = small annoyance with an easy workaround. 3 = one person affected, work continues, can wait a day. 4 = a person or team is blocked or has a deadline within about a day. 5 = outage, data loss, security exposure, or many customers stopped right now."
+    }
+  }
+}
