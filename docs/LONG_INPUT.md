@@ -69,3 +69,7 @@ yet. Open questions that only a live run can answer: how well real small models 
 evidence in it (if they lean toward one option on empty text, `max_evidence` will pick that up), and
 whether the extra calls are worth their cost. Treat the defaults as a starting point until that
 measurement is done.
+
+## From the command line
+
+Add `--chunk-chars 3000` to `decide`, `serve` or `calibrate` and situations longer than that are split into overlapping pieces. `--chunk-combine` picks how the pieces are combined (default `max_evidence`).

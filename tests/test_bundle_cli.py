@@ -267,3 +267,20 @@ class ServerCalibrationTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ChunkFlagTests(unittest.TestCase):
+    def test_chunk_flag_finds_a_sentence_buried_in_filler(self):
+        import io
+        import json
+        from contextlib import redirect_stdout
+
+        from assay import cli
+
+        filler = "The weather has been strange this week and the train was late twice. " * 300
+        state = filler + "The customer says this is a billing problem billing billing. " + filler
+        argv = ["decide", "--backend", "keyword", "--state", state, "--question", "choice:Which team?:billing|technical|sales"]
+        out = io.StringIO()
+        with redirect_stdout(out):
+            self.assertEqual(cli.main(argv + ["--chunk-chars", "2000"]), 0)
+        self.assertEqual(json.loads(out.getvalue())["answers"]["q1"]["value"], "billing")

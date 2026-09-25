@@ -55,6 +55,11 @@ def build_parser() -> argparse.ArgumentParser:
         sp.add_argument("--host", default="http://127.0.0.1:11434", help="Ollama address")
         sp.add_argument("--timeout", type=float, default=60)
         sp.add_argument("--orders", type=int, default=3, help="how many option orderings to average")
+        sp.add_argument("--chunk-chars", type=int, default=0,
+                        help="split situations longer than this many characters into overlapping pieces (0 = never split)")
+        sp.add_argument("--chunk-combine", default="max_evidence",
+                        choices=["max_evidence", "mean_logprob", "first_and_last", "head_tail"],
+                        help="how to combine the pieces' scores (see docs/LONG_INPUT.md)")
 
     def answering(sp):
         sp.add_argument("--calibration", help="a file made by `assay calibrate`; its rescaling is applied to answers")
@@ -94,6 +99,9 @@ def main(argv: list[str] | None = None) -> int:
             print(json.dumps(BACKENDS, indent=2))
             return 0
         backend = make_backend(args.backend, args.model, args.host, args.timeout)
+        if getattr(args, "chunk_chars", 0):
+            from .longinput import ChunkedBackend
+            backend = ChunkedBackend(backend, max_chars=args.chunk_chars, overlap=min(300, args.chunk_chars // 10), combine=args.chunk_combine)
         if args.cmd == "calibrate":
             with open(args.request, encoding="utf-8") as f:
                 questions = questions_from_body(json.load(f))
