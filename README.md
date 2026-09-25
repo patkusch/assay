@@ -1,5 +1,7 @@
 # assay
 
+[![tests](https://github.com/patkusch/assay/actions/workflows/ci.yml/badge.svg)](https://github.com/patkusch/assay/actions/workflows/ci.yml)
+
 Ask a small local model a question and get back a **typed answer with a probability you can check**, not a paragraph.
 
 assay is an open, local take on the idea behind TypeSafe AI's Jev (launched 15 September 2026): a model that never chats. You hand it a situation and some questions. It hands back a choice, a score or a yes/no probability, in about half a second, on a laptop, for no money.
