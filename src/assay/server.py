@@ -97,10 +97,12 @@ def run_request(backend, body: object, *, n_orders: int = 3, calibrators: dict |
 
 def make_server(backend, host: str = "127.0.0.1", port: int = 8787, n_orders: int = 3,
                 calibrators: dict | None = None, confidence_floor: float = 0.0,
-                bundle=None) -> ThreadingHTTPServer:
+                bundle=None, cors: str | None = None) -> ThreadingHTTPServer:
     """Build the server without starting it (port 0 picks a free port). Useful for tests.
 
     Pass a `CalibrationBundle` as `bundle` to use its calibrators and to serve `GET /v1/calibration`.
+    Pass `cors` (an origin such as "https://example.com", or "*") to let web pages from that origin call the server.
+    It is off by default: without it, only programs on your machine can use the server, not other websites.
     """
     if bundle is not None and calibrators is None:
         calibrators = bundle.calibrators
@@ -113,8 +115,28 @@ def make_server(backend, host: str = "127.0.0.1", port: int = 8787, n_orders: in
             self.send_response(code)
             self.send_header("Content-Type", "application/json")
             self.send_header("Content-Length", str(len(data)))
+            self._cors_headers()
             self.end_headers()
             self.wfile.write(data)
+
+        def _cors_headers(self) -> None:
+            if cors:
+                self.send_header("Access-Control-Allow-Origin", cors)
+                self.send_header("Vary", "Origin")
+
+        def do_OPTIONS(self):
+            """Answer a browser's permission check before a web page may call the server."""
+            if not cors:
+                self._send(404, {"error": "not found"})
+                return
+            self.send_response(204)
+            self._cors_headers()
+            self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+            self.send_header("Access-Control-Allow-Headers", "Content-Type")
+            self.send_header("Access-Control-Allow-Private-Network", "true")
+            self.send_header("Access-Control-Max-Age", "600")
+            self.send_header("Content-Length", "0")
+            self.end_headers()
 
         def do_GET(self):
             if self.path == "/healthz":
@@ -161,9 +183,9 @@ def make_server(backend, host: str = "127.0.0.1", port: int = 8787, n_orders: in
 
 
 def serve(backend, host: str = "127.0.0.1", port: int = 8787, n_orders: int = 3,
-          calibrators: dict | None = None, confidence_floor: float = 0.0, bundle=None) -> None:
+          calibrators: dict | None = None, confidence_floor: float = 0.0, bundle=None, cors: str | None = None) -> None:
     """Run the server until interrupted."""
-    srv = make_server(backend, host, port, n_orders, calibrators, confidence_floor, bundle)
+    srv = make_server(backend, host, port, n_orders, calibrators, confidence_floor, bundle, cors)
     print(f"assay listening on http://{host}:{srv.server_address[1]} (backend: {getattr(backend, 'name', '?')})", flush=True)
     try:
         srv.serve_forever()

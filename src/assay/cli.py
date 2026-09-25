@@ -77,6 +77,8 @@ def build_parser() -> argparse.ArgumentParser:
     s = sub.add_parser("serve", help="run the HTTP server")
     s.add_argument("--bind", default="127.0.0.1")
     s.add_argument("--port", type=int, default=8787)
+    s.add_argument("--cors", nargs="?", const="*", default=None, metavar="ORIGIN",
+                   help="let web pages call the server (for the demo page). Alone it allows any page; give an origin to allow just that one. Off by default.")
     common(s)
     answering(s)
 
@@ -118,7 +120,7 @@ def main(argv: list[str] | None = None) -> int:
                 print(warning, file=sys.stderr)
         calibrators = bundle.calibrators if bundle else None
         if args.cmd == "serve":
-            serve(backend, args.bind, args.port, args.orders, calibrators, args.confidence_floor, bundle)
+            serve(backend, args.bind, args.port, args.orders, calibrators, args.confidence_floor, bundle, args.cors)
             return 0
         if args.request:
             raw = sys.stdin.read() if args.request == "-" else open(args.request, encoding="utf-8").read()
