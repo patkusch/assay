@@ -178,9 +178,18 @@ def build_report(receipts: dict) -> str:
     elif bl is None:
         L += ["## Against an ordinary LLM answer", "", "Not run in this receipts file (it needs a live Ollama model).", ""]
 
+    n_test = [t["n_test"] for t in receipts["tasks"].values()]
+    n_dev = [t["n_dev"] for t in receipts["tasks"].values()]
+    lo_t, hi_t, lo_d, hi_d = min(n_test), max(n_test), min(n_dev), max(n_dev)
+    per_test = f"{lo_t}" if lo_t == hi_t else f"{lo_t} to {hi_t}"
+    per_dev = f"{lo_d}" if lo_d == hi_d else f"{lo_d} to {hi_d}"
+    small = lo_t < 100
     L += ["## Read this before quoting any number", "",
-          "- The tasks are synthetic, small (about 30 test items each) and labelled by the person who built the engine. Gaps of a few points can be noise.",
-          "- Calibration was fitted on about 30 dev items per task. That is enough to run, not enough to be precise.",
+          f"- The tasks are synthetic and labelled by construction, with {per_test} test items per task"
+          + (". That is small: gaps of a few points can be noise." if small else ". Gaps of a couple of points are still within noise for a single task; `bench/significance.py` gives intervals for the pooled gaps."),
+          f"- Calibration was fitted on {per_dev} dev items per task."
+          + (" That is enough to run, not enough to be precise." if lo_d < 50 else " Our calibration study found the error stops improving at about 80 examples per question."),
+          "- Accuracy at coverage moves in steps: each item is worth a fraction of a point, and more at 40% coverage." if not small else
           "- Accuracy at coverage on small sets moves in big steps: each item is worth several points at 40% coverage.",
           "- The order-flip check compares the top answer with the options shown in forward versus reversed order. It does not test rewording.",
           "- Full per-item predictions are in the receipts JSON next to this file, so every number can be recomputed.", ""]
