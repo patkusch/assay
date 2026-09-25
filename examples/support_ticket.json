@@ -1,0 +1,8 @@
+{
+  "state": "Hi, I was charged twice for my subscription this month and nobody has answered my last two emails. I need this fixed before Friday's board meeting.",
+  "questions": {
+    "team": {"type": "choice", "instructions": "Which team should handle this?", "options": ["billing", "technical", "sales", "cancel", "other"]},
+    "urgency": {"type": "score", "levels": 5, "instructions": "How urgent is this ticket, judging by the facts and not the tone?"},
+    "angry": {"type": "noul", "instructions": "Is the customer angry?"}
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "state": "From: security@paypa1-secure.example\nSubject: Account suspended\n\nYour account has been suspended. Verify your password within 24 hours at https://paypa1-secure.example/verify or it will be closed.",
+  "questions": {
+    "phishing": {"type": "noul", "instructions": "Is this email a phishing attempt, meaning it tries to trick the reader into giving up a password, payment or personal data?"}
+  }
+}
