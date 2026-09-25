@@ -1,4 +1,4 @@
-.PHONY: test bench-quick serve example
+.PHONY: test bench-quick serve example demo
 
 PY ?= python3
 
@@ -14,3 +14,7 @@ serve:
 
 example:
 	PYTHONPATH=src $(PY) -m assay decide --backend keyword --request examples/support_ticket.json
+
+# rebuild the visual demo page from the saved v2 receipts
+demo:
+	$(PY) bench/make_demo.py

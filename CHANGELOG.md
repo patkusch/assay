@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Visual demo page (`docs/demo/index.html`) built from the saved receipts, with a live panel; `serve --cors` to allow it.
 - Benchmark v2: 1,370 items, labelled by construction and checked blind; 203 ambiguous items dropped, never relabelled.
 - Adapters and receipts for the open clones von and openJev-verdict-2.0.
 - Scoreboard says "not applicable" when a model never flips under reordering, instead of failing it.

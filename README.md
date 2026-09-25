@@ -66,6 +66,17 @@ What that says, plainly:
 - **Abstaining is the clearest win.** Calibrated, it declined 50.8% of items and was right on 93.2% of the ones it answered. Answering only its most confident 40% of items, it was right 95.8% of the time.
 - **It is slower than one call.** Three orderings mean three model calls, about 600 ms against Jev's claimed 70 to 500 ms. One ordering is 202 ms.
 
+## See it
+
+`docs/demo/index.html` is a single page you can open in any browser. It replays the real benchmark receipts: each system's odds for every option on every test item, a chart of whether its confidence can be trusted, a chart of what happens if you only keep its most confident answers, and how often the answer changes when the options are reversed. A last panel talks to your own running server.
+
+```bash
+make demo          # rebuild the page from bench/receipts
+open docs/demo/index.html
+```
+
+Nothing on the page is invented and no model needs to be running to view it. The live panel needs `python -m assay serve --model gemma3 --cors`.
+
 ## Bigger benchmark (v2)
 
 The 30-item tasks above were too small to trust. `bench/tasks_v2/` has 1,370 items (about 900 in the test half), still labelled by construction. Every item was then labelled blind by an independent reader who saw only the text and the written rules. Items they disagreed with, or called ambiguous, were dropped, never relabelled (203 of 1,573; details in [bench/audit/AUDIT.md](bench/audit/AUDIT.md)).

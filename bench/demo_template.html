@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>assay: see how sure it is</title>
+<style>
+:root{
+  color-scheme:light;
+  --page:#f9f9f7; --surface:#fcfcfb; --ink:#0b0b0b; --ink2:#52514e; --muted:#6f6d67; --grid:#e1e0d9; --axis:#c3c2b7; --ring:rgba(11,11,11,.10);
+  --s-gemma:#2a78d6; --s-von:#eb6834; --s-verdict:#1baf7a;
+  --good:#0ca30c; --good-text:#006300; --warn:#fab219; --warn-text:#7a5200; --crit:#d03b3b; --track:#eceae4;
+  --font:system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:where(:not([data-theme="light"])){
+  color-scheme:dark; --page:#0d0d0d; --surface:#1a1a19; --ink:#fff; --ink2:#c3c2b7; --muted:#a09e96; --grid:#2c2c2a; --axis:#383835; --ring:rgba(255,255,255,.10);
+  --s-gemma:#3987e5; --s-von:#d95926; --s-verdict:#199e70; --good-text:#0ca30c; --warn-text:#fab219; --track:#2a2a28;}}
+:root[data-theme="dark"]{
+  color-scheme:dark; --page:#0d0d0d; --surface:#1a1a19; --ink:#fff; --ink2:#c3c2b7; --muted:#a09e96; --grid:#2c2c2a; --axis:#383835; --ring:rgba(255,255,255,.10);
+  --s-gemma:#3987e5; --s-von:#d95926; --s-verdict:#199e70; --good-text:#0ca30c; --warn-text:#fab219; --track:#2a2a28;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--ink);font:16px/1.5 var(--font)}
+a{color:inherit}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px 64px}
+header{padding:32px 0 8px;display:flex;gap:16px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+h1{font-size:28px;line-height:1.2;margin:0 0 8px;font-weight:650}
+h2{font-size:20px;margin:0 0 4px;font-weight:650}
+.lede{color:var(--ink2);max-width:62ch;margin:0}
+.sub{color:var(--ink2);margin:0 0 16px;max-width:70ch}
+section{margin-top:40px}
+.card{background:var(--surface);border:1px solid var(--ring);border-radius:12px;padding:16px}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.seg{display:inline-flex;border:1px solid var(--ring);border-radius:8px;overflow:hidden;background:var(--surface)}
+.seg button{all:unset;cursor:pointer;padding:6px 12px;font-size:14px;color:var(--ink2)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+.seg button:focus-visible,.chip:focus-visible,button.plain:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--s-gemma);outline-offset:2px}
+.chip{all:unset;cursor:pointer;padding:4px 12px;border:1px solid var(--ring);border-radius:999px;font-size:14px;color:var(--ink2);background:var(--surface)}
+.chip[aria-pressed="true"]{border-color:var(--ink);color:var(--ink)}
+button.plain{cursor:pointer;border:1px solid var(--ring);background:var(--surface);color:var(--ink);border-radius:8px;padding:6px 12px;font:inherit;font-size:14px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:12px}
+.tile h3{font-size:15px;margin:0 0 2px;display:flex;align-items:center;gap:8px}
+.tile .sub2{color:var(--muted);font-size:13px;margin:0 0 12px}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;flex:none}
+.stat{display:flex;justify-content:space-between;align-items:baseline;padding:4px 0;border-top:1px solid var(--grid);font-size:14px;color:var(--ink2)}
+.stat b{font-size:20px;font-weight:600;color:var(--ink)}
+.stat span small{display:block;color:var(--muted);font-size:12px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.explorer{display:grid;grid-template-columns:minmax(0,360px) minmax(0,1fr);gap:16px}
+@media (max-width:820px){.explorer{grid-template-columns:minmax(0,1fr)}}
+.list{max-height:640px;overflow:auto;border:1px solid var(--ring);border-radius:12px;background:var(--surface)}
+.list button{all:unset;display:block;width:100%;box-sizing:border-box;cursor:pointer;padding:10px 12px;border-bottom:1px solid var(--grid);font-size:14px;color:var(--ink2)}
+.list button[aria-current="true"]{background:var(--track);color:var(--ink)}
+.list button:hover{background:var(--track)}
+.list .meta{font-size:12px;color:var(--muted);display:flex;gap:8px;margin-bottom:2px}
+.list .txt{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;white-space:pre-line}
+.detail pre{white-space:pre-wrap;word-break:break-word;font:14px/1.5 var(--font);background:var(--track);border-radius:8px;padding:12px;margin:0 0 12px;max-height:240px;overflow:auto}
+.truth{font-size:14px;color:var(--ink2);margin-bottom:12px}
+.sys{border-top:1px solid var(--grid);padding:12px 0}
+.sys h4{margin:0 0 8px;font-size:15px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.pill{font-size:12px;padding:1px 8px;border-radius:999px;border:1px solid currentColor;font-weight:600}
+.pill.good{color:var(--good-text)} .pill.bad{color:var(--crit)} .pill.warn{color:var(--warn-text)}
+.bar{display:grid;grid-template-columns:110px 1fr 52px;gap:8px;align-items:center;font-size:14px;margin:3px 0}
+.bar .lab{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink2)}
+.bar .lab.t{color:var(--ink);font-weight:600}
+.bar .trk{height:14px;background:var(--track);border-radius:4px;position:relative}
+.bar .fill{position:absolute;left:0;top:0;bottom:0;border-radius:0 4px 4px 0;min-width:1px}
+.bar .val{text-align:right;font-variant-numeric:tabular-nums;color:var(--ink2)}
+.chartbox{position:relative}
+svg text{font-family:var(--font)}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:14px;color:var(--ink2);margin:8px 0}
+.legend i{display:inline-block;width:14px;height:0;border-top:2px solid;vertical-align:middle;margin-right:6px}
+#tip{position:fixed;z-index:10;pointer-events:none;background:var(--ink);color:var(--surface);border-radius:8px;padding:6px 10px;font-size:13px;display:none;max-width:280px}
+details{margin-top:8px;font-size:14px;color:var(--ink2);overflow-x:auto}
+details summary{cursor:pointer}
+table{border-collapse:collapse;width:100%;font-size:13px;margin-top:8px}
+th,td{text-align:left;padding:4px 8px;border-bottom:1px solid var(--grid);font-variant-numeric:tabular-nums}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:12px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(420px,100%),1fr));gap:16px}
+textarea,input,select{font:inherit;font-size:14px;width:100%;background:var(--surface);color:var(--ink);border:1px solid var(--axis);border-radius:8px;padding:8px}
+textarea{min-height:110px}
+label.f{display:block;font-size:13px;color:var(--ink2);margin:8px 0 4px}
+.note{font-size:13px;color:var(--muted);max-width:80ch}
+footer{margin-top:48px;color:var(--muted);font-size:13px}
+.err{color:var(--crit);font-size:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div>
+    <h1>See how sure it is</h1>
+    <p class="lede">assay gives a small model on your own laptop a question and gets back an answer with a probability you can check. Every picture below is replayed from real benchmark runs. Nothing on this page is made up.</p>
+  </div>
+  <button class="plain" id="theme" aria-label="Switch between light and dark">Light / dark</button>
+</header>
+
+<section id="s-score">
+  <h2>How each system did</h2>
+  <p class="sub" id="score-sub"></p>
+  <div class="row" style="margin-bottom:12px"><span class="note">Setting:</span><div class="seg" id="cond" role="group" aria-label="Setting"></div></div>
+  <p class="note" id="cond-help"></p>
+  <div class="tiles" id="tiles"></div>
+</section>
+
+<section id="s-explore">
+  <h2>Look at one decision</h2>
+  <p class="sub">Pick a task and an item. Each system's odds for every option are drawn as bars. The right answer is marked with a tick.</p>
+  <div class="tabs" id="tasktabs" role="group" aria-label="Task"></div>
+  <div class="tabs" id="filters" role="group" aria-label="Filter"></div>
+  <div class="explorer">
+    <div><div class="list" id="list"></div><p class="note" id="listnote"></p></div>
+    <div class="card detail" id="detail"></div>
+  </div>
+</section>
+
+<section id="s-trust">
+  <h2>Can you trust its confidence?</h2>
+  <p class="sub">When it says "80% sure", is it right about 80% of the time? A perfect system follows the diagonal. Lines below the diagonal are overconfident: they claim more certainty than they have earned.</p>
+  <div class="card chartbox" id="trust"></div>
+</section>
+
+<section id="s-cover">
+  <h2>Answer fewer, get more right</h2>
+  <p class="sub">Keep only the answers the system is most sure about and ignore the rest. A trustworthy confidence number makes accuracy climb as you answer less.</p>
+  <div class="card chartbox" id="cover"></div>
+</section>
+
+<section id="s-flip">
+  <h2>Does the order of the options change the answer?</h2>
+  <p class="sub">Each item is asked twice: once with the options in one order and once reversed. This chart shows how often the top answer changed. Lower is better.</p>
+  <div class="grid3" id="flip"></div>
+</section>
+
+<section id="s-live">
+  <h2>Try it yourself</h2>
+  <p class="sub">This part needs the server running on your machine, because the pictures above are replays and this one is live. Start it with <code>python -m assay serve --model gemma3 --cors --port 8787</code>, then press Ask.</p>
+  <div class="card">
+    <div class="two">
+      <div>
+        <label class="f" for="lv-url">Server address</label><input id="lv-url" value="http://127.0.0.1:8787">
+        <label class="f" for="lv-ex">Example</label><select id="lv-ex"></select>
+        <label class="f" for="lv-state">The situation</label><textarea id="lv-state"></textarea>
+        <p style="margin:12px 0 0"><button class="plain" id="lv-go">Ask</button> <span id="lv-status" class="note"></span></p>
+      </div>
+      <div id="lv-out"><p class="note">Answers appear here.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer id="foot"></footer>
+</div>
+<div id="tip" role="tooltip"></div>
+
+<script id="data" type="application/json">/*DATA*/</script>
+<script>
+"use strict";
+const D = JSON.parse(document.getElementById("data").textContent);
+const CONDS = [["a","As shipped","One option order, raw odds."],["b","Order-shuffled","Options shown in rotated orders and averaged."],["c","Shuffled + calibrated","Odds rescaled using a labelled sample, so confidence matches how often it is right."],["p","Plain model answer","The same model asked to write its answer and a confidence. Only measured for the assay model."]];
+const state = {cond:"b", task:D.taskOrder[0], filter:"all", sel:null, shown:60};
+const $ = (s,r=document)=>r.querySelector(s);
+const el = (t,a={},...kids)=>{const e=document.createElement(t);for(const[k,v]of Object.entries(a)){if(k==="class")e.className=v;else if(k.startsWith("on"))e.addEventListener(k.slice(2),v);else if(v!==false&&v!=null)e.setAttribute(k,v);}for(const c of kids.flat())e.append(c&&c.nodeType?c:document.createTextNode(c==null?"":c));return e;};
+const NS="http://www.w3.org/2000/svg";
+const sv=(t,a={},...kids)=>{const e=document.createElementNS(NS,t);for(const[k,v]of Object.entries(a))e.setAttribute(k,v);for(const c of kids.flat())e.append(c);return e;};
+const pct=x=>x==null?"n/a":(x*100).toFixed(1)+"%";
+const col=id=>`var(--s-${id})`;
+const tip=$("#tip");
+function showTip(ev,html){tip.innerHTML=html;tip.style.display="block";const w=tip.offsetWidth,h=tip.offsetHeight;let x=ev.clientX+14,y=ev.clientY+14;if(x+w>innerWidth-8)x=ev.clientX-w-14;if(y+h>innerHeight-8)y=ev.clientY-h-14;tip.style.left=Math.max(8,x)+"px";tip.style.top=Math.max(8,y)+"px";}
+const hideTip=()=>{tip.style.display="none"};
+
+/* ---------- data helpers ---------- */
+const sysById=Object.fromEntries(D.systems.map(s=>[s.id,s]));
+function probsOf(it,sid,cond=state.cond){const s=it.s[sid];return s?s[cond]||null:null;}
+function topOf(p){let b=0;for(let i=1;i<p.length;i++)if(p[i]>p[b])b=i;return b;}
+function condItems(sid,cond=state.cond,task=null){return D.items.filter(it=>(!task||it.t===task)&&probsOf(it,sid,cond));}
+function ece(rows){ // rows: [conf, correct]
+  const B=10,n=rows.length;if(!n)return null;let e=0;
+  for(let b=0;b<B;b++){const r=rows.filter(([c])=>Math.min(B-1,Math.floor(c*B))===b);if(!r.length)continue;
+    const mc=r.reduce((a,x)=>a+x[0],0)/r.length,acc=r.reduce((a,x)=>a+x[1],0)/r.length;e+=r.length/n*Math.abs(mc-acc);}
+  return e;}
+function rowsFor(sid,cond,task=null){return condItems(sid,cond,task).map(it=>{const p=probsOf(it,sid,cond);const t=topOf(p);return [p[t],t===it.y?1:0];});}
+function flipRate(sid,which,task=null){const its=D.items.filter(it=>(!task||it.t===task)&&it.s[sid]&&it.s[sid][which]!=null);return its.length?its.reduce((a,it)=>a+it.s[sid][which],0)/its.length:null;}
+
+/* ---------- theme ---------- */
+$("#theme").addEventListener("click",()=>{const r=document.documentElement;const dark=(r.dataset.theme==="dark")||(!r.dataset.theme&&matchMedia("(prefers-color-scheme:dark)").matches);r.dataset.theme=dark?"light":"dark";try{localStorage.setItem("assay-theme",r.dataset.theme)}catch(e){}renderAll();});
+try{const t=localStorage.getItem("assay-theme");if(t)document.documentElement.dataset.theme=t;}catch(e){}
+
+/* ---------- condition switch + scoreboard ---------- */
+function renderCond(){
+  const box=$("#cond");box.replaceChildren();
+  for(const[k,label]of CONDS){
+    if(k==="p"&&!D.systems.some(s=>s.hasPlain))continue;
+    box.append(el("button",{type:"button","aria-pressed":String(state.cond===k),onclick:()=>{state.cond=k;renderAll();}},label));
+  }
+  $("#cond-help").textContent=CONDS.find(c=>c[0]===state.cond)[2];
+}
+function renderTiles(){
+  $("#score-sub").textContent=`${D.items.length.toLocaleString()} test items across ${D.taskOrder.length} tasks, checked by construction and then by a blind reader. Calibration was fitted on a separate half and never scored on it.`;
+  const box=$("#tiles");box.replaceChildren();
+  for(const s of D.systems){
+    const its=condItems(s.id);
+    const t=el("div",{class:"card tile"});
+    t.append(el("h3",{},el("i",{class:"dot",style:`background:${col(s.id)}`}),s.label),el("p",{class:"sub2"},s.sub));
+    if(!its.length){t.append(el("p",{class:"note"},"Not measured in this setting."));box.append(t);continue;}
+    const rows=rowsFor(s.id,state.cond);const acc=rows.reduce((a,r)=>a+r[1],0)/rows.length;
+    const notSure=state.cond==="c"?its.filter(it=>it.s[s.id].set.length>1):[];
+    const answered=state.cond==="c"?its.filter(it=>it.s[s.id].set.length===1):null;
+    const accAns=answered&&answered.length?answered.filter(it=>topOf(it.s[s.id].c)===it.y).length/answered.length:null;
+    const flip=state.cond==="a"?flipRate(s.id,"fs"):(state.cond==="p"?null:flipRate(s.id,"fb"));
+    const stats=[["Right answers",pct(acc),"How often the top pick matched the answer written by construction. Higher is better."],
+      ["Confidence error",ece(rows).toFixed(3),"How far its stated confidence is from how often it is right, on average. 0.10 means about 10 points off. Lower is better."],
+      ["Changed when options reversed",flip==null?"n/a":pct(flip),"Lower is better."],
+      ["Typical time",s.lat[state.cond]==null?"n/a":Math.round(s.lat[state.cond])+" ms","Half of answers came back faster than this."]];
+    if(state.cond==="c")stats.splice(2,0,["Said \"not sure\"",pct(notSure.length/its.length),`When it did answer, it was right ${pct(accAns)} of the time.`]);
+    for(const[l,v,h]of stats)t.append(el("div",{class:"stat"},el("span",{},l,el("small",{},h)),el("b",{},v)));
+    box.append(t);
+  }
+}
+
+/* ---------- item explorer ---------- */
+const FILTERS=[["all","All"],["hard","Hard ones"],["wrong","Someone got it wrong"],["unsure","Said not sure"],["flip","Answer changed when reversed"]];
+function passes(it){
+  if(it.t!==state.task)return false;
+  const f=state.filter;
+  if(f==="all")return true;
+  if(f==="hard")return it.h;
+  const ss=D.systems.filter(s=>probsOf(it,s.id));
+  if(f==="wrong")return ss.some(s=>topOf(probsOf(it,s.id))!==it.y);
+  if(f==="unsure")return state.cond==="c"&&ss.some(s=>it.s[s.id].set.length>1);
+  if(f==="flip")return ss.some(s=>it.s[s.id][state.cond==="a"?"fs":"fb"]===1);
+  return true;
+}
+function renderTabs(){
+  const tb=$("#tasktabs");tb.replaceChildren();
+  for(const t of D.taskOrder)tb.append(el("button",{class:"chip",type:"button","aria-pressed":String(state.task===t),onclick:()=>{state.task=t;state.sel=null;state.shown=60;renderExplorer();}},D.tasks[t].title));
+  const fb=$("#filters");fb.replaceChildren();
+  for(const[k,l]of FILTERS){
+    if(k==="unsure"&&state.cond!=="c")continue;
+    fb.append(el("button",{class:"chip",type:"button","aria-pressed":String(state.filter===k),onclick:()=>{state.filter=k;state.sel=null;state.shown=60;renderExplorer();}},l));
+  }
+}
+function renderList(items){
+  const box=$("#list");box.replaceChildren();
+  if(!items.length){box.append(el("p",{class:"note",style:"padding:12px"},"Nothing matches this filter in this setting."));$("#listnote").textContent="";return;}
+  for(const it of items.slice(0,state.shown)){
+    box.append(el("button",{type:"button","aria-current":String(state.sel&&state.sel.id===it.id),onclick:()=>{state.sel=it;renderExplorer();}},
+      el("div",{class:"meta"},el("span",{},it.id),it.h?el("span",{},"hard: "+it.k):el("span",{},"easy")),
+      el("div",{class:"txt"},it.x)));
+  }
+  if(items.length>state.shown)box.append(el("button",{type:"button",style:"text-align:center;color:var(--ink)",onclick:()=>{state.shown+=60;renderExplorer();}},`Show more (${items.length-state.shown} left)`));
+  $("#listnote").textContent=`${items.length} items match.`;
+}
+function bars(labels,probs,truthIdx,color){
+  const box=el("div");
+  const order=labels.map((l,i)=>i);
+  for(const i of order){
+    const isT=i===truthIdx;
+    box.append(el("div",{class:"bar"},
+      el("span",{class:"lab"+(isT?" t":""),title:labels[i]},(isT?"✓ ":"")+labels[i]),
+      el("div",{class:"trk"},el("div",{class:"fill",style:`width:${Math.max(0,probs[i])*100}%;background:${color}`})),
+      el("span",{class:"val"},(probs[i]*100).toFixed(probs[i]>=.995||probs[i]<.005?1:0)+"%")));
+  }
+  return box;
+}
+function renderDetail(){
+  const box=$("#detail");box.replaceChildren();
+  const it=state.sel;
+  if(!it){box.append(el("p",{class:"note"},"Choose an item on the left."));return;}
+  const labels=D.tasks[it.t].labels;
+  box.append(el("pre",{},it.x),
+    el("p",{class:"truth"},"Right answer: ",el("b",{},labels[it.y]),it.h?`  ·  a hard case (${it.k})`:"  ·  an easy case"));
+  for(const s of D.systems){
+    const p=probsOf(it,s.id);
+    const wrap=el("div",{class:"sys"});
+    const head=el("h4",{},el("i",{class:"dot",style:`background:${col(s.id)}`}),s.label);
+    if(!p){wrap.append(head,el("p",{class:"note"},"Not measured in this setting."));box.append(wrap);continue;}
+    const top=topOf(p),right=top===it.y;
+    const set=state.cond==="c"?it.s[s.id].set:[top];
+    if(set.length>1){
+      const inSet=set.includes(it.y);
+      head.append(el("span",{class:"pill warn"},"⚠ Not sure: "+set.map(i=>labels[i]).join(" or ")),el("span",{class:"note"},inSet?"The right answer is among them.":"The right answer is not among them."));
+    }else head.append(right?el("span",{class:"pill good"},"✓ Right"):el("span",{class:"pill bad"},"✕ Wrong"));
+    wrap.append(head,bars(labels,p,it.y,col(s.id)));
+    box.append(wrap);
+  }
+}
+function renderExplorer(){
+  renderTabs();
+  const items=D.items.filter(passes);
+  if(state.sel&&!items.some(i=>i.id===state.sel.id))state.sel=null;
+  if(!state.sel&&items.length)state.sel=items[0];
+  renderList(items);renderDetail();
+}
+
+/* ---------- charts ---------- */
+function svgChart(w,h){return sv("svg",{viewBox:`0 0 ${w} ${h}`,width:"100%",role:"img",style:"display:block;max-width:760px;margin:0 auto"});}
+function legendFor(systems){const l=el("div",{class:"legend"});for(const s of systems)l.append(el("span",{},el("i",{style:`border-color:${col(s.id)}`}),s.label));return l;}
+function tableOf(head,rows){return el("details",{},el("summary",{},"Show these numbers as a table"),el("table",{},el("thead",{},el("tr",{},head.map(h=>el("th",{},h)))),el("tbody",{},rows.map(r=>el("tr",{},r.map(c=>el("td",{},c)))))));}
+const M={l:64,r:24,t:16,b:44};
+function axes(svg,W,H,xl,yl,xticks,yticks){
+  const pw=W-M.l-M.r,ph=H-M.t-M.b;
+  for(const[y,lab]of yticks){const py=M.t+ph*(1-y);svg.append(sv("line",{x1:M.l,x2:W-M.r,y1:py,y2:py,stroke:"var(--grid)","stroke-width":1}));const t=sv("text",{x:M.l-8,y:py+4,"text-anchor":"end","font-size":12,fill:"var(--muted)"});t.textContent=lab;svg.append(t);}
+  for(const[x,lab]of xticks){const px=M.l+pw*x;const t=sv("text",{x:px,y:H-M.b+18,"text-anchor":"middle","font-size":12,fill:"var(--muted)"});t.textContent=lab;svg.append(t);}
+  svg.append(sv("line",{x1:M.l,x2:W-M.r,y1:M.t+ph,y2:M.t+ph,stroke:"var(--axis)"}));
+  const xt=sv("text",{x:M.l+pw/2,y:H-6,"text-anchor":"middle","font-size":13,fill:"var(--ink2)"});xt.textContent=xl;svg.append(xt);
+  const yt=sv("text",{x:12,y:M.t+ph/2,"text-anchor":"middle","font-size":13,fill:"var(--ink2)",transform:`rotate(-90 12 ${M.t+ph/2})`});yt.textContent=yl;svg.append(yt);
+  return {pw,ph,X:v=>M.l+pw*v,Y:v=>M.t+ph*(1-v)};
+}
+function renderTrust(){
+  const box=$("#trust");box.replaceChildren();
+  const W=720,H=460,svg=svgChart(W,H);
+  const tk=[0,.2,.4,.6,.8,1].map(v=>[v,Math.round(v*100)+"%"]);
+  const g=axes(svg,W,H,"How sure it said it was","How often it was actually right",tk,tk);
+  svg.append(sv("line",{x1:g.X(0),y1:g.Y(0),x2:g.X(1),y2:g.Y(1),stroke:"var(--muted)","stroke-width":1,"stroke-dasharray":"4 4"}));
+  const ang=Math.atan2(g.ph,g.pw)*180/Math.PI,lx=g.X(.3),ly=g.Y(.3)+16;
+  const dl=sv("text",{x:lx,y:ly,"font-size":12,fill:"var(--muted)","text-anchor":"middle",transform:`rotate(${-ang} ${lx} ${ly})`});dl.textContent="perfect";svg.append(dl);
+  const rows=[],used=[];
+  for(const s of D.systems){
+    const its=condItems(s.id);if(!its.length)continue;used.push(s);
+    const bins=[];const B=10;
+    for(let b=0;b<B;b++){const r=rowsFor(s.id,state.cond).filter(([c])=>Math.min(B-1,Math.floor(c*B))===b);if(r.length<5)continue;
+      const mc=r.reduce((a,x)=>a+x[0],0)/r.length,acc=r.reduce((a,x)=>a+x[1],0)/r.length;bins.push({b,n:r.length,mc,acc});}
+    if(bins.length>1)svg.append(sv("polyline",{points:bins.map(p=>`${g.X(p.mc)},${g.Y(p.acc)}`).join(" "),fill:"none",stroke:col(s.id),"stroke-width":2,"stroke-linejoin":"round","stroke-linecap":"round"}));
+    for(const p of bins){
+      const r=Math.max(4,Math.min(10,3+Math.sqrt(p.n)/2));
+      svg.append(sv("circle",{cx:g.X(p.mc),cy:g.Y(p.acc),r,fill:col(s.id),stroke:"var(--surface)","stroke-width":2}));
+      const hit=sv("circle",{cx:g.X(p.mc),cy:g.Y(p.acc),r:Math.max(12,r+4),fill:"transparent",tabindex:0,"aria-label":`${s.label}: said ${(p.mc*100).toFixed(0)}% sure, right ${(p.acc*100).toFixed(0)}% of ${p.n} times`});
+      hit.addEventListener("mousemove",ev=>showTip(ev,`<b>${s.label}</b><br>Said about ${(p.mc*100).toFixed(0)}% sure<br>Was right ${(p.acc*100).toFixed(0)}% of the time<br>${p.n} items`));
+      hit.addEventListener("mouseleave",hideTip);svg.append(hit);
+      rows.push([s.label,`${p.b*10}–${p.b*10+10}%`,p.n,(p.mc*100).toFixed(0)+"%",(p.acc*100).toFixed(0)+"%"]);
+    }
+  }
+  box.append(legendFor(used),svg,el("p",{class:"note"},"Dot size shows how many items fell in that band. Bands with fewer than 5 items are left out."),tableOf(["System","Confidence band","Items","Average said","Actually right"],rows));
+}
+function renderCover(){
+  const box=$("#cover");box.replaceChildren();
+  const W=720,H=440,svg=svgChart(W,H);
+  const xs=[.2,.4,.6,.8,1];
+  const all=[];let lo=1;
+  const curves=D.systems.map(s=>{const its=condItems(s.id).map(it=>{const p=probsOf(it,s.id);const t=topOf(p);return [p[t],t===it.y?1:0];}).sort((a,b)=>b[0]-a[0]);
+    if(!its.length)return null;const pts=[];for(let c=.1;c<=1.0001;c+=.05){const k=Math.max(1,Math.round(its.length*c));pts.push([c,its.slice(0,k).reduce((a,x)=>a+x[1],0)/k]);}
+    pts.forEach(p=>lo=Math.min(lo,p[1]));return {s,pts};}).filter(Boolean);
+  const y0=Math.max(0,Math.floor((lo-.02)*5)/5),span=1-y0;
+  const yt=[];for(let v=y0;v<=1.0001;v+=.2)yt.push([(v-y0)/span,Math.round(v*100)+"%"]);
+  const xt=[.1,.25,.5,.75,1].map(c=>[(c-.1)/.9,Math.round(c*100)+"%"]);
+  const g=axes(svg,W,H,"Share of items answered, most confident first","Right answers among those answered",xt,yt);
+  const X=c=>g.X((c-.1)/.9),Y=a=>g.Y((a-y0)/span);
+  const rows=[];
+  for(const{s,pts}of curves){
+    svg.append(sv("polyline",{points:pts.map(p=>`${X(p[0])},${Y(p[1])}`).join(" "),fill:"none",stroke:col(s.id),"stroke-width":2,"stroke-linejoin":"round","stroke-linecap":"round"}));
+    const e=pts[pts.length-1],st=pts[0];
+    svg.append(sv("circle",{cx:X(e[0]),cy:Y(e[1]),r:4,fill:col(s.id),stroke:"var(--surface)","stroke-width":2}),sv("circle",{cx:X(st[0]),cy:Y(st[1]),r:4,fill:col(s.id),stroke:"var(--surface)","stroke-width":2}));
+    const t=sv("text",{x:X(st[0])+10,y:Y(st[1])-8,"font-size":13,"font-weight":600,fill:"var(--ink)"});t.textContent=`${s.short} ${(st[1]*100).toFixed(0)}%`;svg.append(t);
+    const t2=sv("text",{x:X(e[0])-6,y:Y(e[1])+(s.id==="von"?-10:18),"font-size":13,"font-weight":600,fill:"var(--ink)","text-anchor":"end"});t2.textContent=`${(e[1]*100).toFixed(0)}%`;svg.append(t2);
+    for(const c of [.2,.4,.6,.8,1]){const p=pts.reduce((a,b)=>Math.abs(b[0]-c)<Math.abs(a[0]-c)?b:a);rows.push([s.label,Math.round(p[0]*100)+"%",(p[1]*100).toFixed(1)+"%"]);}
+  }
+  const ov=sv("rect",{x:M.l,y:M.t,width:g.pw,height:g.ph,fill:"transparent"});
+  const cross=sv("line",{y1:M.t,y2:M.t+g.ph,stroke:"var(--muted)","stroke-width":1,visibility:"hidden"});svg.append(cross);
+  ov.addEventListener("mousemove",ev=>{const r=svg.getBoundingClientRect();const sx=(ev.clientX-r.left)*(W/r.width);const c=Math.min(1,Math.max(.1,.1+(sx-M.l)/g.pw*.9));cross.setAttribute("x1",X(c));cross.setAttribute("x2",X(c));cross.setAttribute("visibility","visible");
+    showTip(ev,`<b>Answering the top ${Math.round(c*100)}%</b><br>`+curves.map(({s,pts})=>{const p=pts.reduce((a,b)=>Math.abs(b[0]-c)<Math.abs(a[0]-c)?b:a);return `${s.short}: ${(p[1]*100).toFixed(0)}% right`;}).join("<br>"));});
+  ov.addEventListener("mouseleave",()=>{hideTip();cross.setAttribute("visibility","hidden");});svg.append(ov);
+  box.append(legendFor(curves.map(c=>c.s)),svg,tableOf(["System","Share answered","Right among those"],rows));
+}
+function renderFlip(){
+  const box=$("#flip");box.replaceChildren();
+  const tasks=D.taskOrder;
+  for(const s of D.systems){
+    const W=340,H=250,svg=sv("svg",{viewBox:`0 0 ${W} ${H}`,width:"100%",role:"img","aria-label":`${s.label}: how often the answer changed when the options were reversed`});
+    const vals=tasks.map(t=>[flipRate(s.id,"fs",t),flipRate(s.id,"fb",t)]);
+    const top=Math.max(.1,...vals.flat().filter(v=>v!=null));const ymax=Math.ceil(top*10)/10;
+    const pl=36,pr=8,pt=14,pb=44,pw=W-pl-pr,ph=H-pt-pb,Y=v=>pt+ph*(1-v/ymax);
+    for(let i=0;i<=2;i++){const v=ymax*i/2,y=Y(v);svg.append(sv("line",{x1:pl,x2:W-pr,y1:y,y2:y,stroke:"var(--grid)"}));const t=sv("text",{x:pl-6,y:y+4,"text-anchor":"end","font-size":11,fill:"var(--muted)"});t.textContent=Math.round(v*100)+"%";svg.append(t);}
+    svg.append(sv("line",{x1:pl,x2:W-pr,y1:pt+ph,y2:pt+ph,stroke:"var(--axis)"}));
+    const bw=14,gap=3,gw=pw/tasks.length;
+    tasks.forEach((t,i)=>{
+      const cx=pl+gw*i+gw/2;const [a,b]=vals[i];
+      [[a,"var(--muted)",cx-bw-gap/2,"one order"],[b,col(s.id),cx+gap/2,"shuffled"]].forEach(([v,c,x,nm])=>{
+        if(v==null)return;const h=Math.max(1,ph*v/ymax),y=pt+ph-h;
+        svg.append(sv("path",{d:`M${x},${pt+ph} V${y+4} Q${x},${y} ${x+4},${y} H${x+bw-4} Q${x+bw},${y} ${x+bw},${y+4} V${pt+ph} Z`,fill:c}));
+        if(!(a===0&&b===0)){const lb=sv("text",{x:x+bw/2,y:y-4,"text-anchor":"middle","font-size":11,fill:"var(--ink2)"});lb.textContent=Math.round(v*100)+"%";svg.append(lb);}
+        const hit=sv("rect",{x:x-2,y:pt,width:bw+4,height:ph,fill:"transparent"});hit.addEventListener("mousemove",ev=>showTip(ev,`<b>${s.label}</b><br>${D.tasks[t].title}, ${nm}: answer changed on ${(v*100).toFixed(1)}% of items`));hit.addEventListener("mouseleave",hideTip);svg.append(hit);
+      });
+      if(a===0&&b===0){const zl=sv("text",{x:cx,y:pt+ph-5,"text-anchor":"middle","font-size":11,fill:"var(--ink2)"});zl.textContent="0%";svg.append(zl);}
+      const tl=sv("text",{x:cx,y:H-pb+16,"text-anchor":"middle","font-size":11,fill:"var(--muted)"});tl.textContent=D.tasks[t].short;svg.append(tl);
+    });
+    box.append(el("div",{class:"card"},el("h3",{style:"font-size:15px;margin:0 0 4px;display:flex;gap:8px;align-items:center"},el("i",{class:"dot",style:`background:${col(s.id)}`}),s.label),svg,
+      tableOf(["Task","One order","Shuffled"],tasks.map((t,i)=>[D.tasks[t].title,pct(vals[i][0]),pct(vals[i][1])]))));
+  }
+  box.append(el("p",{class:"note",style:"grid-column:1/-1"},"Grey bars: one order, as shipped. Coloured bars: shuffled orders averaged. A system that never changes its answer has no bars: it is already immune to option order."));
+}
+
+/* ---------- live ---------- */
+function renderLive(){
+  const sel=$("#lv-ex");
+  D.examples.forEach((e,i)=>sel.append(el("option",{value:i},e.name)));
+  const load=()=>{$("#lv-state").value=D.examples[sel.value].body.state;};
+  sel.addEventListener("change",load);load();
+  $("#lv-go").addEventListener("click",async()=>{
+    const ex=D.examples[sel.value];const body=JSON.parse(JSON.stringify(ex.body));body.state=$("#lv-state").value;
+    const out=$("#lv-out"),st=$("#lv-status");st.textContent="Asking…";st.className="note";out.replaceChildren();
+    try{
+      const r=await fetch($("#lv-url").value.replace(/\/$/,"")+"/v1/systemone",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+      const j=await r.json();if(!r.ok)throw new Error(j.error||("HTTP "+r.status));
+      st.textContent=`Answered in ${Math.round(j.latency_ms)} ms by ${j.model}.`;
+      for(const[qid,a]of Object.entries(j.answers)){
+        const labels=Object.keys(a.probabilities),probs=labels.map(l=>a.probabilities[l]);
+        const wrap=el("div",{class:"sys"});
+        const h=el("h4",{},qid,el("span",{class:"note"},`stability ${(a.stability*100).toFixed(0)}%`));
+        if(a.abstain)h.append(el("span",{class:"pill warn"},"⚠ Not sure: "+a.prediction_set.join(" or ")));
+        wrap.append(h,bars(labels,probs,-1,"var(--s-gemma)"),el("p",{class:"note"},`Confidence ${(a.confidence*100).toFixed(0)}%${a.calibrated?" (calibrated)":" (not calibrated)"}`));out.append(wrap);
+      }
+    }catch(e){st.className="err";st.textContent="Could not get an answer: "+e.message+". Is the server running with --cors?";}
+  });
+}
+
+/* ---------- boot ---------- */
+function renderAll(){renderCond();renderTiles();renderExplorer();renderTrust();renderCover();renderFlip();}
+$("#foot").innerHTML=D.foot;
+renderAll();renderLive();
+</script>
+</body>
+</html>
