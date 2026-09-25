@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- gemma3 4B run on the v2 set with bootstrap intervals (`bench/significance.py`); README rewritten with the real numbers and the routing weakness stated.
 - Visual demo page (`docs/demo/index.html`) built from the saved receipts, with a live panel; `serve --cors` to allow it.
 - Benchmark v2: 1,370 items, labelled by construction and checked blind; 203 ambiguous items dropped, never relabelled.
 - Adapters and receipts for the open clones von and openJev-verdict-2.0.

@@ -46,3 +46,9 @@ option probabilities in one pass (no text generation). Then it adds the parts no
 On our own benchmark, with gemma3 4B locally: order-shuffling must cut the order-flip rate versus a single
 ordering, and calibration must cut expected calibration error versus raw probabilities. If either fails, we say so
 in the README instead of hiding it.
+
+## Result against the bar (2026-09-25, gemma3 4B, 912 test items)
+- Shuffling cut the order-flip rate from 20.3% to 10.7%. Met, and outside noise. It helped in 3 of 4 tasks and hurt in urgency.
+- Calibration cut expected calibration error from 0.146 to 0.096. Met, and outside noise. It helped in 2 of 4 tasks.
+- Not part of the bar, but found: a plain generate-and-parse answer from the same model is 7 points more accurate (81.7% against 74.6%), mostly on routing. The two are level on confidence error.
+Details: `bench/receipts/v2-gemma3-4b.md` and `bench/receipts/v2-gemma3-4b-significance.md`.
