@@ -15,12 +15,12 @@ BACKENDS = {
 }
 
 
-def make_backend(kind: str, model: str, host: str, timeout: float):
+def make_backend(kind: str, model: str, host: str, timeout: float, scoring: str = "letter"):
     if kind == "keyword":
         from .backends.mock import KeywordBackend
         return KeywordBackend()
     from .backends.ollama import OllamaBackend
-    return OllamaBackend(model=model, host=host, timeout=timeout)
+    return OllamaBackend(model=model, host=host, timeout=timeout, scoring=scoring)
 
 
 def parse_question_arg(spec: str) -> dict:
@@ -54,6 +54,8 @@ def build_parser() -> argparse.ArgumentParser:
         sp.add_argument("--model", default="gemma3")
         sp.add_argument("--host", default="http://127.0.0.1:11434", help="Ollama address")
         sp.add_argument("--timeout", type=float, default=60)
+        sp.add_argument("--scoring", choices=["letter", "word", "auto"], default="letter",
+                        help="ollama only: read the odds of a lettered code (default) or of the option's own word")
         sp.add_argument("--orders", type=int, default=3, help="how many option orderings to average")
         sp.add_argument("--chunk-chars", type=int, default=0,
                         help="split situations longer than this many characters into overlapping pieces (0 = never split)")
@@ -100,7 +102,7 @@ def main(argv: list[str] | None = None) -> int:
         if args.cmd == "backends":
             print(json.dumps(BACKENDS, indent=2))
             return 0
-        backend = make_backend(args.backend, args.model, args.host, args.timeout)
+        backend = make_backend(args.backend, args.model, args.host, args.timeout, getattr(args, "scoring", "letter"))
         if getattr(args, "chunk_chars", 0):
             from .longinput import ChunkedBackend
             backend = ChunkedBackend(backend, max_chars=args.chunk_chars, overlap=min(300, args.chunk_chars // 10), combine=args.chunk_combine)

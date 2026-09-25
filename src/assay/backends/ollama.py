@@ -62,6 +62,72 @@ def build_prompt(state: str, question: Question, labels: list[str]) -> tuple[str
     return "\n".join(lines), codes
 
 
+def word_conflicts(labels: list[str], prefix: int = 2) -> list[str]:
+    """Options whose first few letters are the same as another option's. Word scoring cannot tell those apart."""
+    seen: dict[str, str] = {}
+    clash: list[str] = []
+    for l in labels:
+        key = l.strip().lower()[:prefix]
+        if key in seen:
+            clash += [seen[key], l]
+        seen.setdefault(key, l)
+    return clash
+
+
+def build_word_prompt(state: str, question: Question, labels: list[str]) -> str:
+    """The same question, but the model is asked to reply with the option's own word instead of a code."""
+    lines = [
+        "You are a careful decision maker. Read the situation, then answer the question by "
+        "replying with exactly one of the options, written exactly as shown.",
+        "",
+        "SITUATION:",
+        state.strip(),
+        "",
+        "QUESTION:",
+        question.instructions.strip(),
+    ]
+    if question.type == "score":
+        lines += ["", f"This is a rating on a scale from 1 to {question.levels}: 1 = lowest, {question.levels} = highest."]
+    elif question.type == "noul":
+        lines += ["", "This is a yes or no question."]
+    lines += ["", "OPTIONS:"] + [f"- {l}" for l in labels]
+    lines += ["", "Reply with your chosen option only, nothing else.", "ANSWER:"]
+    return "\n".join(lines)
+
+
+def parse_word_scores(data: dict, labels: list[str]) -> list[float]:
+    """Read the model's first-word odds and line them up with the options' own words.
+
+    A token counts for an option when it is that option's whole word or the start of it, and the start
+    belongs to no other option. Spellings ("cancel", " Cancel") are pooled. Odds on tokens that fit no
+    option are ignored, and an option nobody ranked gets a floor just below the lowest ranked one.
+    """
+    entries = data.get("logprobs")
+    if not entries or not isinstance(entries, list):
+        raise BackendError(
+            "Ollama reply had no logprobs. This needs an Ollama version that supports "
+            "logprobs (v0.12.11 or newer)."
+        )
+    tops = entries[0].get("top_logprobs") or [{"token": entries[0].get("token", ""), "logprob": entries[0].get("logprob", 0.0)}]
+    low = [l.strip().lower() for l in labels]
+    found: list[list[float]] = [[] for _ in labels]
+    lowest = min(float(t["logprob"]) for t in tops)
+    for t in tops:
+        tok = str(t.get("token", "")).strip().lower()
+        if not tok:
+            continue
+        exact = [i for i, l in enumerate(low) if l == tok]
+        starts = [i for i, l in enumerate(low) if l.startswith(tok)]
+        hit = exact[0] if exact else (starts[0] if len(starts) == 1 else None)
+        if hit is not None:
+            found[hit].append(float(t["logprob"]))
+    if not any(found):
+        seen = ", ".join(repr(str(t.get("token", ""))) for t in tops[:5])
+        raise BackendError(f"model did not start its reply with any of the options (it preferred: {seen}).")
+    floor = lowest - FLOOR_MARGIN
+    return [_logsumexp(f) if f else floor for f in found]
+
+
 def _logsumexp(xs: list[float]) -> float:
     m = max(xs)
     return m + math.log(sum(math.exp(x - m) for x in xs))
@@ -102,11 +168,18 @@ def parse_scores(data: dict, codes: list[str]) -> list[float]:
 class OllamaBackend:
     """Scores candidate answers with a local Ollama model, one short call per ordering."""
 
-    def __init__(self, model: str = "gemma3", host: str = "http://127.0.0.1:11434", timeout: float = 60):
+    def __init__(self, model: str = "gemma3", host: str = "http://127.0.0.1:11434", timeout: float = 60,
+                 scoring: str = "letter"):
+        """`scoring` is "letter" (options shown as A, B, C and the letter's odds read; the default), "word"
+        (the model replies with the option's own word and the first token's odds are read), or "auto"
+        (word when the options' first letters differ, otherwise letter)."""
+        if scoring not in ("letter", "word", "auto"):
+            raise ValueError('scoring must be "letter", "word" or "auto"')
         self.model = model
         self.host = host.rstrip("/")
         self.timeout = timeout
-        self.name = f"ollama:{model}"
+        self.scoring = scoring
+        self.name = f"ollama:{model}" + ("" if scoring == "letter" else f":{scoring}")
 
     def _post(self, path: str, payload: dict) -> dict:
         req = urllib.request.Request(
@@ -141,8 +214,20 @@ class OllamaBackend:
         except ValueError as e:
             raise BackendError(f"Ollama sent a reply that is not JSON: {e}") from e
 
+    def _use_words(self, labels: list[str]) -> bool:
+        if self.scoring == "letter":
+            return False
+        clash = word_conflicts(labels)
+        if self.scoring == "word" and clash:
+            raise BackendError(f"word scoring cannot tell these options apart by their first letters: {sorted(set(clash))}; use scoring=\"letter\"")
+        return not clash
+
     def logprobs(self, state: str, question: Question, labels: list[str]) -> list[float]:
-        prompt, codes = build_prompt(state, question, labels)
+        words = self._use_words(labels)
+        if words:
+            prompt, codes = build_word_prompt(state, question, labels), None
+        else:
+            prompt, codes = build_prompt(state, question, labels)
         data = self._post("/api/generate", {
             "model": self.model,
             "prompt": prompt,
@@ -151,4 +236,4 @@ class OllamaBackend:
             "logprobs": True,
             "top_logprobs": TOP_LOGPROBS,
         })
-        return parse_scores(data, codes)
+        return parse_word_scores(data, labels) if words else parse_scores(data, codes)

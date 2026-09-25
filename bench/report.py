@@ -98,6 +98,8 @@ def build_report(receipts: dict) -> str:
     conds = [c for c in COND_NAMES if _get(receipts, c) is not None]
     L: list[str] = []
     model = cfg.get("model") or ("keyword stand-in (no real model)" if cfg.get("backend") == "keyword" else cfg.get("backend"))
+    if cfg.get("scoring") and cfg["scoring"] != "letter":
+        model = f"{model} ({cfg['scoring']} scoring)"
     L += [f"# assay scoreboard: {model}", "",
           f"Run at {receipts['timestamp']}. Backend `{cfg.get('backend')}`, {cfg.get('orders')} option orderings, "
           f"tasks: {', '.join(receipts['tasks'])}. Python {ver.get('python')}, assay {ver.get('assay', '?')}"

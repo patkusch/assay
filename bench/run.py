@@ -75,13 +75,13 @@ def _load_calibrator():
         return M.LocalCalibrator, "bench/_local.py (assay.calibrate not importable)"
 
 
-def make_backend(kind: str, model: str, host: str, timeout: float):
+def make_backend(kind: str, model: str, host: str, timeout: float, scoring: str = "letter"):
     if kind == "keyword":
         from assay.backends.mock import KeywordBackend
         return KeywordBackend()
     if kind == "ollama":
         from assay.backends.ollama import OllamaBackend
-        return OllamaBackend(model, host, timeout=timeout)
+        return OllamaBackend(model, host, timeout=timeout, scoring=scoring)
     if kind == "von":
         from adapters.von import VonBackend
         return VonBackend()
@@ -369,6 +369,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--limit", type=int, default=0, help="only the first N items of each split (quick runs)")
     ap.add_argument("--timeout", type=float, default=120.0)
     ap.add_argument("--no-baseline", action="store_true", help="skip the generate-and-parse baseline")
+    ap.add_argument("--scoring", choices=["letter", "word", "auto"], default="letter",
+                    help="ollama only: read the odds of a lettered code (default) or of the option's own word")
     ap.add_argument("--tasks-dir", default=None, help="folder with tasks.json and <task>.jsonl (default bench/tasks; v2 set is bench/tasks_v2)")
     ap.add_argument("--out", default=None, help="receipts path; default bench/receipts/<backend>-<model>.json")
     args = ap.parse_args(argv)
@@ -378,14 +380,14 @@ def main(argv: list[str] | None = None) -> int:
 
     names = None if args.tasks == "all" else [t.strip() for t in args.tasks.split(",") if t.strip()]
     tasks = load_tasks(names, args.limit or None)
-    backend = make_backend(args.backend, args.model, args.host, args.timeout)
+    backend = make_backend(args.backend, args.model, args.host, args.timeout, args.scoring)
     baseline = None
     if args.backend == "ollama" and not args.no_baseline:
         baseline = make_ollama_baseline(args.model, args.host, args.timeout)
     out = Path(args.out) if args.out else BENCH_DIR / "receipts" / f"{args.backend}{'-' + args.model.replace(':', '_') if args.backend == 'ollama' else ''}.json"
     out.parent.mkdir(parents=True, exist_ok=True)
 
-    config = {"backend": args.backend, "model": args.model if args.backend == "ollama" else None, "host": args.host if args.backend == "ollama" else None,
+    config = {"backend": args.backend, "model": args.model if args.backend == "ollama" else None, "host": args.host if args.backend == "ollama" else None, "scoring": args.scoring if args.backend == "ollama" else None,
               "tasks": list(tasks), "limit": args.limit or None, "baseline": "ollama /api/generate JSON" if baseline else "not run"}
     receipts = run_benchmark(backend, tasks, orders=args.orders, alpha=args.alpha, baseline=baseline, config=config,
                              progress=lambda m: print(m, file=sys.stderr))
