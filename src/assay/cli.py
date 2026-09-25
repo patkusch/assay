@@ -1,10 +1,11 @@
-"""Command line: `python -m assay decide|serve|backends`. Prints JSON."""
+"""Command line: `python -m assay decide|serve|calibrate|backends`."""
 from __future__ import annotations
 
 import argparse
 import json
 import sys
 
+from .bundle import CalibrationBundle, describe, fit_bundle, load_labelled, questions_from_body
 from .server import BadRequest, run_request, serve
 from .types import BackendError
 
@@ -55,17 +56,32 @@ def build_parser() -> argparse.ArgumentParser:
         sp.add_argument("--timeout", type=float, default=60)
         sp.add_argument("--orders", type=int, default=3, help="how many option orderings to average")
 
+    def answering(sp):
+        sp.add_argument("--calibration", help="a file made by `assay calibrate`; its rescaling is applied to answers")
+        sp.add_argument("--confidence-floor", type=float, default=0.0,
+                        help="mark an answer 'abstain' when its confidence is below this (0 to 1)")
+
     d = sub.add_parser("decide", help="answer questions about a situation and print JSON")
     d.add_argument("--state", help="the situation, as text")
     d.add_argument("--question", action="append", default=[],
                    help="kind:instructions[:opt1|opt2]; kind is choice, score or noul (repeatable)")
     d.add_argument("--request", help="a JSON file in the same shape the server takes ('-' for stdin)")
     common(d)
+    answering(d)
 
     s = sub.add_parser("serve", help="run the HTTP server")
     s.add_argument("--bind", default="127.0.0.1")
     s.add_argument("--port", type=int, default=8787)
     common(s)
+    answering(s)
+
+    c = sub.add_parser("calibrate", help="fit a calibration from labelled examples and save it")
+    c.add_argument("--request", required=True, help="a request-shaped JSON file; only its 'questions' are used")
+    c.add_argument("--labelled", required=True, help='JSONL file, one {"question", "state", "truth"} per line')
+    c.add_argument("--out", required=True, help="where to write the calibration file")
+    c.add_argument("--alpha", type=float, default=0.1,
+                   help="miss rate you accept for the not-sure set (0.1 = right answer inside it about 90%% of the time)")
+    common(c)
 
     sub.add_parser("backends", help="list the available backends")
     return p
@@ -78,8 +94,23 @@ def main(argv: list[str] | None = None) -> int:
             print(json.dumps(BACKENDS, indent=2))
             return 0
         backend = make_backend(args.backend, args.model, args.host, args.timeout)
+        if args.cmd == "calibrate":
+            with open(args.request, encoding="utf-8") as f:
+                questions = questions_from_body(json.load(f))
+            bundle = fit_bundle(backend, questions, load_labelled(args.labelled), n_orders=args.orders, alpha=args.alpha)
+            bundle.save(args.out)
+            print(describe(bundle))
+            print(f"\nSaved to {args.out}")
+            return 0
+        bundle = None
+        if args.calibration:
+            bundle = CalibrationBundle.load(args.calibration)
+            warning = bundle.check(getattr(backend, "name", "unknown"))
+            if warning:
+                print(warning, file=sys.stderr)
+        calibrators = bundle.calibrators if bundle else None
         if args.cmd == "serve":
-            serve(backend, args.bind, args.port, args.orders)
+            serve(backend, args.bind, args.port, args.orders, calibrators, args.confidence_floor, bundle)
             return 0
         if args.request:
             raw = sys.stdin.read() if args.request == "-" else open(args.request, encoding="utf-8").read()
@@ -89,7 +120,8 @@ def main(argv: list[str] | None = None) -> int:
                 raise BadRequest("give --request FILE, or --state plus at least one --question")
             body = {"state": args.state,
                     "questions": {f"q{i + 1}": parse_question_arg(q) for i, q in enumerate(args.question)}}
-        print(json.dumps(run_request(backend, body, n_orders=args.orders), indent=2))
+        print(json.dumps(run_request(backend, body, n_orders=args.orders, calibrators=calibrators,
+                                     confidence_floor=args.confidence_floor, bundle=bundle), indent=2))
         return 0
     except (BadRequest, ValueError, OSError) as e:
         print(json.dumps({"error": str(e)}), file=sys.stderr)

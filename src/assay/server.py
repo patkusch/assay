@@ -80,16 +80,30 @@ def backend_for(backend, model: str | None):
     return backend
 
 
-def run_request(backend, body: object, *, n_orders: int = 3, calibrators: dict | None = None) -> dict:
-    """The whole job for one decoded request body. Shared by the server and the command line."""
+def run_request(backend, body: object, *, n_orders: int = 3, calibrators: dict | None = None,
+                confidence_floor: float = 0.0, bundle=None) -> dict:
+    """The whole job for one decoded request body. Shared by the server and the command line.
+
+    If a `bundle` is given and the caller asked for a different model than the server's,
+    and that model is not the one it was fitted with, the calibration is left out: it would be wrong for that model.
+    """
     request, model = parse_request(body)
-    resp = decide(backend_for(backend, model), request, n_orders=n_orders, calibrators=calibrators)
+    used = backend_for(backend, model)
+    if bundle is not None and calibrators and used is not backend and bundle.check(getattr(used, "name", "unknown")):
+        calibrators = None
+    resp = decide(used, request, n_orders=n_orders, calibrators=calibrators, confidence_floor=confidence_floor)
     return response_body(request, resp)
 
 
 def make_server(backend, host: str = "127.0.0.1", port: int = 8787, n_orders: int = 3,
-                calibrators: dict | None = None) -> ThreadingHTTPServer:
-    """Build the server without starting it (port 0 picks a free port). Useful for tests."""
+                calibrators: dict | None = None, confidence_floor: float = 0.0,
+                bundle=None) -> ThreadingHTTPServer:
+    """Build the server without starting it (port 0 picks a free port). Useful for tests.
+
+    Pass a `CalibrationBundle` as `bundle` to use its calibrators and to serve `GET /v1/calibration`.
+    """
+    if bundle is not None and calibrators is None:
+        calibrators = bundle.calibrators
 
     class Handler(BaseHTTPRequestHandler):
         server_version = "assay"
@@ -105,6 +119,13 @@ def make_server(backend, host: str = "127.0.0.1", port: int = 8787, n_orders: in
         def do_GET(self):
             if self.path == "/healthz":
                 self._send(200, {"status": "ok", "backend": getattr(backend, "name", "unknown")})
+            elif self.path == "/v1/calibration":
+                if bundle is None:
+                    self._send(404, {"error": "no calibration is loaded"})
+                else:
+                    out = bundle.summary()
+                    out["warning"] = bundle.check(getattr(backend, "name", "unknown"))
+                    self._send(200, out)
             else:
                 self._send(404, {"error": "not found"})
 
@@ -126,7 +147,8 @@ def make_server(backend, host: str = "127.0.0.1", port: int = 8787, n_orders: in
                 self._send(400, {"error": "body is not valid JSON"})
                 return
             try:
-                self._send(200, run_request(backend, body, n_orders=n_orders, calibrators=calibrators))
+                self._send(200, run_request(backend, body, n_orders=n_orders, calibrators=calibrators,
+                                              confidence_floor=confidence_floor, bundle=bundle))
             except BadRequest as e:
                 self._send(400, {"error": str(e)})
             except BackendError as e:
@@ -139,9 +161,9 @@ def make_server(backend, host: str = "127.0.0.1", port: int = 8787, n_orders: in
 
 
 def serve(backend, host: str = "127.0.0.1", port: int = 8787, n_orders: int = 3,
-          calibrators: dict | None = None) -> None:
+          calibrators: dict | None = None, confidence_floor: float = 0.0, bundle=None) -> None:
     """Run the server until interrupted."""
-    srv = make_server(backend, host, port, n_orders, calibrators)
+    srv = make_server(backend, host, port, n_orders, calibrators, confidence_floor, bundle)
     print(f"assay listening on http://{host}:{srv.server_address[1]} (backend: {getattr(backend, 'name', '?')})", flush=True)
     try:
         srv.serve_forever()

@@ -1,0 +1,26 @@
+{"question": "risk", "state": "Command: ls -la ~/projects\nContext: listing files in the user's own project folder.", "truth": "safe"}
+{"question": "risk", "state": "Command: git status\nContext: checking which files changed in a local checkout.", "truth": "safe"}
+{"question": "risk", "state": "Command: terraform plan\nContext: preview of infrastructure changes; nothing is applied.", "truth": "safe"}
+{"question": "risk", "state": "Command: git push --force origin main\nContext: main is the shared release branch; three teammates pushed to it today.", "truth": "risky"}
+{"question": "risk", "state": "Command: curl https://random-site.example/install.sh | sudo bash\nContext: script has not been reviewed by anyone.", "truth": "risky"}
+{"question": "risk", "state": "Command: git reset --hard origin/main\nContext: this throws away the user's unpushed commits on a shared branch.", "truth": "risky"}
+{"question": "risk", "state": "Command: rm -rf /var/lib/postgresql/data\nContext: production database server, no backup exists.", "truth": "destructive"}
+{"question": "risk", "state": "Command: DROP TABLE customers;\nContext: production database, no snapshot was taken.", "truth": "destructive"}
+{"question": "risk", "state": "Command: rm -rf ~/Documents\nContext: the user's only copy of their documents.", "truth": "destructive"}
+{"question": "phishing", "state": "From: security@paypa1-secure.example\nSubject: Account suspended\n\nVerify your password within 24 hours at https://paypa1-secure.example/verify or your account will be closed.", "truth": "yes"}
+{"question": "phishing", "state": "From: hr-payroll@company-benefits-login.example\nSubject: Update your bank details\n\nTo keep receiving your salary, confirm your bank login at the link below today.", "truth": "yes"}
+{"question": "phishing", "state": "From: delivery@parcel-notice.example\nSubject: Parcel on hold\n\nPay a 1.99 fee at http://parcel-notice.example/pay to release your package. Enter your card number to continue.", "truth": "yes"}
+{"question": "phishing", "state": "From: it-helpdesk@yourcompany.example\nSubject: Password expires\n\nYour password expires in 24 hours. Sign in at the address below and type your current password to keep your account.", "truth": "yes"}
+{"question": "phishing", "state": "From: anna@team.example\nSubject: Lunch on Thursday\n\nHi, shall we go for lunch on Thursday at noon? I booked the usual place.", "truth": "no"}
+{"question": "phishing", "state": "From: noreply@github.com\nSubject: Your pull request was merged\n\nYour pull request #42 was merged into main by a maintainer.", "truth": "no"}
+{"question": "phishing", "state": "From: newsletter@localbakery.example\nSubject: New sourdough on Saturday\n\nWe are baking a new sourdough this Saturday. Come by the shop. Unsubscribe at the bottom.", "truth": "no"}
+{"question": "phishing", "state": "From: finance@team.example\nSubject: Expense report approved\n\nYour expense report for March was approved and will be paid with the next payroll run.", "truth": "no"}
+{"question": "team", "state": "I was charged twice for my subscription this month and I want one payment refunded.", "truth": "billing"}
+{"question": "team", "state": "My invoice shows the wrong company address. Can you send a corrected invoice?", "truth": "billing"}
+{"question": "team", "state": "The app crashes every time I open the settings page on my phone.", "truth": "technical"}
+{"question": "team", "state": "I cannot log in. The reset email never arrives and the page says error 500.", "truth": "technical"}
+{"question": "team", "state": "We have 200 employees and want to know your pricing for a company-wide plan.", "truth": "sales"}
+{"question": "team", "state": "Do you offer a discount if we sign a two-year contract for our team?", "truth": "sales"}
+{"question": "team", "state": "Please close my account and stop all future payments. I no longer use the service.", "truth": "cancel"}
+{"question": "team", "state": "I want to cancel my subscription before it renews next week.", "truth": "cancel"}
+{"question": "team", "state": "I am writing a magazine article and would like to interview someone from your company.", "truth": "other"}
