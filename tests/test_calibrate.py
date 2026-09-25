@@ -5,7 +5,9 @@ import random
 import tempfile
 import unittest
 
-from assay.calibrate import TemperatureCalibrator
+from assay.calibrate import (
+    FixedTemperatureCalibrator, ShrunkTemperatureCalibrator, TemperatureCalibrator, _apply_temperature, pooled_temperature,
+)
 from assay.metrics import (
     accuracy, accuracy_at_coverage, brier, ece, nll, reliability_bins,
 )
@@ -210,6 +212,139 @@ class CalibratorTests(unittest.TestCase):
         back = TemperatureCalibrator.from_json(TemperatureCalibrator().to_json())
         self.assertFalse(back.fitted)
         self.assertEqual(back.prediction_set({"a": 0.2, "b": 0.8}), ["b"])
+
+
+def synth_with_temperature(n, seed, true_t, labels=LABELS):
+    """Samples whose labels are drawn FROM the model's probabilities softened by `true_t`, so the best temperature is `true_t`."""
+    rng = random.Random(seed)
+    out = []
+    for _ in range(n):
+        raw = [rng.random() ** 3 + 1e-3 for _ in labels]
+        z = sum(raw)
+        probs = {l: r / z for l, r in zip(labels, raw)}
+        true_probs = _apply_temperature(probs, true_t)
+        truth = rng.choices(labels, weights=[true_probs[l] for l in labels])[0]
+        out.append({"probs": probs, "truth": truth})
+    return out
+
+
+class PooledAndShrunkTests(unittest.TestCase):
+    def test_pooled_recovers_known_temperature_from_mixed_tasks(self):
+        # three tasks with different label sets and different sizes, all needing T = 2
+        groups = [
+            synth_with_temperature(400, 1, 2.0, ["a", "b", "c"]),
+            synth_with_temperature(300, 2, 2.0, ["yes", "no"]),
+            synth_with_temperature(500, 3, 2.0, ["1", "2", "3", "4", "5"]),
+        ]
+        self.assertAlmostEqual(pooled_temperature(groups), 2.0, delta=0.25)
+
+    def test_pooled_accepts_a_dict_and_matches_the_list(self):
+        groups = {"x": synth_with_temperature(100, 4, 1.5), "y": synth_with_temperature(100, 5, 1.5)}
+        self.assertEqual(pooled_temperature(groups), pooled_temperature(list(groups.values())))
+
+    def test_pooled_beats_single_task_estimate_on_noise(self):
+        # many draws of a small sample: the pooled estimate should scatter less than a one-task estimate
+        one, pooled = [], []
+        for seed in range(15):
+            groups = [synth_with_temperature(25, 100 * seed + i, 2.0) for i in range(4)]
+            one.append(pooled_temperature([groups[0]]))
+            pooled.append(pooled_temperature(groups))
+        spread = lambda xs: max(math.log(x) for x in xs) - min(math.log(x) for x in xs)
+        self.assertLess(spread(pooled), spread(one))
+
+    def test_pooled_empty_is_an_error(self):
+        with self.assertRaises(ValueError):
+            pooled_temperature([])
+        with self.assertRaises(ValueError):
+            pooled_temperature([[], []])
+
+    def test_shrunk_sits_between_task_and_pooled(self):
+        samples = synth_with_temperature(60, 6, 3.0)
+        own = TemperatureCalibrator().fit(samples).temperature
+        pooled = 1.0
+        cal = ShrunkTemperatureCalibrator(pooled, k=30).fit(samples)
+        self.assertAlmostEqual(cal.task_temperature, own)
+        lo, hi = sorted((own, pooled))
+        self.assertGreater(cal.temperature, lo)
+        self.assertLess(cal.temperature, hi)
+        # n=60, k=30: two thirds weight on the task's own value, blended in log space
+        self.assertAlmostEqual(math.log(cal.temperature), (2 / 3) * math.log(own) + (1 / 3) * math.log(pooled), places=9)
+        self.assertAlmostEqual(cal.weight_own, 2 / 3)
+
+    def test_shrunk_approaches_task_temperature_as_n_grows(self):
+        big = synth_with_temperature(2000, 7, 3.0)
+        own_big = TemperatureCalibrator().fit(big).temperature
+        gaps = []
+        for n in (20, 60, 240, 2000):
+            cal = ShrunkTemperatureCalibrator(1.0, k=30).fit(big[:n])
+            own = cal.task_temperature
+            gaps.append(abs(math.log(cal.temperature) - math.log(own)))
+        self.assertEqual(gaps, sorted(gaps, reverse=True))  # the pull toward the shared value fades
+        self.assertLess(gaps[-1], 0.02)
+        self.assertAlmostEqual(cal.temperature, own_big, delta=0.1)
+
+    def test_shrunk_with_k_zero_is_the_plain_task_fit(self):
+        s = synth_with_temperature(80, 8, 2.5)
+        self.assertAlmostEqual(ShrunkTemperatureCalibrator(1.0, k=0).fit(s).temperature, TemperatureCalibrator().fit(s).temperature)
+
+    def test_shrunk_and_fixed_json_round_trip(self):
+        s = synth_with_temperature(80, 9, 2.0)
+        for cal in (ShrunkTemperatureCalibrator(1.4, k=20).fit(s, alpha=0.15), FixedTemperatureCalibrator(1.7).fit(s, alpha=0.15)):
+            back = type(cal).from_json(cal.to_json())
+            self.assertEqual(back.temperature, cal.temperature)
+            self.assertEqual(back.qhat, cal.qhat)
+            self.assertEqual(back.alpha, cal.alpha)
+            self.assertEqual(back.report, cal.report)
+            p = {"a": 0.5, "b": 0.3, "c": 0.2}
+            self.assertEqual(back.transform(p), cal.transform(p))
+            self.assertEqual(back.prediction_set(back.transform(p)), cal.prediction_set(cal.transform(p)))
+        shrunk = ShrunkTemperatureCalibrator(1.4, k=20).fit(s)
+        back = ShrunkTemperatureCalibrator.from_json(shrunk.to_json())
+        self.assertEqual((back.pooled, back.k, back.task_temperature), (1.4, 20.0, shrunk.task_temperature))
+        # the plain loader still reads a shrunk file (it only needs the final temperature and threshold)
+        plain = TemperatureCalibrator.from_json(shrunk.to_json())
+        self.assertEqual(plain.transform({"a": 0.6, "b": 0.4}), shrunk.transform({"a": 0.6, "b": 0.4}))
+
+    def test_unfitted_versions_pass_through(self):
+        p = {"a": 0.6, "b": 0.3, "c": 0.1}
+        for cal in (ShrunkTemperatureCalibrator(2.0), FixedTemperatureCalibrator(2.0)):
+            self.assertFalse(cal.fitted)
+            self.assertEqual(cal.transform(p), p)
+            self.assertEqual(cal.prediction_set(p), ["a"])
+            self.assertFalse(ShrunkTemperatureCalibrator.from_json(cal.to_json()).fitted if isinstance(cal, ShrunkTemperatureCalibrator)
+                             else FixedTemperatureCalibrator.from_json(cal.to_json()).fitted)
+
+    def test_prediction_set_never_empty_and_keeps_the_top_pick(self):
+        s = synth_with_temperature(120, 10, 2.0)
+        for cal in (ShrunkTemperatureCalibrator(1.3, k=30).fit(s), FixedTemperatureCalibrator(1.3).fit(s)):
+            for p in ({"a": 0.34, "b": 0.33, "c": 0.33}, {"a": 1.0, "b": 0.0, "c": 0.0}, {"a": 0.05, "b": 0.9, "c": 0.05}):
+                ps = cal.prediction_set(cal.transform(p))
+                self.assertGreaterEqual(len(ps), 1)
+                self.assertEqual(ps[0], max(p, key=p.get))
+
+    def test_fixed_uses_its_temperature_and_still_needs_enough_examples(self):
+        s = synth_with_temperature(50, 11, 2.0)
+        self.assertEqual(FixedTemperatureCalibrator(1.7).fit(s).temperature, 1.7)
+        with self.assertRaises(ValueError):
+            FixedTemperatureCalibrator(1.7).fit(s[:19])
+        with self.assertRaises(ValueError):
+            FixedTemperatureCalibrator(0)
+
+    def test_bad_settings(self):
+        with self.assertRaises(ValueError):
+            ShrunkTemperatureCalibrator(0.0)
+        with self.assertRaises(ValueError):
+            ShrunkTemperatureCalibrator(1.0, k=-1)
+
+    def test_conformal_coverage_holds_for_shrunk(self):
+        coverages = []
+        for seed in range(30):
+            s = synth_with_temperature(200, 500 + seed, 2.0)
+            train, test = s[:100], s[100:]
+            cal = ShrunkTemperatureCalibrator(1.2, k=30).fit(train, alpha=0.1)
+            cov = sum(1 for x in test if x["truth"] in cal.prediction_set(cal.transform(x["probs"]))) / len(test)
+            coverages.append(cov)
+        self.assertGreaterEqual(sum(coverages) / len(coverages), 0.88)
 
 
 if __name__ == "__main__":

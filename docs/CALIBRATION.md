@@ -24,7 +24,8 @@ Do not ignore that warning.
 - **Under 20 for a question:** assay refuses. There is too little to learn from.
 - **20 to 39:** it works, but the scores are measured on the same examples it learned from. They look better than they will in real use.
 - **40 or more:** assay hides half, learns from the other half, and tests on the hidden half. Those scores are honest.
-- **More is better.** Aim for a few hundred if you can.
+- **More is better, up to a point.** In our study the error stopped improving at about 80 examples per question, and the results stopped jumping around at about 50. Aim for 50 to 100 per question. See [CALIBRATION_STUDY.md](CALIBRATION_STUDY.md).
+- **Fit each question on its own.** We tried sharing one correction across questions, and it was worse, because different questions need opposite corrections.
 
 The examples must be true. If your labels are wrong, the calibration will be wrong.
 

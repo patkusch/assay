@@ -29,6 +29,43 @@ def _apply_temperature(probs: dict[str, float], t: float) -> dict[str, float]:
     return {k: v / z for k, v in exps.items()}
 
 
+def _fit_temperature(samples: list[dict]) -> float:
+    """Find the temperature that makes the true answers least surprising (search over log T in [-3, 3])."""
+    def loss(log_t: float) -> float:
+        t = math.exp(log_t)
+        return nll([{"probs": _apply_temperature(s["probs"], t), "truth": s["truth"]} for s in samples])
+
+    lo, hi = -3.0, 3.0
+    c = hi - _GOLD * (hi - lo)
+    d = lo + _GOLD * (hi - lo)
+    fc, fd = loss(c), loss(d)
+    for _ in range(60):
+        if fc < fd:
+            hi, d, fd = d, c, fc
+            c = hi - _GOLD * (hi - lo)
+            fc = loss(c)
+        else:
+            lo, c, fc = c, d, fd
+            d = lo + _GOLD * (hi - lo)
+            fd = loss(d)
+    return math.exp((lo + hi) / 2)
+
+
+def pooled_temperature(sample_groups: list[list[dict]] | dict[str, list[dict]]) -> float:
+    """One temperature fitted on the examples of several tasks together.
+
+    Pass one list of labelled examples per task (a list of lists, or a dict of task name to list).
+    The examples are merged and the temperature that makes the true answers least surprising overall
+    is returned. Use it as a shared starting point: ``FixedTemperatureCalibrator`` applies it as is,
+    ``ShrunkTemperatureCalibrator`` blends it with each task's own temperature.
+    """
+    groups = list(sample_groups.values()) if isinstance(sample_groups, dict) else list(sample_groups)
+    merged = [s for g in groups for s in g]
+    if not merged:
+        raise ValueError("need at least one labelled example to pool")
+    return _fit_temperature(merged)
+
+
 class TemperatureCalibrator:
     """Temperature scaling plus a split-conformal prediction-set threshold.
 
@@ -59,7 +96,7 @@ class TemperatureCalibrator:
         if not 0 < alpha < 1:
             raise ValueError("alpha must be between 0 and 1")
 
-        self.temperature = self._best_temperature(samples)
+        self.temperature = self._pick_temperature(samples)
         scaled = [self._scaled(s) for s in samples]
 
         # Conformal step: how surprised was the calibrated model by the truth? Take the score that
@@ -188,24 +225,99 @@ class TemperatureCalibrator:
     def _scaled(self, sample: dict) -> dict:
         return {"probs": _apply_temperature(sample["probs"], self.temperature), "truth": sample["truth"]}
 
+    def _pick_temperature(self, samples: list[dict]) -> float:
+        """Which temperature to use for these examples. Subclasses change this one step."""
+        return self._best_temperature(samples)
+
     @staticmethod
     def _best_temperature(samples: list[dict]) -> float:
-        """Find the temperature that makes the true answers least surprising (search over log T in [-3, 3])."""
-        def loss(log_t: float) -> float:
-            t = math.exp(log_t)
-            return nll([{"probs": _apply_temperature(s["probs"], t), "truth": s["truth"]} for s in samples])
+        return _fit_temperature(samples)
 
-        lo, hi = -3.0, 3.0
-        c = hi - _GOLD * (hi - lo)
-        d = lo + _GOLD * (hi - lo)
-        fc, fd = loss(c), loss(d)
-        for _ in range(60):
-            if fc < fd:
-                hi, d, fd = d, c, fc
-                c = hi - _GOLD * (hi - lo)
-                fc = loss(c)
-            else:
-                lo, c, fc = c, d, fd
-                d = lo + _GOLD * (hi - lo)
-                fd = loss(d)
-        return math.exp((lo + hi) / 2)
+
+class FixedTemperatureCalibrator(TemperatureCalibrator):
+    """Uses a temperature you hand it (for example ``pooled_temperature(...)``) and only learns the conformal threshold.
+
+    With ``temperature=1.0`` the probabilities pass through untouched, so this is also the "no temperature
+    scaling, but still say not-sure" baseline.
+    """
+
+    def __init__(self, temperature: float = 1.0) -> None:
+        super().__init__()
+        if temperature <= 0:
+            raise ValueError("temperature must be positive")
+        self._fixed = float(temperature)
+        self.temperature = self._fixed
+
+    def _pick_temperature(self, samples: list[dict]) -> float:
+        return self._fixed
+
+    def to_json(self) -> str:
+        d = json.loads(super().to_json())
+        d["kind"] = "fixed"
+        return json.dumps(d, indent=2)
+
+    @classmethod
+    def from_json(cls, text: str | dict) -> "FixedTemperatureCalibrator":
+        d = json.loads(text) if isinstance(text, str) else text
+        cal = cls(float(d["temperature"]))
+        cal.alpha = d.get("alpha")
+        cal.qhat = d.get("qhat")
+        cal.report = d.get("report") or {}
+        return cal
+
+
+class ShrunkTemperatureCalibrator(TemperatureCalibrator):
+    """A per-task temperature pulled toward a shared one when the task has few examples.
+
+    The task's own temperature gets weight ``n / (n + k)`` and the shared (pooled) temperature gets the
+    rest, blended in log space so 0.5 and 2.0 average to 1.0. ``n`` is the number of labelled examples
+    the task has. ``k`` is how many examples it takes for the task's own evidence to count as much as the
+    shared one: with the default ``k=30``, 30 examples give a 50/50 blend, 120 examples give 80% own.
+    ``k`` is a judgement call, not a fitted value, and it does matter: docs/CALIBRATION_STUDY.md found that on
+    tasks whose right temperatures differ a lot, a large ``k`` hurts and a small one (10-30) is safer. In that
+    study shrinking did not beat plain per-task fitting once a task had about 90 or more examples.
+    """
+
+    def __init__(self, pooled: float = 1.0, k: float = 30.0) -> None:
+        super().__init__()
+        if pooled <= 0:
+            raise ValueError("pooled temperature must be positive")
+        if k < 0:
+            raise ValueError("k must not be negative")
+        self.pooled = float(pooled)
+        self.k = float(k)
+        self.task_temperature: float | None = None
+        self.weight_own: float | None = None
+
+    def _pick_temperature(self, samples: list[dict]) -> float:
+        own = _fit_temperature(samples)
+        n = len(samples)
+        w = n / (n + self.k) if (n + self.k) > 0 else 1.0
+        self.task_temperature = own
+        self.weight_own = w
+        return math.exp(w * math.log(own) + (1 - w) * math.log(self.pooled))
+
+    def fit(self, samples: list[dict], alpha: float = 0.1) -> "ShrunkTemperatureCalibrator":
+        super().fit(samples, alpha)
+        self.report.update({"T_task": self.task_temperature, "T_pooled": self.pooled, "k": self.k, "weight_own": self.weight_own})
+        return self
+
+    def to_json(self) -> str:
+        d = json.loads(super().to_json())
+        d.update({"kind": "shrunk", "pooled": self.pooled, "k": self.k,
+                  "task_temperature": self.task_temperature, "weight_own": self.weight_own})
+        return json.dumps(d, indent=2)
+
+    @classmethod
+    def from_json(cls, text: str | dict) -> "ShrunkTemperatureCalibrator":
+        d = json.loads(text) if isinstance(text, str) else text
+        cal = cls(float(d.get("pooled", 1.0)), float(d.get("k", 30.0)))
+        cal.temperature = float(d["temperature"])
+        if cal.temperature <= 0:
+            raise ValueError("temperature must be positive")
+        cal.alpha = d.get("alpha")
+        cal.qhat = d.get("qhat")
+        cal.report = d.get("report") or {}
+        cal.task_temperature = d.get("task_temperature")
+        cal.weight_own = d.get("weight_own")
+        return cal
