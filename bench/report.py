@@ -54,12 +54,14 @@ def verdicts(receipts: dict) -> list[dict]:
     improved = sum(1 for _, a, b in per if b < a)
     worse = sum(1 for _, a, b in per if b > a)
     ok = shuf["flip_rate"] < single["flip_rate"]
+    if single["flip_rate"] == 0:
+        ok = None  # a model that never flips on reversal is already order-proof: there is nothing for shuffling to cut
     out.append({
         "bar": "Shuffling the option order must cut the order-flip rate versus a single ordering.",
         "passed": ok, "before": single["flip_rate"], "after": shuf["flip_rate"],
         "detail": f"Order-flip rate went from {_pct(single['flip_rate'])} to {_pct(shuf['flip_rate'])} over {single['n']} test items. "
                   f"By task: lower in {improved}, higher in {worse}, unchanged in {len(per) - improved - worse}."
-                  + ("" if single["flip_rate"] > 0 else " The single ordering never flipped, so there was nothing to cut."),
+                  + ("" if single["flip_rate"] > 0 else " The single ordering never flipped, so there was nothing to cut: not applicable."),
     })
 
     cal = _get(receipts, "calibrated")
@@ -113,11 +115,13 @@ def build_report(receipts: dict) -> str:
           "The bar was set in `docs/PLAN.md` before any measuring.", ""]
     vs = verdicts(receipts)
     for v in vs:
-        tag = "NOT EVALUATED" if v["passed"] is None else ("PASS" if v["passed"] else "FAIL")
+        tag = "NOT APPLICABLE / NOT EVALUATED" if v["passed"] is None else ("PASS" if v["passed"] else "FAIL")
         L += [f"- **{tag}.** {v['bar']}", f"  {v['detail']}"]
-    overall = all(v["passed"] for v in vs)
-    L += ["", f"**Overall: {'PASS' if overall else 'FAIL'}.** " + ("Both parts of the bar were met on this run." if overall else
-          "At least one part of the bar was not met; that is the honest result of this run."), ""]
+    failed = any(v["passed"] is False for v in vs)
+    unclear = any(v["passed"] is None for v in vs)
+    overall = "FAIL" if failed else ("PASS (part not applicable)" if unclear else "PASS")
+    L += ["", f"**Overall: {overall}.** " + ("At least one part of the bar was not met; that is the honest result of this run." if failed else
+          "Every part of the bar that applies was met on this run." if unclear else "Both parts of the bar were met on this run."), ""]
 
     L += ["## Scoreboard (all tasks together, test half)", ""]
     head = "| Measure | " + " | ".join(COND_NAMES[c] for c in conds) + " | What it means |"
@@ -151,7 +155,7 @@ def build_report(receipts: dict) -> str:
         accs = " / ".join(_pct(m["accuracy"]) if m else "n/a" for m in (s, sh, ca, bl))
         L.append(f"| {t} | {tv['n_test']} | {_pct(s['flip_rate'])} → {_pct(sh['flip_rate'])} | "
                  f"{_num(sh['ece'])} → {_num(ca['ece']) if ca else 'n/a'} | {accs} | "
-                 f"flip {'PASS' if f_ok else 'FAIL'}, ECE {'PASS' if e_ok else 'FAIL'} |")
+                 f"flip {'n/a' if s['flip_rate'] == 0 else ('PASS' if f_ok else 'FAIL')}, ECE {'PASS' if e_ok else 'FAIL'} |")
     L += [""]
 
     bl = _get(receipts, "llm_baseline")

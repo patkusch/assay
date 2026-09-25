@@ -262,12 +262,25 @@ class HarnessTests(unittest.TestCase):
         md = report.build_report(receipts)
         self.assertIn("**PASS.** Shuffling", md)
 
-    def test_report_says_fail_when_shuffling_does_not_help(self):
-        # the keyword stand-in has no position bias, so shuffling has nothing to fix: this must be reported as FAIL
+    def test_report_says_not_applicable_when_the_model_is_already_order_proof(self):
+        # the keyword stand-in has no position bias, so there is nothing for shuffling to fix: not a pass and not a fail
         tasks = bench_run.load_tasks(["urgency"], limit=20)
         receipts = bench_run.run_benchmark(KeywordBackend(), tasks, orders=3, config={"backend": "keyword"})
         v = report.verdicts(receipts)
-        self.assertFalse(v[0]["passed"])
+        self.assertIsNone(v[0]["passed"])
+        md = report.build_report(receipts)
+        self.assertIn("**NOT APPLICABLE / NOT EVALUATED.** Shuffling", md)
+        self.assertIn("flip n/a", md)
+
+    def test_report_says_fail_when_shuffling_makes_flips_worse(self):
+        tasks = bench_run.load_tasks(["urgency"], limit=20)
+        receipts = bench_run.run_benchmark(KeywordBackend(), tasks, orders=3, config={"backend": "keyword"})
+        # hand-edit the pooled and per-task numbers so a single ordering flips a little and shuffling flips more
+        for cond, rate in (("single", 0.05), ("shuffled", 0.20)):
+            receipts["pooled"][cond]["test"]["flip_rate"] = rate
+            for t in receipts["tasks"].values():
+                t["conditions"][cond]["test"]["flip_rate"] = rate
+        self.assertFalse(report.verdicts(receipts)[0]["passed"])
         self.assertIn("**FAIL.** Shuffling", report.build_report(receipts))
 
     def test_baseline_condition_runs_with_an_injected_generator(self):
