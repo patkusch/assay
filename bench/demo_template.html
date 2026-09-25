@@ -170,6 +170,7 @@ const hideTip=()=>{tip.style.display="none"};
 /* ---------- data helpers ---------- */
 const sysById=Object.fromEntries(D.systems.map(s=>[s.id,s]));
 function probsOf(it,sid,cond=state.cond){const s=it.s[sid];return s?s[cond]||null:null;}
+function topFor(it,sid,cond){const s=it.s[sid];const t=s&&s["t"+cond];return t!=null?t:topOf(s[cond]);}
 function topOf(p){let b=0;for(let i=1;i<p.length;i++)if(p[i]>p[b])b=i;return b;}
 function condItems(sid,cond=state.cond,task=null){return D.items.filter(it=>(!task||it.t===task)&&probsOf(it,sid,cond));}
 function ece(rows){ // rows: [conf, correct]
@@ -177,7 +178,7 @@ function ece(rows){ // rows: [conf, correct]
   for(let b=0;b<B;b++){const r=rows.filter(([c])=>Math.min(B-1,Math.floor(c*B))===b);if(!r.length)continue;
     const mc=r.reduce((a,x)=>a+x[0],0)/r.length,acc=r.reduce((a,x)=>a+x[1],0)/r.length;e+=r.length/n*Math.abs(mc-acc);}
   return e;}
-function rowsFor(sid,cond,task=null){return condItems(sid,cond,task).map(it=>{const p=probsOf(it,sid,cond);const t=topOf(p);return [p[t],t===it.y?1:0];});}
+function rowsFor(sid,cond,task=null){return condItems(sid,cond,task).map(it=>{const p=probsOf(it,sid,cond);const t=topFor(it,sid,cond);return [p[t],t===it.y?1:0];});}
 function flipRate(sid,which,task=null){const its=D.items.filter(it=>(!task||it.t===task)&&it.s[sid]&&it.s[sid][which]!=null);return its.length?its.reduce((a,it)=>a+it.s[sid][which],0)/its.length:null;}
 
 /* ---------- theme ---------- */
@@ -204,7 +205,7 @@ function renderTiles(){
     const rows=rowsFor(s.id,state.cond);const acc=rows.reduce((a,r)=>a+r[1],0)/rows.length;
     const notSure=state.cond==="c"?its.filter(it=>it.s[s.id].set.length>1):[];
     const answered=state.cond==="c"?its.filter(it=>it.s[s.id].set.length===1):null;
-    const accAns=answered&&answered.length?answered.filter(it=>topOf(it.s[s.id].c)===it.y).length/answered.length:null;
+    const accAns=answered&&answered.length?answered.filter(it=>topFor(it,s.id,"c")===it.y).length/answered.length:null;
     const flip=state.cond==="a"?flipRate(s.id,"fs"):(state.cond==="p"?null:flipRate(s.id,"fb"));
     const stats=[["Right answers",pct(acc),"How often the top pick matched the answer written by construction. Higher is better."],
       ["Confidence error",ece(rows).toFixed(3),"How far its stated confidence is from how often it is right, on average. 0.10 means about 10 points off. Lower is better."],
@@ -224,7 +225,7 @@ function passes(it){
   if(f==="all")return true;
   if(f==="hard")return it.h;
   const ss=D.systems.filter(s=>probsOf(it,s.id));
-  if(f==="wrong")return ss.some(s=>topOf(probsOf(it,s.id))!==it.y);
+  if(f==="wrong")return ss.some(s=>topFor(it,s.id,state.cond)!==it.y);
   if(f==="unsure")return state.cond==="c"&&ss.some(s=>it.s[s.id].set.length>1);
   if(f==="flip")return ss.some(s=>it.s[s.id][state.cond==="a"?"fs":"fb"]===1);
   return true;
@@ -273,7 +274,7 @@ function renderDetail(){
     const wrap=el("div",{class:"sys"});
     const head=el("h4",{},el("i",{class:"dot",style:`background:${col(s.id)}`}),s.label);
     if(!p){wrap.append(head,el("p",{class:"note"},"Not measured in this setting."));box.append(wrap);continue;}
-    const top=topOf(p),right=top===it.y;
+    const top=topFor(it,s.id,state.cond),right=top===it.y;
     const set=state.cond==="c"?it.s[s.id].set:[top];
     if(set.length>1){
       const inSet=set.includes(it.y);
@@ -336,7 +337,7 @@ function renderCover(){
   const W=720,H=440,svg=svgChart(W,H);
   const xs=[.2,.4,.6,.8,1];
   const all=[];let lo=1;
-  const curves=D.systems.map(s=>{const its=condItems(s.id).map(it=>{const p=probsOf(it,s.id);const t=topOf(p);return [p[t],t===it.y?1:0];}).sort((a,b)=>b[0]-a[0]);
+  const curves=D.systems.map(s=>{const its=condItems(s.id).map(it=>{const p=probsOf(it,s.id);const t=topFor(it,s.id,state.cond);return [p[t],t===it.y?1:0];}).sort((a,b)=>b[0]-a[0]);
     if(!its.length)return null;const pts=[];for(let c=.1;c<=1.0001;c+=.05){const k=Math.max(1,Math.round(its.length*c));pts.push([c,its.slice(0,k).reduce((a,x)=>a+x[1],0)/k]);}
     pts.forEach(p=>lo=Math.min(lo,p[1]));return {s,pts};}).filter(Boolean);
   const y0=Math.max(0,Math.floor((lo-.02)*5)/5),span=1-y0;

@@ -31,7 +31,7 @@ DEFAULTS = [("gemma", "v2-gemma3-4b.json"), ("von", "v2-von.json"), ("verdict", 
 
 
 def r3(x: float) -> float:
-    return round(x, 3)
+    return round(x, 4)
 
 
 def build(systems: list[tuple[str, Path]]) -> dict:
@@ -68,15 +68,19 @@ def build(systems: list[tuple[str, Path]]) -> dict:
                 if "single" in it:
                     entry["a"] = [r3(it["single"]["probs"][l]) for l in labels]
                     entry["fs"] = int(it["single"]["top"] != it["single"]["top_reversed"])
+                    entry["ta"] = labels.index(str(it["single"]["top"]))
                 if "shuffled" in it:
                     entry["b"] = [r3(it["shuffled"]["probs"][l]) for l in labels]
                     entry["fb"] = int(it["shuffled"]["top"] != it["shuffled"]["top_reversed"])
+                    entry["tb"] = labels.index(str(it["shuffled"]["top"]))
                 if "calibrated" in it:
                     entry["c"] = [r3(it["calibrated"]["probs"][l]) for l in labels]
                     entry["set"] = sorted(labels.index(l) for l in it["calibrated"]["prediction_set"])
+                    entry["tc"] = labels.index(str(it["calibrated"]["top"]))
                 bl = it.get("llm_baseline")
                 if bl and not bl.get("failed") and bl.get("probs"):
                     entry["p"] = [r3(bl["probs"][l]) for l in labels]
+                    entry["tp"] = labels.index(str(bl["pred"]))
                     has_plain = True
                 row["s"][sid] = entry
         sys_meta.append({"id": sid, "label": label, "short": short, "sub": sub, "hasPlain": has_plain, "lat": lat,

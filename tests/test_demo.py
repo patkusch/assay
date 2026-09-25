@@ -9,6 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "bench"))
 import make_demo  # noqa: E402
 
+GEMMA = ("gemma", ROOT / "bench" / "receipts" / "v2-gemma3-4b.json")
 RECEIPTS = [("von", ROOT / "bench" / "receipts" / "v2-von.json"), ("verdict", ROOT / "bench" / "receipts" / "v2-verdict.json")]
 
 
@@ -33,6 +34,16 @@ class DemoTests(unittest.TestCase):
         self.assertNotRegex(html, r'src="https?://')          # nothing loaded from the network
         blob = re.search(r'<script id="data" type="application/json">(.*?)</script>', html, re.S).group(1)
         self.assertEqual(json.loads(blob)["taskOrder"], data["taskOrder"])
+
+    def test_demo_accuracy_matches_the_scoreboard_exactly(self):
+        # the page picks each answer from the receipts' own top pick, so its accuracy must equal the scoreboard's
+        every = RECEIPTS + ([GEMMA] if GEMMA[1].exists() else [])
+        data = make_demo.build(every)
+        for sid, path in every:
+            pooled = json.loads(path.read_text())["pooled"]
+            for cond, key in (("ta", "single"), ("tb", "shuffled"), ("tc", "calibrated")):
+                hit = sum(1 for it in data["items"] if it["s"][sid][cond] == it["y"]) / len(data["items"])
+                self.assertAlmostEqual(hit, pooled[key]["test"]["accuracy"], places=9, msg=f"{sid} {key}")
 
     def test_generator_refuses_receipts_from_another_item_set(self):
         v1 = ROOT / "bench" / "receipts" / "gemma3-4b.json"
