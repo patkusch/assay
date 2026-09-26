@@ -53,7 +53,10 @@ def parse_request(body: object) -> tuple[Request, str | None]:
         levels = spec.get("levels", 5)
         if isinstance(levels, bool) or not isinstance(levels, int):
             raise BadRequest(f"question {qid!r}: 'levels' must be an integer")
-        q = Question(str(spec.get("type", "")), instructions, options, levels)
+        alternates = spec.get("alternates", [])
+        if not isinstance(alternates, list) or not all(isinstance(a, str) for a in alternates):
+            raise BadRequest(f"question {qid!r}: 'alternates' must be a list of strings (other wordings of the question)")
+        q = Question(str(spec.get("type", "")), instructions, options, levels, alternates)
         try:
             q.validate()
         except ValueError as e:

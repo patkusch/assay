@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import math
 import time
+from dataclasses import replace
 
 from .types import Answer, Backend, Calibrator, Question, Request, Response
 
@@ -22,6 +23,29 @@ def orderings(labels: list[str], n: int) -> list[list[str]]:
     return [labels[s:] + labels[:s] for s in shifts]
 
 
+def average_probs(backend: Backend, state: str, q: Question, n_orders: int = 3) -> tuple[dict[str, float], list[dict[str, float]]]:
+    """The model's odds for each label before calibration, averaged over rotated option orders and, if the question has
+    `alternates`, over its other wordings too.
+
+    Each wording is paired with a different option rotation, and the number of calls is whichever is larger: the
+    number of wordings or the number of rotations. With no alternates this is exactly the plain rotation average.
+    Returns the averaged odds and the per-call distributions (used to report how stable the answer was).
+    """
+    labels = q.labels()
+    orders = orderings(labels, n_orders)
+    wordings = [q.instructions] + list(q.alternates)
+    per_call: list[dict[str, float]] = []
+    for i in range(max(len(orders), len(wordings))):
+        order = orders[i % len(orders)]
+        wq = q if len(wordings) == 1 else replace(q, instructions=wordings[i % len(wordings)], alternates=[])
+        raw = backend.logprobs(state, wq, order)
+        if len(raw) != len(order):
+            raise ValueError(f"backend returned {len(raw)} scores for {len(order)} labels")
+        per_call.append(dict(zip(order, softmax(raw))))
+    # position bias cancels because every label rotates through every slot
+    return {l: sum(p[l] for p in per_call) / len(per_call) for l in labels}, per_call
+
+
 def decide_one(
     backend: Backend,
     state: str,
@@ -32,16 +56,7 @@ def decide_one(
     confidence_floor: float = 0.0,
 ) -> Answer:
     q.validate()
-    labels = q.labels()
-    per_order: list[dict[str, float]] = []
-    for order in orderings(labels, n_orders):
-        raw = backend.logprobs(state, q, order)
-        if len(raw) != len(order):
-            raise ValueError(f"backend returned {len(raw)} scores for {len(order)} labels")
-        per_order.append(dict(zip(order, softmax(raw))))
-
-    # average the per-order distributions; position bias cancels because every label rotates through every slot
-    probs = {l: sum(p[l] for p in per_order) / len(per_order) for l in labels}
+    probs, per_order = average_probs(backend, state, q, n_orders)
     top = max(probs, key=probs.get)
     stability = sum(1 for p in per_order if max(p, key=p.get) == top) / len(per_order)
 

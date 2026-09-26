@@ -21,6 +21,7 @@ class Question:
     instructions: str
     options: list[str] = field(default_factory=list)  # choice only
     levels: int = 5                                   # score only, 2..10
+    alternates: list[str] = field(default_factory=list)  # other wordings of `instructions`, averaged with it (optional)
 
     def labels(self) -> list[str]:
         """The candidate answers the backend must score, in canonical order."""
@@ -41,6 +42,8 @@ class Question:
             raise ValueError("choice options must be unique")
         if self.type == "score" and not (2 <= self.levels <= 10):
             raise ValueError("score levels must be 2..10")
+        if any(not isinstance(a, str) or not a.strip() for a in self.alternates):
+            raise ValueError("alternates must be non-empty strings")
 
 
 @dataclass

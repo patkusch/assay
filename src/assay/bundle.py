@@ -10,7 +10,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from .calibrate import MIN_SAMPLES, TemperatureCalibrator
-from .engine import orderings, softmax
+from .engine import average_probs
 from .types import Backend, Question
 
 FORMAT_VERSION = 1
@@ -19,14 +19,7 @@ FORMAT_VERSION = 1
 def score_probs(backend: Backend, state: str, q: Question, n_orders: int = 3) -> dict[str, float]:
     """The model's probabilities before calibration: the same path `engine.decide_one` takes."""
     q.validate()
-    labels = q.labels()
-    per_order: list[dict[str, float]] = []
-    for order in orderings(labels, n_orders):
-        raw = backend.logprobs(state, q, order)
-        if len(raw) != len(order):
-            raise ValueError(f"backend returned {len(raw)} scores for {len(order)} labels")
-        per_order.append(dict(zip(order, softmax(raw))))
-    return {l: sum(p[l] for p in per_order) / len(per_order) for l in labels}
+    return average_probs(backend, state, q, n_orders)[0]
 
 
 def _truth_label(q: Question, truth: object) -> str:
