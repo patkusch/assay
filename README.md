@@ -61,6 +61,8 @@ print(answer.value, answer.confidence, answer.stability, answer.abstain)
 
 ## See it
 
+**Live demo: [patkusch.github.io/assay/demo](https://patkusch.github.io/assay/demo/)**
+
 `docs/demo/index.html` is a single page you can open in any browser. It replays the real benchmark receipts: each system's odds for every option on every test item, a chart of whether its confidence can be trusted, a chart of what happens if you only keep its most confident answers, and how often the answer changes when the options are reversed. A last panel talks to your own running server.
 
 ```bash
@@ -68,7 +70,7 @@ make demo          # rebuild the page from bench/receipts
 open docs/demo/index.html
 ```
 
-Nothing on the page is invented and no model needs to be running to view it. The live panel needs `python -m assay serve --model gemma3 --cors`.
+Nothing on the page is invented and no model needs to be running to view it. The live panel needs `python -m assay serve --model gemma3 --cors` running on your machine. From the public page some browsers may block a web page from reaching your local server; if so, open `docs/demo/index.html` from a downloaded copy instead.
 
 ## What we measured
 
