@@ -1,0 +1,14 @@
+{
+  "state": "Hi, I need a copy of last month's invoice with our VAT number on it.",
+  "questions": {
+    "team": {
+      "type": "choice",
+      "instructions": "Which team should this customer message go to? Route on the single thing the customer actually wants. billing: a charge, invoice, refund, tax detail or payment method. technical: something broken in the product, or how to use it. sales: price, quote, plan change, demo or discount. cancel: ending the subscription or closing the account. other: anything else, such as press, jobs, feedback, privacy requests or thanks.",
+      "options": ["billing", "technical", "sales", "cancel", "other"],
+      "alternates": [
+        "Decide who should answer this customer, looking for the one request in the message. Money matters (a charge, invoice, refund, tax detail, payment method) go to billing. Product problems or how-to questions go to technical. Questions about price, a quote, a plan change, a demo or a discount go to sales. Wanting to end the subscription or close the account goes to cancel. Anything else (press, jobs, feedback, privacy, thanks) goes to other.",
+        "Route this message to one team: billing (a charge, invoice, refund, tax detail or payment method), technical (a broken product or how to use it), sales (price, quote, plan change, demo, discount), cancel (ending the subscription or closing the account) or other (anything else: press, jobs, feedback, privacy, thanks). Pick according to the one thing the customer is asking for."
+      ]
+    }
+  }
+}

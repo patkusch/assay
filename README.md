@@ -144,6 +144,25 @@ gemma3 12B was run on the first 80 items of each split (320 test items), so its 
 - **The cost is time.** About two seconds a call with three orderings. One ordering is 693 ms.
 - **Only 320 items and about 80 per task.** Treat single-task results as noise.
 
+### Does the wording of the question matter?
+
+Yes, and more than the order of the options. Each of 240 items (60 per task) was asked four ways: the original question and three hand-written rewordings that keep every label definition ([bench/rewordings.json](bench/rewordings.json); a test checks the key terms survive). The items and right answers do not change. gemma3 4B, option order averaged as usual:
+
+| | Letter scoring | Word scoring |
+|---|---|---|
+| Items where the answer changed with the wording | 37.1% | 27.5% |
+| Right answers by wording (original first) | 75.0%, 81.7%, 80.8%, 72.9% | 78.3%, 80.4%, 84.2%, 77.9% |
+| Majority answer across the four wordings | 82.1% | 82.1% |
+| Average single wording | 77.6% | 80.2% |
+
+- **Wording moved answers about three times as often as option order** (37.1% against the 10.7% that flip when the options are reversed). Word scoring helps but does not fix it.
+- **Some tasks swing hard.** Command safety went from 83% to 53% right with letters, and routing from 58% to 88%. Phishing was steady with word scoring (88% to 92%). With 60 items a task, swings of 20 points or more are well outside noise.
+- **The original wording was not the best one.** On routing it was the worst of the four for both scoring methods (58% and 63%, against 88% and 92% for the best rewording). So part of the routing weakness reported above was the wording, not only how the odds were read.
+- **Every result above uses the original wording.** Treat the single-wording numbers as one draw from a wide range.
+- **Asking several ways and combining helps.** The majority answer across wordings was as good as the best single wording with letters (82.1% against 81.7%), and it protects against an unlucky one. A question can carry `alternates` (other wordings), and assay averages the odds across them ([docs/CHOOSING_SETTINGS.md](docs/CHOOSING_SETTINGS.md)). The measured ensemble is below.
+
+Receipts: [letter](bench/receipts/rewording-gemma3-4b-letter.md), [word](bench/receipts/rewording-gemma3-4b-word.md). A 12B rewording run was attempted but the model server hung under memory pressure; it is not measured.
+
 ### Earlier, smaller run
 
 The first run used 30 test items per task and could not tell any of this apart from noise. Its receipts stay in `bench/receipts/gemma3-4b.*` so the change is visible.
@@ -152,7 +171,7 @@ The first run used 30 test items per task and could not tell any of this apart f
 
 - The tasks are synthetic and labelled by construction. Blind readers checked every label, but the readers are models and may share blind spots with whoever wrote the items. The middle urgency levels lost the most items in that check, so level 3 is thin (22 items).
 - Calibration was fitted on 93 to 141 items per task. The study in [docs/CALIBRATION_STUDY.md](docs/CALIBRATION_STUDY.md) found about 50 to 100 is enough.
-- The flip check reverses the option order. It does not test rewording or long inputs. The long-input wrapper ([docs/LONG_INPUT.md](docs/LONG_INPUT.md)) is only tested on mock backends so far.
+- The flip check reverses the option order. The rewording test (above) is separate and shows wording matters more. Every single-wording number in this README uses the original wording of each question. Long inputs are tested separately ([docs/LONG_INPUT.md](docs/LONG_INPUT.md)), with results below when they land.
 - gemma3 4B is the only model measured on the full 912 test items. gemma3 12B covers a 320-item subset. No other model family has been tried.
 - More than 36 options is not supported by the Ollama backend (Jev allows 255).
 - A probability is not a guarantee. A confident answer can still be wrong.

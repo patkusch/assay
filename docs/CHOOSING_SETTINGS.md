@@ -14,19 +14,30 @@ Where to look: [bench/receipts/comparisons.md](../bench/receipts/comparisons.md)
 
 It did not win everywhere: urgency went down 5.9 points on one run, which is inside noise for that task. Check your own task.
 
-## 3. Let the options rotate
+## 3. Ask in more than one way
+
+On the 4B model the answer changed with the question's wording on 27% to 37% of items, and single wordings differed by up to 30 points on one task. Give a question `alternates` (other wordings that keep the same label definitions) and assay averages the odds across all of them, pairing each wording with a different option order:
+
+```json
+{"type": "choice", "instructions": "Which team should get this?", "options": ["billing", "technical", "sales"],
+ "alternates": ["Route this message to one team.", "Who should answer this customer?"]}
+```
+
+It costs one call per wording. See [examples/routing_wordings.json](../examples/routing_wordings.json). Write the alternates by hand, and check each keeps the same label definitions: a reworded question that changes what a label means changes the answer for a good reason.
+
+## 4. Let the options rotate
 
 By default assay shows the options in three different orders and averages the results. This cut the share of answers that flipped when the options were reversed from 20.3% to 10.7% on the 4B letter run. It triples the number of model calls. Use `--orders 1` if speed matters more than stable answers.
 
-## 4. Calibrate, and fit each question on its own
+## 5. Calibrate, and fit each question on its own
 
 Raw odds from a small model are much too confident. Give assay 50 to 100 labelled examples per question and it rescales them. In our study the error stopped improving at about 80 examples. Fit each question separately: sharing one correction across questions did worse, because different questions need opposite corrections. See [CALIBRATION.md](CALIBRATION.md) and [CALIBRATION_STUDY.md](CALIBRATION_STUDY.md).
 
-## 5. Treat "not sure" as an answer
+## 6. Treat "not sure" as an answer
 
 Calibrated, the 4B model said "not sure" on about half the items and was right on 91% of the rest. The 12B model said "not sure" on 7% of items. Send those items to a person or a bigger model.
 
-## 6. Know where a plain answer is better
+## 7. Know where a plain answer is better
 
 Asking a small model to write JSON with a confidence is sometimes more accurate. On the 4B model it was 81.7% right against 74.6% (letters) or 78.0% (words), mostly on routing. At 12B that reversed: reading the odds got 90.0% against 85.0%. If you use a small model, run both on your own data.
 
