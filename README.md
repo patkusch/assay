@@ -25,6 +25,19 @@ python -m assay decide --backend ollama --model gemma3 \
 python -m assay serve --model gemma3 --port 8787   # POST /v1/systemone, shaped like Jev's
 ```
 
+Add `--format pretty` for a readable view with a bar for every option, a confidence line and a "not sure" warning, instead of JSON:
+
+```text
+team: billing
+  Which team should handle this?
+ * billing    ███████████████████████░     97%
+   technical  █░░░░░░░░░░░░░░░░░░░░░░░      2%
+   sales      ░░░░░░░░░░░░░░░░░░░░░░░░    0.4%
+  confidence 97%, stable across option orders 100%, calibrated
+```
+
+(An illustration of the layout, not a recorded run.)
+
 In Python:
 
 ```python

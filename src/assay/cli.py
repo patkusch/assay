@@ -68,11 +68,13 @@ def build_parser() -> argparse.ArgumentParser:
         sp.add_argument("--confidence-floor", type=float, default=0.0,
                         help="mark an answer 'abstain' when its confidence is below this (0 to 1)")
 
-    d = sub.add_parser("decide", help="answer questions about a situation and print JSON")
+    d = sub.add_parser("decide", help="answer questions about a situation and print JSON (or a readable view with --format pretty)")
     d.add_argument("--state", help="the situation, as text")
     d.add_argument("--question", action="append", default=[],
                    help="kind:instructions[:opt1|opt2]; kind is choice, score or noul (repeatable)")
     d.add_argument("--request", help="a JSON file in the same shape the server takes ('-' for stdin)")
+    d.add_argument("--format", choices=["json", "pretty"], default="json",
+                   help="json (default) or pretty: a readable view with a bar for every option")
     common(d)
     answering(d)
 
@@ -132,8 +134,14 @@ def main(argv: list[str] | None = None) -> int:
                 raise BadRequest("give --request FILE, or --state plus at least one --question")
             body = {"state": args.state,
                     "questions": {f"q{i + 1}": parse_question_arg(q) for i, q in enumerate(args.question)}}
-        print(json.dumps(run_request(backend, body, n_orders=args.orders, calibrators=calibrators,
-                                     confidence_floor=args.confidence_floor, bundle=bundle), indent=2))
+        result = run_request(backend, body, n_orders=args.orders, calibrators=calibrators,
+                             confidence_floor=args.confidence_floor, bundle=bundle)
+        if args.format == "pretty":
+            from .pretty import format_answers
+            asked = {qid: q.get("instructions", "") for qid, q in body.get("questions", {}).items() if isinstance(q, dict)}
+            print(format_answers(result, asked), end="")
+        else:
+            print(json.dumps(result, indent=2))
         return 0
     except (BadRequest, ValueError, OSError) as e:
         print(json.dumps({"error": str(e)}), file=sys.stderr)
