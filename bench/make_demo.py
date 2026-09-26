@@ -24,10 +24,11 @@ TASK_INFO = {
 }
 SYSTEM_INFO = {
     "gemma": ("assay + gemma3 4B", "assay", "A small chat model whose odds for each option are read directly, then order-shuffled and calibrated by assay. 4 billion parameters, on a laptop."),
+    "gemmaw": ("assay + gemma3 4B, word scoring", "assay (word)", "The same model and the same items, but the model replies with the option's own word and that word's odds are read, instead of a letter. Drawn dashed."),
     "von": ("von 1.2", "von", "An open 395-million-parameter model that scores every option at once, run inside assay's scoring loop. Order-proof by design."),
     "verdict": ("openJev-verdict-2.0", "Verdict", "An open 151-million-parameter model, run inside assay's scoring loop. Its licence is unclear."),
 }
-DEFAULTS = [("gemma", "v2-gemma3-4b.json"), ("von", "v2-von.json"), ("verdict", "v2-verdict.json")]
+DEFAULTS = [("gemma", "v2-gemma3-4b.json"), ("gemmaw", "v2-gemma3-4b-word.json"), ("von", "v2-von.json"), ("verdict", "v2-verdict.json")]
 
 
 def r3(x: float) -> float:
@@ -83,7 +84,7 @@ def build(systems: list[tuple[str, Path]]) -> dict:
                     entry["tp"] = labels.index(str(bl["pred"]))
                     has_plain = True
                 row["s"][sid] = entry
-        sys_meta.append({"id": sid, "label": label, "short": short, "sub": sub, "hasPlain": has_plain, "lat": lat,
+        sys_meta.append({"id": sid, "label": label, "short": short, "sub": sub, "hasPlain": has_plain, "lat": lat, "dash": "7 5" if sid == "gemmaw" else "",
                          "model": rec["config"].get("model") or rec["config"].get("backend"), "run": rec["timestamp"][:10]})
 
     # attach item text from the task files (receipts do not carry it)
@@ -119,7 +120,7 @@ def build(systems: list[tuple[str, Path]]) -> dict:
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument("--system", action="append", default=[], help="id=receipts.json, id one of gemma, von, verdict")
+    ap.add_argument("--system", action="append", default=[], help="id=receipts.json, id one of gemma, gemmaw, von, verdict")
     ap.add_argument("--out", default=str(ROOT / "docs" / "demo" / "index.html"))
     args = ap.parse_args()
     if args.system:
