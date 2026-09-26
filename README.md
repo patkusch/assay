@@ -93,7 +93,41 @@ The same 912 items, with [von](https://github.com/wfzyx/von) and [openJev-verdic
 | Answer flips when options are reversed | 10.7% | 0.0% | 3.8% |
 | Typical time | 598 ms | 125 ms | 136 ms |
 
-assay with gemma3 is the most accurate on these tasks. Both clones are much faster, and von is far better calibrated and never changes with option order. They are small special-purpose models (395 and 151 million parameters) that were not tuned for these tasks, and their own benchmarks may show different numbers. So assay's value is not raw accuracy. It is the tooling around any model: order-proofing, a calibration you can fit and check, "not sure" answers, and a scoreboard that reports failures.
+assay with gemma3 is the most accurate on these tasks. Both clones are much faster, and von is far better calibrated and never changes with option order. They are small special-purpose models (395 and 151 million parameters) that were not tuned for these tasks, and their own benchmarks may show different numbers. With the 4B model, assay's value was not raw accuracy. It was the tooling around any model: order-proofing, a calibration you can fit and check, "not sure" answers, and a scoreboard that reports failures. The next two sections show how much of the accuracy gap is the model and how much is how the odds are read.
+
+### Reading the word instead of the letter
+
+The first version showed each option as a letter (A, B, C) and read the odds of the letter. The routing gap made us try another way: ask the model to reply with the option's own word (`--scoring word`) and read the odds of that first word. Same 4B model, same 912 items, both order-shuffled and calibrated:
+
+| | Letter | Word | Plain answer |
+|---|---|---|---|
+| Right answers | 74.6% | 78.0% | 81.7% |
+| Confidence error (lower is better) | 0.096 | 0.062 | 0.110 |
+| Answer flips when options are reversed | 10.7% | 4.3% | n/a |
+| Typical time | 598 ms | 572 ms | 639 ms |
+
+- **Word scoring is better than letter scoring, and the gaps are outside noise.** Right answers rose 3.4 points, flips fell by more than half, and calibrated confidence error fell by a third. Calibration now helped in all 4 tasks, where before it helped in 2.
+- **It is not better everywhere.** It gained most on phishing (84.5% to 92.2%) and routing (58.4% to 65.4%). On urgency it lost 5.9 points, which is inside noise for that one task.
+- **The plain answer still leads on 4B.** 81.7% against 78.0%. On routing it is 95.8% against 65.4%, and on urgency 82.8% against 74.7%. Word scoring is 16.8 points ahead on phishing.
+- **Raw word odds are more overconfident than letter odds** (0.189 against 0.146 before calibration), so calibration matters more with word scoring, not less.
+
+Every gap with its interval: [bench/receipts/comparisons.md](bench/receipts/comparisons.md).
+
+### A bigger model
+
+gemma3 12B was run on the first 80 items of each split (320 test items), so its numbers cover fewer items. The 4B run was compared on exactly the same 320 items. Letter scoring, order-shuffled:
+
+| | 4B | 12B | 12B plain answer |
+|---|---|---|---|
+| Right answers | 74.1% | 90.0% | 85.0% |
+| Confidence error, calibrated | 0.084 | 0.029 | 0.091 |
+| Answer flips when options are reversed | 10.3% | 3.1% | n/a |
+| Typical time | 598 ms | 1,969 ms | 1,887 ms |
+
+- **Most of the accuracy gap is the model.** 12B is 15.9 points more accurate than 4B on the same items, outside noise. Routing goes from 60.0% to 92.5%.
+- **At 12B, reading the odds beats the plain answer.** 90.0% against 85.0% right, and calibrated confidence error 0.029 against 0.091, both outside noise. The weakness seen at 4B was mostly a small-model problem.
+- **The cost is time.** About two seconds a call with three orderings. One ordering is 693 ms.
+- **Only 320 items and about 80 per task.** Treat single-task results as noise.
 
 ### Earlier, smaller run
 
@@ -104,7 +138,7 @@ The first run used 30 test items per task and could not tell any of this apart f
 - The tasks are synthetic and labelled by construction. Blind readers checked every label, but the readers are models and may share blind spots with whoever wrote the items. The middle urgency levels lost the most items in that check, so level 3 is thin (22 items).
 - Calibration was fitted on 93 to 141 items per task. The study in [docs/CALIBRATION_STUDY.md](docs/CALIBRATION_STUDY.md) found about 50 to 100 is enough.
 - The flip check reverses the option order. It does not test rewording or long inputs. The long-input wrapper ([docs/LONG_INPUT.md](docs/LONG_INPUT.md)) is only tested on mock backends so far.
-- Only gemma3 4B is measured on the full set. A 12B run is in progress and will be added.
+- gemma3 4B is the only model measured on the full 912 test items. gemma3 12B covers a 320-item subset. No other model family has been tried.
 - More than 36 options is not supported by the Ollama backend (Jev allows 255).
 - A probability is not a guarantee. A confident answer can still be wrong.
 
@@ -123,6 +157,6 @@ Run the tests: `PYTHONPATH=src python3 -m unittest discover -s tests`
 
 ## Next
 
-The gemma3 12B run, a measured test of the long-input wrapper, a rewording test (the flip check only reverses the options), a small encoder backend to close the speed gap, and a fix for routing, where reading the option odds falls well behind a plain answer.
+A measured test of the long-input wrapper, a rewording test (the flip check only reverses the options), word scoring on 12B, a small encoder backend to close the speed gap, and other model families.
 
 MIT licence.
