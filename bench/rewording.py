@@ -39,7 +39,16 @@ def top_label(answer) -> str:
     return max(answer.probabilities, key=answer.probabilities.get)
 
 
-def run(backend, per_task: int, orders: int, tasks_dir: Path, names: list[str] | None = None, progress=None) -> dict:
+def majority(tops: list[str]) -> str:
+    """The most common answer across wordings; a tie goes to the original wording's answer if it is among the leaders."""
+    counts = {t: tops.count(t) for t in tops}
+    best = max(counts.values())
+    leaders = [t for t in tops if counts[t] == best]
+    return tops[0] if tops[0] in leaders else leaders[0]
+
+
+def run(backend, per_task: int, orders: int, tasks_dir: Path, names: list[str] | None = None, progress=None,
+        ensemble: bool = False) -> dict:
     tasks = bench_run.load_tasks(names, per_task)
     out = {"tasks": {}}
     for name, t in tasks.items():
@@ -51,7 +60,13 @@ def run(backend, per_task: int, orders: int, tasks_dir: Path, names: list[str] |
             for text in vs:
                 ans = decide_one(backend, it["state"], make_question(t["spec"], text), n_orders=orders)
                 tops.append(top_label(ans))
-            rows.append({"id": it["id"], "truth": str(it["truth"]), "hard": it.get("hard", False), "tops": tops})
+            row = {"id": it["id"], "truth": str(it["truth"]), "hard": it.get("hard", False), "tops": tops}
+            if ensemble:
+                # the real thing: average the odds over all four wordings (each paired with a different option rotation)
+                q = make_question(t["spec"], vs[0])
+                q.alternates = list(vs[1:])
+                row["ensemble"] = top_label(decide_one(backend, it["state"], q, n_orders=orders))
+            rows.append(row)
             if progress and n % 20 == 0:
                 progress(f"[{name}] {n}/{len(items)}")
         out["tasks"][name] = {"n_variants": len(vs), "items": rows}
@@ -71,7 +86,10 @@ def summarise(receipts: dict) -> dict:
         pairs = list(itertools.combinations(range(k), 2))
         pair_dis = sum(r["tops"][a] != r["tops"][b] for r in rows for a, b in pairs) / (len(rows) * len(pairs))
         summary["tasks"][name] = {"n": len(rows), "accuracy_by_wording": acc, "accuracy_spread": max(acc) - min(acc),
-                                  "answer_changed_with_wording": any_change, "pairwise_disagreement": pair_dis}
+                                  "answer_changed_with_wording": any_change, "pairwise_disagreement": pair_dis,
+                                  "majority_vote_accuracy": sum(majority(r["tops"]) == r["truth"] for r in rows) / len(rows)}
+        if "ensemble" in rows[0]:
+            summary["tasks"][name]["ensemble_accuracy"] = sum(r["ensemble"] == r["truth"] for r in rows) / len(rows)
         pooled_any += sum(len(set(r["tops"])) > 1 for r in rows)
         pooled_pair += sum(r["tops"][a] != r["tops"][b] for r in rows for a, b in pairs)
         pooled_pairs += len(rows) * len(pairs)
@@ -80,7 +98,11 @@ def summarise(receipts: dict) -> dict:
     k = len(pooled_acc[0])
     acc = [sum(a[v] for a in pooled_acc) / pooled_n for v in range(k)]
     summary["pooled"] = {"n": pooled_n, "accuracy_by_wording": acc, "accuracy_spread": max(acc) - min(acc),
-                         "answer_changed_with_wording": pooled_any / pooled_n, "pairwise_disagreement": pooled_pair / pooled_pairs}
+                         "answer_changed_with_wording": pooled_any / pooled_n, "pairwise_disagreement": pooled_pair / pooled_pairs,
+                         "mean_single_accuracy": sum(acc) / len(acc),
+                         "majority_vote_accuracy": sum(t["majority_vote_accuracy"] * t["n"] for t in summary["tasks"].values()) / pooled_n}
+    if all("ensemble_accuracy" in t for t in summary["tasks"].values()):
+        summary["pooled"]["ensemble_accuracy"] = sum(t["ensemble_accuracy"] * t["n"] for t in summary["tasks"].values()) / pooled_n
     return summary
 
 
@@ -95,11 +117,17 @@ def markdown(receipts: dict, summary: dict) -> str:
          f"Option order was averaged over {cfg['orders']} rotations, so only the wording changes.", "",
          f"- **The answer changed with the wording on {p['answer_changed_with_wording']:.1%} of items** (at least one wording gave a different top answer).",
          f"- **Two wordings disagreed on {p['pairwise_disagreement']:.1%} of pairs** on average.",
-         f"- **Accuracy by wording:** " + ", ".join(f"{a:.1%}" for a in p["accuracy_by_wording"]) + f" (spread {p['accuracy_spread'] * 100:.1f} points). The first is the original wording.", "",
-         "| Task | Items | Answer changed with wording | Pairwise disagreement | Accuracy by wording | Spread |", "|---|---|---|---|---|---|"]
+         f"- **Accuracy by wording:** " + ", ".join(f"{a:.1%}" for a in p["accuracy_by_wording"]) + f" (spread {p['accuracy_spread'] * 100:.1f} points). The first is the original wording.",
+         f"- **Taking the majority answer across the wordings:** {p['majority_vote_accuracy']:.1%}, against {p['mean_single_accuracy']:.1%} for the average single wording "
+         f"and {max(p['accuracy_by_wording']):.1%} for the best one."]
+    if "ensemble_accuracy" in p:
+        L.append(f"- **Averaging the odds across the wordings (the wording ensemble):** {p['ensemble_accuracy']:.1%}.")
+    L += ["", "| Task | Items | Answer changed with wording | Pairwise disagreement | Accuracy by wording | Spread | Majority answer |" + (" Ensemble |" if "ensemble_accuracy" in p else ""),
+          "|---|---|---|---|---|---|---|" + ("---|" if "ensemble_accuracy" in p else "")]
     for t, s in summary["tasks"].items():
         L.append(f"| {t} | {s['n']} | {s['answer_changed_with_wording']:.1%} | {s['pairwise_disagreement']:.1%} | "
-                 + " / ".join(f"{a:.0%}" for a in s["accuracy_by_wording"]) + f" | {s['accuracy_spread'] * 100:.1f} pts |")
+                 + " / ".join(f"{a:.0%}" for a in s["accuracy_by_wording"]) + f" | {s['accuracy_spread'] * 100:.1f} pts | {s['majority_vote_accuracy']:.0%} |"
+                 + (f" {s['ensemble_accuracy']:.0%} |" if "ensemble_accuracy" in s else ""))
     L += ["", "The rewordings are in `bench/rewordings.json`. Each was written by hand to keep the same label definitions; a test checks the key terms are all still there. "
               "A few dozen items per task is small, so treat gaps of a few points as noise.", ""]
     return "\n".join(L)
@@ -116,13 +144,25 @@ def main(argv=None) -> int:
     ap.add_argument("--orders", type=int, default=3)
     ap.add_argument("--timeout", type=float, default=120.0)
     ap.add_argument("--tasks-dir", default="bench/tasks_v2")
-    ap.add_argument("--out", required=True)
+    ap.add_argument("--ensemble", action="store_true", help="also answer each item once by averaging the odds over all wordings")
+    ap.add_argument("--report", metavar="RECEIPTS", help="rebuild the summary and scoreboard of an existing receipts file, without running anything")
+    ap.add_argument("--out")
     args = ap.parse_args(argv)
+    if args.report:
+        path = Path(args.report)
+        rec = json.loads(path.read_text())
+        rec["summary"] = summarise(rec)
+        path.write_text(json.dumps(rec, indent=1, ensure_ascii=False))
+        path.with_suffix(".md").write_text(markdown(rec, rec["summary"]))
+        print(f"rebuilt {path.with_suffix('.md')}")
+        return 0
+    if not args.out:
+        ap.error("--out is required unless --report is given")
     tasks_dir = (BENCH.parent / args.tasks_dir)
     bench_run.TASKS_DIR = tasks_dir
     backend = bench_run.make_backend(args.backend, args.model, args.host, args.timeout, args.scoring)
     names = None if args.tasks == "all" else [t.strip() for t in args.tasks.split(",")]
-    receipts = run(backend, args.per_task, args.orders, tasks_dir, names, progress=lambda m: print(m, flush=True))
+    receipts = run(backend, args.per_task, args.orders, tasks_dir, names, progress=lambda m: print(m, flush=True), ensemble=args.ensemble)
     receipts["config"] = {"backend": args.backend, "model": args.model if args.backend == "ollama" else None,
                           "scoring": args.scoring if args.backend == "ollama" else None, "orders": args.orders,
                           "per_task": args.per_task, "tasks_dir": args.tasks_dir}

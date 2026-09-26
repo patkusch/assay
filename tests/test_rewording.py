@@ -48,6 +48,18 @@ class RewordingTests(unittest.TestCase):
         self.assertEqual(s["pooled"]["answer_changed_with_wording"], 0.0)
         self.assertEqual(s["pooled"]["accuracy_spread"], 0.0)
 
+    def test_majority_and_ensemble_are_reported(self):
+        self.assertEqual(rewording.majority(["a", "b", "b", "a"]), "a")      # tie: the original wording's answer wins
+        self.assertEqual(rewording.majority(["c", "b", "b", "a"]), "b")
+        self.assertEqual(rewording.majority(["c", "b", "a", "b"]), "b")
+        r = rewording.run(Sensitive(), per_task=12, orders=1, tasks_dir=ROOT / "bench" / "tasks_v2", names=["routing"], ensemble=True)
+        s = rewording.summarise(r)
+        self.assertIn("ensemble_accuracy", s["pooled"])
+        self.assertIn("majority_vote_accuracy", s["pooled"])
+        md = rewording.markdown({**r, "config": {"backend": "sensitive", "orders": 1}, "timestamp": "t"}, s)
+        self.assertIn("wording ensemble", md)
+        self.assertIn("Majority answer", md)
+
     def test_a_model_that_reacts_to_wording_is_caught(self):
         r = rewording.run(Sensitive(), per_task=15, orders=1, tasks_dir=ROOT / "bench" / "tasks_v2", names=["phishing", "routing"])
         s = rewording.summarise(r)

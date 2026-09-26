@@ -2682,7 +2682,8 @@
     ],
     "accuracy_spread": 0.16666666666666663,
     "answer_changed_with_wording": 0.2,
-    "pairwise_disagreement": 0.10833333333333334
+    "pairwise_disagreement": 0.10833333333333334,
+    "majority_vote_accuracy": 0.8333333333333334
    },
    "command_safety": {
     "n": 60,
@@ -2694,7 +2695,8 @@
     ],
     "accuracy_spread": 0.30000000000000004,
     "answer_changed_with_wording": 0.43333333333333335,
-    "pairwise_disagreement": 0.25555555555555554
+    "pairwise_disagreement": 0.25555555555555554,
+    "majority_vote_accuracy": 0.8
    },
    "routing": {
     "n": 60,
@@ -2706,7 +2708,8 @@
     ],
     "accuracy_spread": 0.29999999999999993,
     "answer_changed_with_wording": 0.45,
-    "pairwise_disagreement": 0.275
+    "pairwise_disagreement": 0.275,
+    "majority_vote_accuracy": 0.7
    },
    "urgency": {
     "n": 60,
@@ -2718,7 +2721,8 @@
     ],
     "accuracy_spread": 0.21666666666666656,
     "answer_changed_with_wording": 0.4,
-    "pairwise_disagreement": 0.21944444444444444
+    "pairwise_disagreement": 0.21944444444444444,
+    "majority_vote_accuracy": 0.95
    }
   },
   "pooled": {
@@ -2731,7 +2735,9 @@
    ],
    "accuracy_spread": 0.08750000000000002,
    "answer_changed_with_wording": 0.37083333333333335,
-   "pairwise_disagreement": 0.21458333333333332
+   "pairwise_disagreement": 0.21458333333333332,
+   "mean_single_accuracy": 0.7760416666666666,
+   "majority_vote_accuracy": 0.8208333333333333
   }
  }
 }
