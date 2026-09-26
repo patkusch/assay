@@ -165,11 +165,15 @@ def parse_scores(data: dict, codes: list[str]) -> list[float]:
     return [_logsumexp(f) if f else floor for f in found]
 
 
+class BackendTimeout(BackendError):
+    """Ollama did not answer in time. A slow call is often a one-off (the model was swapped out), so it is retried."""
+
+
 class OllamaBackend:
     """Scores candidate answers with a local Ollama model, one short call per ordering."""
 
     def __init__(self, model: str = "gemma3", host: str = "http://127.0.0.1:11434", timeout: float = 60,
-                 scoring: str = "letter"):
+                 scoring: str = "letter", retries: int = 1):
         """`scoring` is "letter" (options shown as A, B, C and the letter's odds read; the default), "word"
         (the model replies with the option's own word and the first token's odds are read), or "auto"
         (word when the options' first letters differ, otherwise letter)."""
@@ -179,9 +183,19 @@ class OllamaBackend:
         self.host = host.rstrip("/")
         self.timeout = timeout
         self.scoring = scoring
+        self.retries = max(0, retries)  # extra tries after a timeout; other errors are never retried
         self.name = f"ollama:{model}" + ("" if scoring == "letter" else f":{scoring}")
 
     def _post(self, path: str, payload: dict) -> dict:
+        """Send the request; if Ollama times out, try again up to `retries` more times, then give up loudly."""
+        for attempt in range(self.retries + 1):
+            try:
+                return self._post_once(path, payload)
+            except BackendTimeout:
+                if attempt == self.retries:
+                    raise
+
+    def _post_once(self, path: str, payload: dict) -> dict:
         req = urllib.request.Request(
             self.host + path,
             data=json.dumps(payload).encode(),
@@ -204,10 +218,10 @@ class OllamaBackend:
                 ) from e
             raise BackendError(f"Ollama returned HTTP {e.code}: {detail}") from e
         except (socket.timeout, TimeoutError) as e:
-            raise BackendError(f"Ollama at {self.host} did not answer within {self.timeout}s") from e
+            raise BackendTimeout(f"Ollama at {self.host} did not answer within {self.timeout}s") from e
         except urllib.error.URLError as e:
             if isinstance(e.reason, (socket.timeout, TimeoutError)):
-                raise BackendError(f"Ollama at {self.host} did not answer within {self.timeout}s") from e
+                raise BackendTimeout(f"Ollama at {self.host} did not answer within {self.timeout}s") from e
             raise BackendError(
                 f"cannot reach Ollama at {self.host} ({e.reason}). Is `ollama serve` running?"
             ) from e
