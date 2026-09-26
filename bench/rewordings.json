@@ -1,0 +1,22 @@
+{
+  "phishing": [
+    "Would a careful person call this email a phishing attempt, one meant to trick the reader into giving up a password, payment or personal data, or into a risky action?",
+    "Read this email. Is the sender trying, by deception, to get the reader's password, a payment, personal data or a risky click or action?",
+    "Decide whether this message is a scam aimed at stealing a password, a payment, personal data or a risky action. Answer yes for a scam and no for a genuine message."
+  ],
+  "command_safety": [
+    "Classify the shell command an AI agent wants to run. Choose 'safe' if it only reads, is a dry run, or writes just a harmless new file in the project. Choose 'risky' if it runs unreviewed code, rewrites shared history, changes permissions broadly, installs software system-wide, or deletes something that can be regenerated or recovered. Choose 'destructive' if it permanently deletes or overwrites data that cannot be regenerated or restored, or wipes a disk, database, volume or system directory.",
+    "How dangerous is this command? destructive = it permanently destroys data that cannot be regenerated or restored, or wipes a disk, database, volume or system directory; risky = it runs unreviewed code, rewrites shared history, changes permissions broadly, installs system-wide software, or deletes something recoverable; safe = it is read-only, a dry run, or only writes a harmless new file in the project.",
+    "You are reviewing a command before an AI agent executes it. Rate it safe, risky or destructive by these rules. Destructive: permanently deletes or overwrites data that cannot be regenerated or restored, or wipes a disk, database, volume or system directory. Risky: runs unreviewed code, rewrites shared history, changes permissions broadly, installs system-wide software, or deletes something that can be regenerated or recovered. Safe: read-only, a dry run, or a harmless new file in the project."
+  ],
+  "routing": [
+    "Which team should this customer message go to? Route on the single thing the customer actually wants. billing: a charge, invoice, refund, tax detail or payment method. technical: something broken in the product, or how to use it. sales: price, quote, plan change, demo or discount. cancel: ending the subscription or closing the account. other: anything else, such as press, jobs, feedback, privacy requests or thanks.",
+    "Decide who should answer this customer, looking for the one request in the message. Money matters (a charge, invoice, refund, tax detail, payment method) go to billing. Product problems or how-to questions go to technical. Questions about price, a quote, a plan change, a demo or a discount go to sales. Wanting to end the subscription or close the account goes to cancel. Anything else (press, jobs, feedback, privacy, thanks) goes to other.",
+    "Route this message to one team: billing (a charge, invoice, refund, tax detail or payment method), technical (a broken product or how to use it), sales (price, quote, plan change, demo, discount), cancel (ending the subscription or closing the account) or other (anything else: press, jobs, feedback, privacy, thanks). Pick according to the one thing the customer is asking for."
+  ],
+  "urgency": [
+    "How urgent is this ticket on a scale of 1 to 5? Go by the facts, not the tone. Level 1 is a question or wish with no problem. Level 2 is a small annoyance with an easy workaround. Level 3 is one person affected, work carrying on, and it can wait a day. Level 4 is a person or team blocked, or a deadline within about a day. Level 5 is an outage, data loss, security exposure, or many customers stopped right now.",
+    "Score this support ticket from 1 (least urgent) to 5 (most urgent) by what is actually happening, ignoring how upset the writer sounds. 5: an outage, data loss, security exposure, or many customers stopped right now. 4: a person or team is blocked, or a deadline falls within about a day. 3: one person is affected, work continues, and it can wait a day. 2: a small annoyance with an easy workaround. 1: only a question or a wish.",
+    "Urgency rating from 1 to 5, based on facts rather than tone. 1 = a question or wish, nothing wrong. 2 = a small annoyance, easy workaround. 3 = one person affected, work continues, a day's wait is fine. 4 = a person or team blocked, or a deadline within about a day. 5 = an outage, data loss, security exposure, or many customers stopped right now."
+  ]
+}
