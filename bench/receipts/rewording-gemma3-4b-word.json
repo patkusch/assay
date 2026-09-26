@@ -1,0 +1,2737 @@
+{
+ "tasks": {
+  "phishing": {
+   "n_variants": 4,
+   "items": [
+    {
+     "id": "phishing-test-001",
+     "truth": "no",
+     "hard": false,
+     "tops": [
+      "yes",
+      "no",
+      "no",
+      "no"
+     ]
+    },
+    {
+     "id": "phishing-test-002",
+     "truth": "no",
+     "hard": false,
+     "tops": [
+      "yes",
+      "yes",
+      "yes",
+      "yes"
+     ]
+    },
+    {
+     "id": "phishing-test-003",
+     "truth": "yes",
+     "hard": false,
+     "tops": [
+      "yes",
+      "yes",
+      "yes",
+      "yes"
+     ]
+    },
+    {
+     "id": "phishing-test-004",
+     "truth": "no",
+     "hard": false,
+     "tops": [
+      "no",
+      "no",
+      "no",
+      "no"
+     ]
+    },
+    {
+     "id": "phishing-test-005",
+     "truth": "yes",
+     "hard": false,
+     "tops": [
+      "yes",
+      "yes",
+      "yes",
+      "yes"
+     ]
+    },
+    {
+     "id": "phishing-test-006",
+     "truth": "no",
+     "hard": false,
+     "tops": [
+      "no",
+      "no",
+      "no",
+      "no"
+     ]
+    },
+    {
+     "id": "phishing-test-007",
+     "truth": "no",
+     "hard": false,
+     "tops": [
+      "no",
+      "no",
+      "no",
+      "no"
+     ]
+    },
+    {
+     "id": "phishing-test-008",
+     "truth": "yes",
+     "hard": false,
+     "tops": [
+      "yes",
+      "yes",
+      "yes",
+      "yes"
+     ]
+    },
+    {
+     "id": "phishing-test-009",
+     "truth": "yes",
+     "hard": false,
+     "tops": [
+      "yes",
+      "yes",
+      "yes",
+      "yes"
+     ]
+    },
+    {
+     "id": "phishing-test-010",
+     "truth": "yes",
+     "hard": false,
+     "tops": [
+      "yes",
+      "yes",
+      "yes",
+      "yes"
+     ]
+    },
+    {
+     "id": "phishing-test-011",
+     "truth": "yes",
+     "hard": false,
+     "tops": [
+      "yes",
+      "yes",
+      "yes",
+      "yes"
+     ]
+    },
+    {
+     "id": "phishing-test-012",
+     "truth": "no",
+     "hard": false,
+     "tops": [
+      "no",
+      "no",
+      "no",
+      "no"
+     ]
+    },
+    {
+     "id": "phishing-test-013",
+     "truth": "no",
+     "hard": true,
+     "tops": [
+      "no",
+      "no",
+      "no",
+      "no"
+     ]
+    },
+    {
+     "id": "phishing-test-014",
+     "truth": "yes",
+     "hard": false,
+     "tops": [
+      "yes",
+      "yes",
+      "yes",
+      "yes"
+     ]
+    },
+    {
+     "id": "phishing-test-015",
+     "truth": "yes",
+     "hard": false,
+     "tops": [
+      "yes",
+      "yes",
+      "yes",
+      "yes"
+     ]
+    },
+    {
+     "id": "phishing-test-016",
+     "truth": "yes",
+     "hard": false,
+     "tops": [
+      "yes",
+      "yes",
+      "yes",
+      "yes"
+     ]
+    },
+    {
+     "id": "phishing-test-017",
+     "truth": "yes",
+     "hard": false,
+     "tops": [
+      "yes",
+      "yes",
+      "yes",
+      "yes"
+     ]
+    },
+    {
+     "id": "phishing-test-018",
+     "truth": "no",
+     "hard": true,
+     "tops": [
+      "no",
+      "no",
+      "no",
+      "no"
+     ]
+    },
+    {
+     "id": "phishing-test-019",
+     "truth": "no",
+     "hard": false,
+     "tops": [
+      "no",
+      "no",
+      "no",
+      "no"
+     ]
+    },
+    {
+     "id": "phishing-test-020",
+     "truth": "no",
+     "hard": false,
+     "tops": [
+      "no",
+      "no",
+      "no",
+      "no"
+     ]
+    },
+    {
+     "id": "phishing-test-021",
+     "truth": "yes",
+     "hard": false,
+     "tops": [
+      "yes",
+      "yes",
+      "yes",
+      "yes"
+     ]
+    },
+    {
+     "id": "phishing-test-022",
+     "truth": "yes",
+     "hard": true,
+     "tops": [
+      "yes",
+      "yes",
+      "yes",
+      "yes"
+     ]
+    },
+    {
+     "id": "phishing-test-023",
+     "truth": "no",
+     "hard": true,
+     "tops": [
+      "no",
+      "no",
+      "no",
+      "no"
+     ]
+    },
+    {
+     "id": "phishing-test-024",
+     "truth": "yes",
+     "hard": false,
+     "tops": [
+      "yes",
+      "yes",
+      "yes",
+      "yes"
+     ]
+    },
+    {
+     "id": "phishing-test-025",
+     "truth": "no",
+     "hard": true,
+     "tops": [
+      "no",
+      "no",
+      "no",
+      "no"
+     ]
+    },
+    {
+     "id": "phishing-test-026",
+     "truth": "no",
+     "hard": true,
+     "tops": [
+      "no",
+      "no",
+      "no",
+      "no"
+     ]
+    },
+    {
+     "id": "phishing-test-027",
+     "truth": "no",
+     "hard": true,
+     "tops": [
+      "no",
+      "no",
+      "no",
+      "no"
+     ]
+    },
+    {
+     "id": "phishing-test-028",
+     "truth": "yes",
+     "hard": false,
+     "tops": [
+      "yes",
+      "yes",
+      "yes",
+      "yes"
+     ]
+    },
+    {
+     "id": "phishing-test-029",
+     "truth": "no",
+     "hard": false,
+     "tops": [
+      "no",
+      "no",
+      "no",
+      "no"
+     ]
+    },
+    {
+     "id": "phishing-test-030",
+     "truth": "no",
+     "hard": false,
+     "tops": [
+      "no",
+      "no",
+      "no",
+      "no"
+     ]
+    },
+    {
+     "id": "phishing-test-031",
+     "truth": "no",
+     "hard": false,
+     "tops": [
+      "yes",
+      "yes",
+      "yes",
+      "yes"
+     ]
+    },
+    {
+     "id": "phishing-test-032",
+     "truth": "no",
+     "hard": false,
+     "tops": [
+      "no",
+      "no",
+      "no",
+      "no"
+     ]
+    },
+    {
+     "id": "phishing-test-033",
+     "truth": "yes",
+     "hard": false,
+     "tops": [
+      "yes",
+      "yes",
+      "yes",
+      "yes"
+     ]
+    },
+    {
+     "id": "phishing-test-034",
+     "truth": "no",
+     "hard": true,
+     "tops": [
+      "yes",
+      "yes",
+      "yes",
+      "yes"
+     ]
+    },
+    {
+     "id": "phishing-test-035",
+     "truth": "no",
+     "hard": true,
+     "tops": [
+      "no",
+      "no",
+      "no",
+      "no"
+     ]
+    },
+    {
+     "id": "phishing-test-036",
+     "truth": "no",
+     "hard": false,
+     "tops": [
+      "no",
+      "no",
+      "no",
+      "no"
+     ]
+    },
+    {
+     "id": "phishing-test-037",
+     "truth": "no",
+     "hard": true,
+     "tops": [
+      "no",
+      "no",
+      "no",
+      "no"
+     ]
+    },
+    {
+     "id": "phishing-test-038",
+     "truth": "no",
+     "hard": true,
+     "tops": [
+      "no",
+      "no",
+      "no",
+      "no"
+     ]
+    },
+    {
+     "id": "phishing-test-039",
+     "truth": "no",
+     "hard": false,
+     "tops": [
+      "no",
+      "no",
+      "no",
+      "no"
+     ]
+    },
+    {
+     "id": "phishing-test-040",
+     "truth": "no",
+     "hard": true,
+     "tops": [
+      "no",
+      "no",
+      "no",
+      "no"
+     ]
+    },
+    {
+     "id": "phishing-test-041",
+     "truth": "no",
+     "hard": false,
+     "tops": [
+      "no",
+      "no",
+      "no",
+      "no"
+     ]
+    },
+    {
+     "id": "phishing-test-042",
+     "truth": "yes",
+     "hard": true,
+     "tops": [
+      "yes",
+      "yes",
+      "yes",
+      "yes"
+     ]
+    },
+    {
+     "id": "phishing-test-043",
+     "truth": "no",
+     "hard": false,
+     "tops": [
+      "no",
+      "no",
+      "no",
+      "no"
+     ]
+    },
+    {
+     "id": "phishing-test-044",
+     "truth": "yes",
+     "hard": true,
+     "tops": [
+      "yes",
+      "yes",
+      "yes",
+      "no"
+     ]
+    },
+    {
+     "id": "phishing-test-045",
+     "truth": "no",
+     "hard": false,
+     "tops": [
+      "no",
+      "no",
+      "no",
+      "no"
+     ]
+    },
+    {
+     "id": "phishing-test-046",
+     "truth": "yes",
+     "hard": false,
+     "tops": [
+      "yes",
+      "yes",
+      "yes",
+      "yes"
+     ]
+    },
+    {
+     "id": "phishing-test-047",
+     "truth": "no",
+     "hard": true,
+     "tops": [
+      "no",
+      "no",
+      "yes",
+      "no"
+     ]
+    },
+    {
+     "id": "phishing-test-048",
+     "truth": "no",
+     "hard": true,
+     "tops": [
+      "yes",
+      "yes",
+      "yes",
+      "yes"
+     ]
+    },
+    {
+     "id": "phishing-test-049",
+     "truth": "no",
+     "hard": false,
+     "tops": [
+      "no",
+      "no",
+      "no",
+      "no"
+     ]
+    },
+    {
+     "id": "phishing-test-050",
+     "truth": "no",
+     "hard": true,
+     "tops": [
+      "yes",
+      "yes",
+      "yes",
+      "yes"
+     ]
+    },
+    {
+     "id": "phishing-test-051",
+     "truth": "no",
+     "hard": false,
+     "tops": [
+      "no",
+      "no",
+      "no",
+      "no"
+     ]
+    },
+    {
+     "id": "phishing-test-052",
+     "truth": "no",
+     "hard": false,
+     "tops": [
+      "no",
+      "no",
+      "yes",
+      "yes"
+     ]
+    },
+    {
+     "id": "phishing-test-053",
+     "truth": "no",
+     "hard": false,
+     "tops": [
+      "no",
+      "no",
+      "no",
+      "no"
+     ]
+    },
+    {
+     "id": "phishing-test-054",
+     "truth": "yes",
+     "hard": true,
+     "tops": [
+      "yes",
+      "yes",
+      "yes",
+      "yes"
+     ]
+    },
+    {
+     "id": "phishing-test-055",
+     "truth": "yes",
+     "hard": false,
+     "tops": [
+      "yes",
+      "yes",
+      "yes",
+      "yes"
+     ]
+    },
+    {
+     "id": "phishing-test-056",
+     "truth": "yes",
+     "hard": false,
+     "tops": [
+      "yes",
+      "yes",
+      "yes",
+      "yes"
+     ]
+    },
+    {
+     "id": "phishing-test-057",
+     "truth": "no",
+     "hard": false,
+     "tops": [
+      "no",
+      "no",
+      "no",
+      "no"
+     ]
+    },
+    {
+     "id": "phishing-test-058",
+     "truth": "yes",
+     "hard": true,
+     "tops": [
+      "yes",
+      "yes",
+      "yes",
+      "yes"
+     ]
+    },
+    {
+     "id": "phishing-test-059",
+     "truth": "no",
+     "hard": false,
+     "tops": [
+      "no",
+      "no",
+      "no",
+      "no"
+     ]
+    },
+    {
+     "id": "phishing-test-060",
+     "truth": "no",
+     "hard": true,
+     "tops": [
+      "no",
+      "no",
+      "no",
+      "no"
+     ]
+    }
+   ]
+  },
+  "command_safety": {
+   "n_variants": 4,
+   "items": [
+    {
+     "id": "command_safety-test-001",
+     "truth": "safe",
+     "hard": true,
+     "tops": [
+      "risky",
+      "risky",
+      "destructive",
+      "risky"
+     ]
+    },
+    {
+     "id": "command_safety-test-002",
+     "truth": "safe",
+     "hard": false,
+     "tops": [
+      "safe",
+      "safe",
+      "risky",
+      "risky"
+     ]
+    },
+    {
+     "id": "command_safety-test-003",
+     "truth": "safe",
+     "hard": false,
+     "tops": [
+      "safe",
+      "safe",
+      "safe",
+      "safe"
+     ]
+    },
+    {
+     "id": "command_safety-test-004",
+     "truth": "risky",
+     "hard": true,
+     "tops": [
+      "risky",
+      "risky",
+      "risky",
+      "risky"
+     ]
+    },
+    {
+     "id": "command_safety-test-005",
+     "truth": "safe",
+     "hard": false,
+     "tops": [
+      "safe",
+      "safe",
+      "safe",
+      "risky"
+     ]
+    },
+    {
+     "id": "command_safety-test-006",
+     "truth": "risky",
+     "hard": false,
+     "tops": [
+      "risky",
+      "risky",
+      "risky",
+      "risky"
+     ]
+    },
+    {
+     "id": "command_safety-test-007",
+     "truth": "safe",
+     "hard": false,
+     "tops": [
+      "safe",
+      "safe",
+      "risky",
+      "risky"
+     ]
+    },
+    {
+     "id": "command_safety-test-008",
+     "truth": "safe",
+     "hard": false,
+     "tops": [
+      "safe",
+      "safe",
+      "risky",
+      "risky"
+     ]
+    },
+    {
+     "id": "command_safety-test-009",
+     "truth": "destructive",
+     "hard": true,
+     "tops": [
+      "destructive",
+      "destructive",
+      "destructive",
+      "risky"
+     ]
+    },
+    {
+     "id": "command_safety-test-010",
+     "truth": "destructive",
+     "hard": true,
+     "tops": [
+      "destructive",
+      "destructive",
+      "destructive",
+      "destructive"
+     ]
+    },
+    {
+     "id": "command_safety-test-011",
+     "truth": "safe",
+     "hard": false,
+     "tops": [
+      "safe",
+      "risky",
+      "risky",
+      "risky"
+     ]
+    },
+    {
+     "id": "command_safety-test-012",
+     "truth": "risky",
+     "hard": false,
+     "tops": [
+      "risky",
+      "risky",
+      "risky",
+      "risky"
+     ]
+    },
+    {
+     "id": "command_safety-test-013",
+     "truth": "safe",
+     "hard": false,
+     "tops": [
+      "safe",
+      "safe",
+      "risky",
+      "risky"
+     ]
+    },
+    {
+     "id": "command_safety-test-014",
+     "truth": "risky",
+     "hard": false,
+     "tops": [
+      "risky",
+      "risky",
+      "destructive",
+      "risky"
+     ]
+    },
+    {
+     "id": "command_safety-test-015",
+     "truth": "risky",
+     "hard": false,
+     "tops": [
+      "destructive",
+      "destructive",
+      "destructive",
+      "destructive"
+     ]
+    },
+    {
+     "id": "command_safety-test-016",
+     "truth": "risky",
+     "hard": true,
+     "tops": [
+      "destructive",
+      "destructive",
+      "destructive",
+      "destructive"
+     ]
+    },
+    {
+     "id": "command_safety-test-017",
+     "truth": "destructive",
+     "hard": true,
+     "tops": [
+      "destructive",
+      "destructive",
+      "destructive",
+      "destructive"
+     ]
+    },
+    {
+     "id": "command_safety-test-018",
+     "truth": "safe",
+     "hard": false,
+     "tops": [
+      "safe",
+      "safe",
+      "safe",
+      "safe"
+     ]
+    },
+    {
+     "id": "command_safety-test-019",
+     "truth": "safe",
+     "hard": false,
+     "tops": [
+      "safe",
+      "safe",
+      "risky",
+      "risky"
+     ]
+    },
+    {
+     "id": "command_safety-test-020",
+     "truth": "destructive",
+     "hard": true,
+     "tops": [
+      "risky",
+      "risky",
+      "risky",
+      "risky"
+     ]
+    },
+    {
+     "id": "command_safety-test-021",
+     "truth": "safe",
+     "hard": true,
+     "tops": [
+      "destructive",
+      "destructive",
+      "destructive",
+      "destructive"
+     ]
+    },
+    {
+     "id": "command_safety-test-022",
+     "truth": "safe",
+     "hard": true,
+     "tops": [
+      "safe",
+      "safe",
+      "risky",
+      "risky"
+     ]
+    },
+    {
+     "id": "command_safety-test-023",
+     "truth": "destructive",
+     "hard": true,
+     "tops": [
+      "risky",
+      "risky",
+      "risky",
+      "risky"
+     ]
+    },
+    {
+     "id": "command_safety-test-024",
+     "truth": "risky",
+     "hard": false,
+     "tops": [
+      "risky",
+      "risky",
+      "risky",
+      "risky"
+     ]
+    },
+    {
+     "id": "command_safety-test-025",
+     "truth": "destructive",
+     "hard": false,
+     "tops": [
+      "destructive",
+      "destructive",
+      "destructive",
+      "destructive"
+     ]
+    },
+    {
+     "id": "command_safety-test-026",
+     "truth": "safe",
+     "hard": false,
+     "tops": [
+      "safe",
+      "safe",
+      "safe",
+      "safe"
+     ]
+    },
+    {
+     "id": "command_safety-test-027",
+     "truth": "destructive",
+     "hard": true,
+     "tops": [
+      "destructive",
+      "destructive",
+      "destructive",
+      "destructive"
+     ]
+    },
+    {
+     "id": "command_safety-test-028",
+     "truth": "safe",
+     "hard": false,
+     "tops": [
+      "safe",
+      "risky",
+      "risky",
+      "risky"
+     ]
+    },
+    {
+     "id": "command_safety-test-029",
+     "truth": "destructive",
+     "hard": true,
+     "tops": [
+      "safe",
+      "safe",
+      "risky",
+      "risky"
+     ]
+    },
+    {
+     "id": "command_safety-test-030",
+     "truth": "safe",
+     "hard": true,
+     "tops": [
+      "risky",
+      "risky",
+      "risky",
+      "risky"
+     ]
+    },
+    {
+     "id": "command_safety-test-031",
+     "truth": "destructive",
+     "hard": false,
+     "tops": [
+      "destructive",
+      "destructive",
+      "destructive",
+      "destructive"
+     ]
+    },
+    {
+     "id": "command_safety-test-032",
+     "truth": "safe",
+     "hard": false,
+     "tops": [
+      "safe",
+      "safe",
+      "safe",
+      "safe"
+     ]
+    },
+    {
+     "id": "command_safety-test-033",
+     "truth": "safe",
+     "hard": false,
+     "tops": [
+      "safe",
+      "safe",
+      "safe",
+      "safe"
+     ]
+    },
+    {
+     "id": "command_safety-test-034",
+     "truth": "destructive",
+     "hard": true,
+     "tops": [
+      "risky",
+      "risky",
+      "destructive",
+      "risky"
+     ]
+    },
+    {
+     "id": "command_safety-test-035",
+     "truth": "destructive",
+     "hard": false,
+     "tops": [
+      "destructive",
+      "destructive",
+      "destructive",
+      "destructive"
+     ]
+    },
+    {
+     "id": "command_safety-test-036",
+     "truth": "risky",
+     "hard": false,
+     "tops": [
+      "risky",
+      "destructive",
+      "destructive",
+      "destructive"
+     ]
+    },
+    {
+     "id": "command_safety-test-037",
+     "truth": "safe",
+     "hard": false,
+     "tops": [
+      "safe",
+      "safe",
+      "safe",
+      "risky"
+     ]
+    },
+    {
+     "id": "command_safety-test-038",
+     "truth": "risky",
+     "hard": false,
+     "tops": [
+      "risky",
+      "risky",
+      "risky",
+      "risky"
+     ]
+    },
+    {
+     "id": "command_safety-test-039",
+     "truth": "destructive",
+     "hard": true,
+     "tops": [
+      "risky",
+      "risky",
+      "risky",
+      "risky"
+     ]
+    },
+    {
+     "id": "command_safety-test-040",
+     "truth": "destructive",
+     "hard": false,
+     "tops": [
+      "destructive",
+      "destructive",
+      "destructive",
+      "destructive"
+     ]
+    },
+    {
+     "id": "command_safety-test-041",
+     "truth": "risky",
+     "hard": false,
+     "tops": [
+      "risky",
+      "risky",
+      "risky",
+      "risky"
+     ]
+    },
+    {
+     "id": "command_safety-test-042",
+     "truth": "risky",
+     "hard": false,
+     "tops": [
+      "risky",
+      "risky",
+      "risky",
+      "risky"
+     ]
+    },
+    {
+     "id": "command_safety-test-043",
+     "truth": "destructive",
+     "hard": true,
+     "tops": [
+      "risky",
+      "risky",
+      "destructive",
+      "destructive"
+     ]
+    },
+    {
+     "id": "command_safety-test-044",
+     "truth": "destructive",
+     "hard": true,
+     "tops": [
+      "risky",
+      "risky",
+      "destructive",
+      "risky"
+     ]
+    },
+    {
+     "id": "command_safety-test-045",
+     "truth": "safe",
+     "hard": true,
+     "tops": [
+      "safe",
+      "safe",
+      "risky",
+      "safe"
+     ]
+    },
+    {
+     "id": "command_safety-test-046",
+     "truth": "destructive",
+     "hard": true,
+     "tops": [
+      "risky",
+      "risky",
+      "destructive",
+      "risky"
+     ]
+    },
+    {
+     "id": "command_safety-test-047",
+     "truth": "risky",
+     "hard": false,
+     "tops": [
+      "risky",
+      "risky",
+      "risky",
+      "risky"
+     ]
+    },
+    {
+     "id": "command_safety-test-048",
+     "truth": "safe",
+     "hard": false,
+     "tops": [
+      "safe",
+      "safe",
+      "safe",
+      "risky"
+     ]
+    },
+    {
+     "id": "command_safety-test-049",
+     "truth": "risky",
+     "hard": false,
+     "tops": [
+      "risky",
+      "risky",
+      "risky",
+      "risky"
+     ]
+    },
+    {
+     "id": "command_safety-test-050",
+     "truth": "risky",
+     "hard": true,
+     "tops": [
+      "risky",
+      "risky",
+      "risky",
+      "risky"
+     ]
+    },
+    {
+     "id": "command_safety-test-051",
+     "truth": "safe",
+     "hard": false,
+     "tops": [
+      "safe",
+      "safe",
+      "risky",
+      "safe"
+     ]
+    },
+    {
+     "id": "command_safety-test-052",
+     "truth": "safe",
+     "hard": false,
+     "tops": [
+      "safe",
+      "safe",
+      "safe",
+      "safe"
+     ]
+    },
+    {
+     "id": "command_safety-test-053",
+     "truth": "destructive",
+     "hard": false,
+     "tops": [
+      "destructive",
+      "destructive",
+      "destructive",
+      "destructive"
+     ]
+    },
+    {
+     "id": "command_safety-test-054",
+     "truth": "risky",
+     "hard": false,
+     "tops": [
+      "risky",
+      "risky",
+      "risky",
+      "risky"
+     ]
+    },
+    {
+     "id": "command_safety-test-055",
+     "truth": "risky",
+     "hard": false,
+     "tops": [
+      "risky",
+      "risky",
+      "risky",
+      "risky"
+     ]
+    },
+    {
+     "id": "command_safety-test-056",
+     "truth": "safe",
+     "hard": false,
+     "tops": [
+      "safe",
+      "safe",
+      "safe",
+      "safe"
+     ]
+    },
+    {
+     "id": "command_safety-test-057",
+     "truth": "risky",
+     "hard": false,
+     "tops": [
+      "risky",
+      "risky",
+      "risky",
+      "risky"
+     ]
+    },
+    {
+     "id": "command_safety-test-058",
+     "truth": "risky",
+     "hard": false,
+     "tops": [
+      "risky",
+      "risky",
+      "risky",
+      "risky"
+     ]
+    },
+    {
+     "id": "command_safety-test-059",
+     "truth": "destructive",
+     "hard": true,
+     "tops": [
+      "destructive",
+      "destructive",
+      "destructive",
+      "destructive"
+     ]
+    },
+    {
+     "id": "command_safety-test-060",
+     "truth": "risky",
+     "hard": true,
+     "tops": [
+      "risky",
+      "risky",
+      "risky",
+      "risky"
+     ]
+    }
+   ]
+  },
+  "routing": {
+   "n_variants": 4,
+   "items": [
+    {
+     "id": "routing-test-001",
+     "truth": "technical",
+     "hard": true,
+     "tops": [
+      "technical",
+      "cancel",
+      "cancel",
+      "technical"
+     ]
+    },
+    {
+     "id": "routing-test-002",
+     "truth": "technical",
+     "hard": false,
+     "tops": [
+      "billing",
+      "billing",
+      "billing",
+      "technical"
+     ]
+    },
+    {
+     "id": "routing-test-003",
+     "truth": "technical",
+     "hard": false,
+     "tops": [
+      "billing",
+      "billing",
+      "technical",
+      "other"
+     ]
+    },
+    {
+     "id": "routing-test-004",
+     "truth": "billing",
+     "hard": false,
+     "tops": [
+      "billing",
+      "billing",
+      "billing",
+      "billing"
+     ]
+    },
+    {
+     "id": "routing-test-005",
+     "truth": "cancel",
+     "hard": true,
+     "tops": [
+      "cancel",
+      "cancel",
+      "cancel",
+      "cancel"
+     ]
+    },
+    {
+     "id": "routing-test-006",
+     "truth": "billing",
+     "hard": true,
+     "tops": [
+      "billing",
+      "billing",
+      "billing",
+      "billing"
+     ]
+    },
+    {
+     "id": "routing-test-007",
+     "truth": "billing",
+     "hard": false,
+     "tops": [
+      "billing",
+      "billing",
+      "billing",
+      "billing"
+     ]
+    },
+    {
+     "id": "routing-test-008",
+     "truth": "other",
+     "hard": true,
+     "tops": [
+      "billing",
+      "other",
+      "other",
+      "other"
+     ]
+    },
+    {
+     "id": "routing-test-009",
+     "truth": "sales",
+     "hard": true,
+     "tops": [
+      "sales",
+      "billing",
+      "sales",
+      "billing"
+     ]
+    },
+    {
+     "id": "routing-test-010",
+     "truth": "billing",
+     "hard": false,
+     "tops": [
+      "billing",
+      "billing",
+      "billing",
+      "billing"
+     ]
+    },
+    {
+     "id": "routing-test-011",
+     "truth": "sales",
+     "hard": false,
+     "tops": [
+      "billing",
+      "billing",
+      "sales",
+      "other"
+     ]
+    },
+    {
+     "id": "routing-test-012",
+     "truth": "sales",
+     "hard": true,
+     "tops": [
+      "sales",
+      "sales",
+      "sales",
+      "sales"
+     ]
+    },
+    {
+     "id": "routing-test-013",
+     "truth": "billing",
+     "hard": false,
+     "tops": [
+      "billing",
+      "billing",
+      "billing",
+      "billing"
+     ]
+    },
+    {
+     "id": "routing-test-014",
+     "truth": "billing",
+     "hard": false,
+     "tops": [
+      "billing",
+      "billing",
+      "billing",
+      "billing"
+     ]
+    },
+    {
+     "id": "routing-test-015",
+     "truth": "other",
+     "hard": false,
+     "tops": [
+      "other",
+      "other",
+      "other",
+      "other"
+     ]
+    },
+    {
+     "id": "routing-test-016",
+     "truth": "other",
+     "hard": true,
+     "tops": [
+      "other",
+      "other",
+      "other",
+      "other"
+     ]
+    },
+    {
+     "id": "routing-test-017",
+     "truth": "sales",
+     "hard": false,
+     "tops": [
+      "sales",
+      "sales",
+      "sales",
+      "sales"
+     ]
+    },
+    {
+     "id": "routing-test-018",
+     "truth": "billing",
+     "hard": false,
+     "tops": [
+      "billing",
+      "billing",
+      "billing",
+      "billing"
+     ]
+    },
+    {
+     "id": "routing-test-019",
+     "truth": "cancel",
+     "hard": false,
+     "tops": [
+      "cancel",
+      "cancel",
+      "cancel",
+      "cancel"
+     ]
+    },
+    {
+     "id": "routing-test-020",
+     "truth": "other",
+     "hard": false,
+     "tops": [
+      "billing",
+      "other",
+      "other",
+      "other"
+     ]
+    },
+    {
+     "id": "routing-test-021",
+     "truth": "technical",
+     "hard": false,
+     "tops": [
+      "technical",
+      "technical",
+      "technical",
+      "technical"
+     ]
+    },
+    {
+     "id": "routing-test-022",
+     "truth": "cancel",
+     "hard": true,
+     "tops": [
+      "technical",
+      "technical",
+      "other",
+      "technical"
+     ]
+    },
+    {
+     "id": "routing-test-023",
+     "truth": "sales",
+     "hard": true,
+     "tops": [
+      "billing",
+      "billing",
+      "sales",
+      "sales"
+     ]
+    },
+    {
+     "id": "routing-test-024",
+     "truth": "cancel",
+     "hard": true,
+     "tops": [
+      "cancel",
+      "cancel",
+      "cancel",
+      "cancel"
+     ]
+    },
+    {
+     "id": "routing-test-025",
+     "truth": "billing",
+     "hard": false,
+     "tops": [
+      "billing",
+      "billing",
+      "billing",
+      "billing"
+     ]
+    },
+    {
+     "id": "routing-test-026",
+     "truth": "cancel",
+     "hard": false,
+     "tops": [
+      "cancel",
+      "cancel",
+      "cancel",
+      "cancel"
+     ]
+    },
+    {
+     "id": "routing-test-027",
+     "truth": "sales",
+     "hard": false,
+     "tops": [
+      "sales",
+      "sales",
+      "sales",
+      "billing"
+     ]
+    },
+    {
+     "id": "routing-test-028",
+     "truth": "other",
+     "hard": false,
+     "tops": [
+      "billing",
+      "other",
+      "other",
+      "other"
+     ]
+    },
+    {
+     "id": "routing-test-029",
+     "truth": "technical",
+     "hard": false,
+     "tops": [
+      "billing",
+      "technical",
+      "technical",
+      "technical"
+     ]
+    },
+    {
+     "id": "routing-test-030",
+     "truth": "technical",
+     "hard": true,
+     "tops": [
+      "billing",
+      "billing",
+      "technical",
+      "technical"
+     ]
+    },
+    {
+     "id": "routing-test-031",
+     "truth": "billing",
+     "hard": false,
+     "tops": [
+      "billing",
+      "billing",
+      "billing",
+      "billing"
+     ]
+    },
+    {
+     "id": "routing-test-032",
+     "truth": "sales",
+     "hard": false,
+     "tops": [
+      "sales",
+      "sales",
+      "sales",
+      "sales"
+     ]
+    },
+    {
+     "id": "routing-test-033",
+     "truth": "cancel",
+     "hard": true,
+     "tops": [
+      "billing",
+      "cancel",
+      "cancel",
+      "cancel"
+     ]
+    },
+    {
+     "id": "routing-test-034",
+     "truth": "sales",
+     "hard": false,
+     "tops": [
+      "sales",
+      "sales",
+      "sales",
+      "sales"
+     ]
+    },
+    {
+     "id": "routing-test-035",
+     "truth": "billing",
+     "hard": true,
+     "tops": [
+      "billing",
+      "billing",
+      "billing",
+      "billing"
+     ]
+    },
+    {
+     "id": "routing-test-036",
+     "truth": "technical",
+     "hard": false,
+     "tops": [
+      "billing",
+      "technical",
+      "technical",
+      "technical"
+     ]
+    },
+    {
+     "id": "routing-test-037",
+     "truth": "cancel",
+     "hard": false,
+     "tops": [
+      "cancel",
+      "cancel",
+      "cancel",
+      "cancel"
+     ]
+    },
+    {
+     "id": "routing-test-038",
+     "truth": "other",
+     "hard": false,
+     "tops": [
+      "billing",
+      "other",
+      "other",
+      "other"
+     ]
+    },
+    {
+     "id": "routing-test-039",
+     "truth": "technical",
+     "hard": true,
+     "tops": [
+      "billing",
+      "billing",
+      "technical",
+      "technical"
+     ]
+    },
+    {
+     "id": "routing-test-040",
+     "truth": "cancel",
+     "hard": true,
+     "tops": [
+      "cancel",
+      "cancel",
+      "cancel",
+      "cancel"
+     ]
+    },
+    {
+     "id": "routing-test-041",
+     "truth": "billing",
+     "hard": true,
+     "tops": [
+      "billing",
+      "billing",
+      "billing",
+      "billing"
+     ]
+    },
+    {
+     "id": "routing-test-042",
+     "truth": "billing",
+     "hard": false,
+     "tops": [
+      "billing",
+      "billing",
+      "billing",
+      "billing"
+     ]
+    },
+    {
+     "id": "routing-test-043",
+     "truth": "cancel",
+     "hard": true,
+     "tops": [
+      "cancel",
+      "cancel",
+      "cancel",
+      "cancel"
+     ]
+    },
+    {
+     "id": "routing-test-044",
+     "truth": "technical",
+     "hard": true,
+     "tops": [
+      "billing",
+      "technical",
+      "technical",
+      "technical"
+     ]
+    },
+    {
+     "id": "routing-test-045",
+     "truth": "technical",
+     "hard": false,
+     "tops": [
+      "billing",
+      "other",
+      "technical",
+      "other"
+     ]
+    },
+    {
+     "id": "routing-test-046",
+     "truth": "cancel",
+     "hard": true,
+     "tops": [
+      "cancel",
+      "cancel",
+      "cancel",
+      "cancel"
+     ]
+    },
+    {
+     "id": "routing-test-047",
+     "truth": "technical",
+     "hard": false,
+     "tops": [
+      "billing",
+      "other",
+      "technical",
+      "other"
+     ]
+    },
+    {
+     "id": "routing-test-048",
+     "truth": "sales",
+     "hard": false,
+     "tops": [
+      "sales",
+      "sales",
+      "sales",
+      "sales"
+     ]
+    },
+    {
+     "id": "routing-test-049",
+     "truth": "technical",
+     "hard": false,
+     "tops": [
+      "technical",
+      "technical",
+      "technical",
+      "technical"
+     ]
+    },
+    {
+     "id": "routing-test-050",
+     "truth": "other",
+     "hard": true,
+     "tops": [
+      "billing",
+      "billing",
+      "billing",
+      "billing"
+     ]
+    },
+    {
+     "id": "routing-test-051",
+     "truth": "sales",
+     "hard": true,
+     "tops": [
+      "sales",
+      "sales",
+      "sales",
+      "sales"
+     ]
+    },
+    {
+     "id": "routing-test-052",
+     "truth": "sales",
+     "hard": true,
+     "tops": [
+      "sales",
+      "sales",
+      "sales",
+      "sales"
+     ]
+    },
+    {
+     "id": "routing-test-053",
+     "truth": "billing",
+     "hard": false,
+     "tops": [
+      "billing",
+      "billing",
+      "billing",
+      "billing"
+     ]
+    },
+    {
+     "id": "routing-test-054",
+     "truth": "billing",
+     "hard": false,
+     "tops": [
+      "billing",
+      "billing",
+      "billing",
+      "billing"
+     ]
+    },
+    {
+     "id": "routing-test-055",
+     "truth": "sales",
+     "hard": true,
+     "tops": [
+      "sales",
+      "sales",
+      "sales",
+      "sales"
+     ]
+    },
+    {
+     "id": "routing-test-056",
+     "truth": "technical",
+     "hard": false,
+     "tops": [
+      "billing",
+      "billing",
+      "technical",
+      "other"
+     ]
+    },
+    {
+     "id": "routing-test-057",
+     "truth": "other",
+     "hard": false,
+     "tops": [
+      "billing",
+      "billing",
+      "other",
+      "other"
+     ]
+    },
+    {
+     "id": "routing-test-058",
+     "truth": "sales",
+     "hard": false,
+     "tops": [
+      "billing",
+      "other",
+      "other",
+      "technical"
+     ]
+    },
+    {
+     "id": "routing-test-059",
+     "truth": "sales",
+     "hard": false,
+     "tops": [
+      "billing",
+      "billing",
+      "sales",
+      "billing"
+     ]
+    },
+    {
+     "id": "routing-test-060",
+     "truth": "technical",
+     "hard": false,
+     "tops": [
+      "technical",
+      "technical",
+      "technical",
+      "technical"
+     ]
+    }
+   ]
+  },
+  "urgency": {
+   "n_variants": 4,
+   "items": [
+    {
+     "id": "urgency-test-001",
+     "truth": "2",
+     "hard": false,
+     "tops": [
+      "2",
+      "2",
+      "2",
+      "2"
+     ]
+    },
+    {
+     "id": "urgency-test-002",
+     "truth": "1",
+     "hard": true,
+     "tops": [
+      "1",
+      "1",
+      "1",
+      "1"
+     ]
+    },
+    {
+     "id": "urgency-test-003",
+     "truth": "4",
+     "hard": true,
+     "tops": [
+      "4",
+      "4",
+      "4",
+      "4"
+     ]
+    },
+    {
+     "id": "urgency-test-004",
+     "truth": "5",
+     "hard": false,
+     "tops": [
+      "5",
+      "5",
+      "5",
+      "5"
+     ]
+    },
+    {
+     "id": "urgency-test-005",
+     "truth": "5",
+     "hard": true,
+     "tops": [
+      "5",
+      "5",
+      "5",
+      "5"
+     ]
+    },
+    {
+     "id": "urgency-test-006",
+     "truth": "4",
+     "hard": false,
+     "tops": [
+      "4",
+      "4",
+      "4",
+      "4"
+     ]
+    },
+    {
+     "id": "urgency-test-007",
+     "truth": "3",
+     "hard": false,
+     "tops": [
+      "3",
+      "3",
+      "3",
+      "3"
+     ]
+    },
+    {
+     "id": "urgency-test-008",
+     "truth": "4",
+     "hard": false,
+     "tops": [
+      "4",
+      "4",
+      "4",
+      "4"
+     ]
+    },
+    {
+     "id": "urgency-test-009",
+     "truth": "5",
+     "hard": false,
+     "tops": [
+      "5",
+      "5",
+      "5",
+      "5"
+     ]
+    },
+    {
+     "id": "urgency-test-010",
+     "truth": "5",
+     "hard": false,
+     "tops": [
+      "5",
+      "5",
+      "5",
+      "5"
+     ]
+    },
+    {
+     "id": "urgency-test-011",
+     "truth": "4",
+     "hard": false,
+     "tops": [
+      "4",
+      "4",
+      "4",
+      "4"
+     ]
+    },
+    {
+     "id": "urgency-test-012",
+     "truth": "3",
+     "hard": false,
+     "tops": [
+      "3",
+      "3",
+      "3",
+      "3"
+     ]
+    },
+    {
+     "id": "urgency-test-013",
+     "truth": "4",
+     "hard": false,
+     "tops": [
+      "4",
+      "4",
+      "4",
+      "4"
+     ]
+    },
+    {
+     "id": "urgency-test-014",
+     "truth": "2",
+     "hard": false,
+     "tops": [
+      "2",
+      "2",
+      "2",
+      "2"
+     ]
+    },
+    {
+     "id": "urgency-test-015",
+     "truth": "4",
+     "hard": false,
+     "tops": [
+      "4",
+      "4",
+      "4",
+      "4"
+     ]
+    },
+    {
+     "id": "urgency-test-016",
+     "truth": "4",
+     "hard": false,
+     "tops": [
+      "4",
+      "4",
+      "4",
+      "4"
+     ]
+    },
+    {
+     "id": "urgency-test-017",
+     "truth": "3",
+     "hard": false,
+     "tops": [
+      "3",
+      "3",
+      "3",
+      "3"
+     ]
+    },
+    {
+     "id": "urgency-test-018",
+     "truth": "4",
+     "hard": true,
+     "tops": [
+      "4",
+      "4",
+      "4",
+      "4"
+     ]
+    },
+    {
+     "id": "urgency-test-019",
+     "truth": "2",
+     "hard": false,
+     "tops": [
+      "2",
+      "2",
+      "2",
+      "2"
+     ]
+    },
+    {
+     "id": "urgency-test-020",
+     "truth": "3",
+     "hard": false,
+     "tops": [
+      "3",
+      "2",
+      "2",
+      "3"
+     ]
+    },
+    {
+     "id": "urgency-test-021",
+     "truth": "1",
+     "hard": false,
+     "tops": [
+      "3",
+      "1",
+      "1",
+      "3"
+     ]
+    },
+    {
+     "id": "urgency-test-022",
+     "truth": "4",
+     "hard": true,
+     "tops": [
+      "4",
+      "4",
+      "4",
+      "4"
+     ]
+    },
+    {
+     "id": "urgency-test-023",
+     "truth": "3",
+     "hard": false,
+     "tops": [
+      "3",
+      "3",
+      "3",
+      "3"
+     ]
+    },
+    {
+     "id": "urgency-test-024",
+     "truth": "2",
+     "hard": false,
+     "tops": [
+      "2",
+      "2",
+      "2",
+      "2"
+     ]
+    },
+    {
+     "id": "urgency-test-025",
+     "truth": "4",
+     "hard": true,
+     "tops": [
+      "4",
+      "5",
+      "4",
+      "4"
+     ]
+    },
+    {
+     "id": "urgency-test-026",
+     "truth": "4",
+     "hard": false,
+     "tops": [
+      "4",
+      "4",
+      "4",
+      "4"
+     ]
+    },
+    {
+     "id": "urgency-test-027",
+     "truth": "2",
+     "hard": false,
+     "tops": [
+      "3",
+      "2",
+      "2",
+      "2"
+     ]
+    },
+    {
+     "id": "urgency-test-028",
+     "truth": "5",
+     "hard": false,
+     "tops": [
+      "5",
+      "5",
+      "5",
+      "5"
+     ]
+    },
+    {
+     "id": "urgency-test-029",
+     "truth": "2",
+     "hard": false,
+     "tops": [
+      "2",
+      "2",
+      "2",
+      "2"
+     ]
+    },
+    {
+     "id": "urgency-test-030",
+     "truth": "5",
+     "hard": true,
+     "tops": [
+      "5",
+      "5",
+      "5",
+      "5"
+     ]
+    },
+    {
+     "id": "urgency-test-031",
+     "truth": "4",
+     "hard": false,
+     "tops": [
+      "4",
+      "4",
+      "4",
+      "4"
+     ]
+    },
+    {
+     "id": "urgency-test-032",
+     "truth": "4",
+     "hard": true,
+     "tops": [
+      "4",
+      "4",
+      "4",
+      "4"
+     ]
+    },
+    {
+     "id": "urgency-test-033",
+     "truth": "1",
+     "hard": false,
+     "tops": [
+      "3",
+      "1",
+      "1",
+      "3"
+     ]
+    },
+    {
+     "id": "urgency-test-034",
+     "truth": "2",
+     "hard": true,
+     "tops": [
+      "2",
+      "2",
+      "2",
+      "2"
+     ]
+    },
+    {
+     "id": "urgency-test-035",
+     "truth": "2",
+     "hard": true,
+     "tops": [
+      "2",
+      "2",
+      "2",
+      "2"
+     ]
+    },
+    {
+     "id": "urgency-test-036",
+     "truth": "2",
+     "hard": false,
+     "tops": [
+      "2",
+      "2",
+      "2",
+      "2"
+     ]
+    },
+    {
+     "id": "urgency-test-037",
+     "truth": "1",
+     "hard": false,
+     "tops": [
+      "1",
+      "1",
+      "1",
+      "2"
+     ]
+    },
+    {
+     "id": "urgency-test-038",
+     "truth": "1",
+     "hard": false,
+     "tops": [
+      "3",
+      "2",
+      "2",
+      "3"
+     ]
+    },
+    {
+     "id": "urgency-test-039",
+     "truth": "2",
+     "hard": false,
+     "tops": [
+      "3",
+      "2",
+      "2",
+      "2"
+     ]
+    },
+    {
+     "id": "urgency-test-040",
+     "truth": "4",
+     "hard": false,
+     "tops": [
+      "4",
+      "4",
+      "4",
+      "4"
+     ]
+    },
+    {
+     "id": "urgency-test-041",
+     "truth": "2",
+     "hard": false,
+     "tops": [
+      "2",
+      "2",
+      "2",
+      "2"
+     ]
+    },
+    {
+     "id": "urgency-test-042",
+     "truth": "4",
+     "hard": false,
+     "tops": [
+      "4",
+      "4",
+      "4",
+      "4"
+     ]
+    },
+    {
+     "id": "urgency-test-043",
+     "truth": "2",
+     "hard": false,
+     "tops": [
+      "2",
+      "2",
+      "2",
+      "2"
+     ]
+    },
+    {
+     "id": "urgency-test-044",
+     "truth": "1",
+     "hard": false,
+     "tops": [
+      "3",
+      "3",
+      "1",
+      "3"
+     ]
+    },
+    {
+     "id": "urgency-test-045",
+     "truth": "3",
+     "hard": true,
+     "tops": [
+      "3",
+      "3",
+      "3",
+      "3"
+     ]
+    },
+    {
+     "id": "urgency-test-046",
+     "truth": "4",
+     "hard": false,
+     "tops": [
+      "4",
+      "4",
+      "4",
+      "4"
+     ]
+    },
+    {
+     "id": "urgency-test-047",
+     "truth": "1",
+     "hard": false,
+     "tops": [
+      "3",
+      "3",
+      "1",
+      "3"
+     ]
+    },
+    {
+     "id": "urgency-test-048",
+     "truth": "4",
+     "hard": false,
+     "tops": [
+      "4",
+      "4",
+      "4",
+      "4"
+     ]
+    },
+    {
+     "id": "urgency-test-049",
+     "truth": "5",
+     "hard": false,
+     "tops": [
+      "5",
+      "5",
+      "5",
+      "5"
+     ]
+    },
+    {
+     "id": "urgency-test-050",
+     "truth": "3",
+     "hard": false,
+     "tops": [
+      "3",
+      "4",
+      "2",
+      "3"
+     ]
+    },
+    {
+     "id": "urgency-test-051",
+     "truth": "5",
+     "hard": false,
+     "tops": [
+      "5",
+      "5",
+      "5",
+      "5"
+     ]
+    },
+    {
+     "id": "urgency-test-052",
+     "truth": "2",
+     "hard": true,
+     "tops": [
+      "3",
+      "2",
+      "2",
+      "2"
+     ]
+    },
+    {
+     "id": "urgency-test-053",
+     "truth": "1",
+     "hard": false,
+     "tops": [
+      "1",
+      "2",
+      "1",
+      "2"
+     ]
+    },
+    {
+     "id": "urgency-test-054",
+     "truth": "1",
+     "hard": true,
+     "tops": [
+      "3",
+      "3",
+      "1",
+      "2"
+     ]
+    },
+    {
+     "id": "urgency-test-055",
+     "truth": "5",
+     "hard": false,
+     "tops": [
+      "5",
+      "5",
+      "5",
+      "5"
+     ]
+    },
+    {
+     "id": "urgency-test-056",
+     "truth": "5",
+     "hard": false,
+     "tops": [
+      "5",
+      "5",
+      "5",
+      "5"
+     ]
+    },
+    {
+     "id": "urgency-test-057",
+     "truth": "1",
+     "hard": true,
+     "tops": [
+      "4",
+      "4",
+      "2",
+      "4"
+     ]
+    },
+    {
+     "id": "urgency-test-058",
+     "truth": "5",
+     "hard": true,
+     "tops": [
+      "4",
+      "4",
+      "3",
+      "4"
+     ]
+    },
+    {
+     "id": "urgency-test-059",
+     "truth": "5",
+     "hard": false,
+     "tops": [
+      "5",
+      "5",
+      "5",
+      "5"
+     ]
+    },
+    {
+     "id": "urgency-test-060",
+     "truth": "5",
+     "hard": false,
+     "tops": [
+      "5",
+      "5",
+      "5",
+      "5"
+     ]
+    }
+   ]
+  }
+ },
+ "config": {
+  "backend": "ollama",
+  "model": "gemma3",
+  "scoring": "word",
+  "orders": 3,
+  "per_task": 60,
+  "tasks_dir": "bench/tasks_v2"
+ },
+ "timestamp": "2026-09-26T14:13:11+00:00",
+ "summary": {
+  "tasks": {
+   "phishing": {
+    "n": 60,
+    "accuracy_by_wording": [
+     0.9,
+     0.9166666666666666,
+     0.8833333333333333,
+     0.8833333333333333
+    ],
+    "accuracy_spread": 0.033333333333333326,
+    "answer_changed_with_wording": 0.06666666666666667,
+    "pairwise_disagreement": 0.03611111111111111
+   },
+   "command_safety": {
+    "n": 60,
+    "accuracy_by_wording": [
+     0.7833333333333333,
+     0.7333333333333333,
+     0.65,
+     0.5833333333333334
+    ],
+    "accuracy_spread": 0.19999999999999996,
+    "answer_changed_with_wording": 0.36666666666666664,
+    "pairwise_disagreement": 0.20555555555555555
+   },
+   "routing": {
+    "n": 60,
+    "accuracy_by_wording": [
+     0.6333333333333333,
+     0.7333333333333333,
+     0.9166666666666666,
+     0.8166666666666667
+    ],
+    "accuracy_spread": 0.2833333333333333,
+    "answer_changed_with_wording": 0.4,
+    "pairwise_disagreement": 0.25
+   },
+   "urgency": {
+    "n": 60,
+    "accuracy_by_wording": [
+     0.8166666666666667,
+     0.8333333333333334,
+     0.9166666666666666,
+     0.8333333333333334
+    ],
+    "accuracy_spread": 0.09999999999999998,
+    "answer_changed_with_wording": 0.26666666666666666,
+    "pairwise_disagreement": 0.15833333333333333
+   }
+  },
+  "pooled": {
+   "n": 240,
+   "accuracy_by_wording": [
+    0.7833333333333333,
+    0.8041666666666667,
+    0.8416666666666667,
+    0.7791666666666667
+   ],
+   "accuracy_spread": 0.0625,
+   "answer_changed_with_wording": 0.275,
+   "pairwise_disagreement": 0.1625
+  }
+ }
+}
