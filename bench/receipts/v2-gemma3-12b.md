@@ -4,7 +4,7 @@ Run at 2026-09-25T12:33:30+00:00. Backend `ollama`, 3 option orderings, tasks: p
 
 Every number below is measured on the **test half** of each task only. The calibrator was fitted on the dev half and never graded on it. The right answers were written by construction, never by a model (see `bench/tasks/README.md`).
 
-> **Quick run:** only the first 80 items of each split were used. Do not quote these numbers.
+> **Subset:** only the first 80 items of each split were used, so these numbers cover fewer items than the full set and are not directly comparable with a full run. Compare on shared items with `bench/compare.py`.
 
 ## Did it clear the bar?
 

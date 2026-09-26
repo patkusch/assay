@@ -108,7 +108,10 @@ def build_report(receipts: dict) -> str:
           "graded on it. The right answers were written by construction, never by a model (see `bench/tasks/README.md`).", ""]
 
     if cfg.get("limit"):
-        L += [f"> **Quick run:** only the first {cfg['limit']} items of each split were used. Do not quote these numbers.", ""]
+        if cfg["limit"] >= 50:
+            L += [f"> **Subset:** only the first {cfg['limit']} items of each split were used, so these numbers cover fewer items than the full set and are not directly comparable with a full run. Compare on shared items with `bench/compare.py`.", ""]
+        else:
+            L += [f"> **Quick run:** only the first {cfg['limit']} items of each split were used. Do not quote these numbers.", ""]
     if cfg.get("backend") == "keyword":
         L += ["> **This run used the keyword stand-in, not a language model.** It only proves the plumbing works. "
               "Do not read anything about real models from it.", ""]
