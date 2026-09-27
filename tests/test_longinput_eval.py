@@ -59,6 +59,21 @@ class LongInputEvalTests(unittest.TestCase):
         self.assertIn("Padded, plain backend", md)
         self.assertIn("Padded, with chunking", md)
 
+    def test_a_narrower_position_set_is_evaluated_and_reported(self):
+        inner = WindowBackend()
+        chunked = ChunkedBackend(inner, max_chars=3000, overlap=300, combine="mean_logprob")
+        q = Question("choice", "which?", options=["alpha", "beta", "gamma"])
+        items = [{"id": f"i{n}", "state": "the answer is beta", "truth": "beta"} for n in range(4)]
+        rows = le.evaluate(inner, chunked, items, q, pad_chars=9000, orders=1, positions=("both",))
+        self.assertTrue(all("before_plain" not in r and "both_plain" in r for r in rows))
+        summary = le.summarise({"t": rows}, positions=("both",))
+        self.assertEqual(summary["positions"], ["both"])
+        self.assertNotIn("before_plain", summary["pooled"])
+        md = le.markdown({"backend": "keyword", "pad_chars": 9000, "chunk_chars": 3000, "combine": "mean_logprob"}, "now", summary)
+        self.assertIn("mean_logprob", md)
+        self.assertIn("these positions: both", md)
+        self.assertNotIn("before, plain", md)
+
 
 if __name__ == "__main__":
     unittest.main()

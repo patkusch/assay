@@ -73,13 +73,17 @@ def top(answer) -> str:
     return max(answer.probabilities, key=answer.probabilities.get)
 
 
-def evaluate(inner, chunked, items: list[dict], question: Question, pad_chars: int, orders: int, seed: int = 0) -> list[dict]:
-    """One row per item: the answer on the short item, and on each padded version with and without chunking."""
+def evaluate(inner, chunked, items: list[dict], question: Question, pad_chars: int, orders: int, seed: int = 0,
+             positions: tuple[str, ...] = POSITIONS) -> list[dict]:
+    """One row per item: the answer on the short item, and on each padded version with and without chunking.
+
+    `positions` narrows which of "before"/"after"/"both" to run, for a cheaper sweep across combine modes.
+    """
     rng = random.Random(seed)
     rows = []
     for it in items:
         row = {"id": it["id"], "truth": str(it["truth"]), "short": top(decide_one(inner, it["state"], question, n_orders=orders))}
-        for pos in POSITIONS:
+        for pos in positions:
             long_state = pad(it["state"], pos, pad_chars, rng)
             row[pos + "_plain"] = top(decide_one(inner, long_state, question, n_orders=orders))
             row[pos + "_chunked"] = top(decide_one(chunked, long_state, question, n_orders=orders))
@@ -87,19 +91,20 @@ def evaluate(inner, chunked, items: list[dict], question: Question, pad_chars: i
     return rows
 
 
-def summarise(rows_by_task: dict[str, list[dict]]) -> dict:
-    conds = ["short"] + [f"{p}_{m}" for p in POSITIONS for m in ("plain", "chunked")]
+def summarise(rows_by_task: dict[str, list[dict]], positions: tuple[str, ...] = POSITIONS) -> dict:
+    """Numbers per task and pooled: accuracy on the short item, and on each padded position, plain and chunked."""
+    conds = ["short"] + [f"{p}_{m}" for p in positions for m in ("plain", "chunked")]
 
     def acc(rows, c):
         return sum(r[c] == r["truth"] for r in rows) / len(rows)
 
-    out = {"tasks": {}, "pooled": {}}
+    out = {"tasks": {}, "pooled": {}, "positions": list(positions)}
     every = [r for rows in rows_by_task.values() for r in rows]
     for name, rows in rows_by_task.items():
         out["tasks"][name] = {"n": len(rows), **{c: acc(rows, c) for c in conds}}
     out["pooled"] = {"n": len(every), **{c: acc(every, c) for c in conds}}
     for m in ("plain", "chunked"):
-        out["pooled"]["padded_" + m] = sum(acc(every, f"{p}_{m}") for p in POSITIONS) / len(POSITIONS)
+        out["pooled"]["padded_" + m] = sum(acc(every, f"{p}_{m}") for p in positions) / len(positions)
     return out
 
 
@@ -108,16 +113,19 @@ def markdown(cfg: dict, timestamp: str, summary: dict) -> str:
     name = cfg.get("model") or cfg.get("backend")
     if cfg.get("scoring") and cfg["scoring"] != "letter":
         name += f" ({cfg['scoring']} scoring)"
+    positions = summary.get("positions", POSITIONS)
+    combine = cfg.get("combine", "max_evidence")
     L = [f"# Long-input test: {name}", "",
-         f"Run at {timestamp}. {p['n']} test items, each padded with about {cfg['pad_chars']:,} characters of unrelated filler in three positions. "
-         f"Chunking splits text over {cfg['chunk_chars']:,} characters into overlapping pieces (`max_evidence`).", "",
+         f"Run at {timestamp}. {p['n']} test items, each padded with about {cfg['pad_chars']:,} characters of unrelated filler in "
+         f"{'these positions: ' + ', '.join(positions) if len(positions) < len(POSITIONS) else 'three positions'}. "
+         f"Chunking splits text over {cfg['chunk_chars']:,} characters into overlapping pieces (`{combine}`).", "",
          f"- **Short original item:** {p['short']:.1%} right (the ceiling).",
-         f"- **Padded, plain backend:** {p['padded_plain']:.1%} right on average across the three positions.",
+         f"- **Padded, plain backend:** {p['padded_plain']:.1%} right on average across the positions tested.",
          f"- **Padded, with chunking:** {p['padded_chunked']:.1%} right on average.", "",
-         "| Task | Items | Short | Filler before, plain | before, chunked | after, plain | after, chunked | both, plain | both, chunked |",
-         "|---|---|---|---|---|---|---|---|---|"]
+         "| Task | Items | Short | " + " | ".join(f"{pos}, plain | {pos}, chunked" for pos in positions) + " |",
+         "|---|---|---|" + "---|" * (2 * len(positions))]
     for t, s in summary["tasks"].items():
-        L.append(f"| {t} | {s['n']} | {s['short']:.0%} | " + " | ".join(f"{s[f'{pos}_{m}']:.0%}" for pos in POSITIONS for m in ("plain", "chunked")) + " |")
+        L.append(f"| {t} | {s['n']} | {s['short']:.0%} | " + " | ".join(f"{s[f'{pos}_{m}']:.0%}" for pos in positions for m in ("plain", "chunked")) + " |")
     L += ["", "The filler has nothing to do with any label, so padding never changes the right answer. "
               "A few dozen items per task is small: treat gaps of a few points as noise.", ""]
     return "\n".join(L)
@@ -133,26 +141,31 @@ def main(argv=None) -> int:
     ap.add_argument("--per-task", type=int, default=25)
     ap.add_argument("--pad-chars", type=int, default=12000)
     ap.add_argument("--chunk-chars", type=int, default=3000)
+    ap.add_argument("--combine", default="max_evidence", choices=["max_evidence", "mean_logprob", "first_and_last", "head_tail"])
+    ap.add_argument("--positions", default="before,after,both", help="comma-separated subset of before,after,both")
     ap.add_argument("--orders", type=int, default=3)
     ap.add_argument("--timeout", type=float, default=180.0)
     ap.add_argument("--tasks-dir", default="bench/tasks_v2")
     ap.add_argument("--out", required=True)
     args = ap.parse_args(argv)
+    positions = tuple(p.strip() for p in args.positions.split(",") if p.strip())
+    if not positions or any(p not in POSITIONS for p in positions):
+        ap.error(f"--positions must be a subset of {POSITIONS}")
     bench_run.TASKS_DIR = BENCH.parent / args.tasks_dir
     inner = bench_run.make_backend(args.backend, args.model, args.host, args.timeout, args.scoring)
-    chunked = ChunkedBackend(inner, max_chars=args.chunk_chars, overlap=min(300, args.chunk_chars // 10))
+    chunked = ChunkedBackend(inner, max_chars=args.chunk_chars, overlap=min(300, args.chunk_chars // 10), combine=args.combine)
     names = None if args.tasks == "all" else [t.strip() for t in args.tasks.split(",")]
     tasks = bench_run.load_tasks(names, args.per_task)
     rows_by_task = {}
     for name, t in tasks.items():
         items = [r for r in t["items"] if r["split"] == "test"]
-        rows_by_task[name] = evaluate(inner, chunked, items, t["question"], args.pad_chars, args.orders)
+        rows_by_task[name] = evaluate(inner, chunked, items, t["question"], args.pad_chars, args.orders, positions=positions)
         print(f"[{name}] {len(items)} items done", flush=True)
     cfg = {"backend": args.backend, "model": args.model if args.backend == "ollama" else None,
            "scoring": args.scoring if args.backend == "ollama" else None, "orders": args.orders, "per_task": args.per_task,
-           "pad_chars": args.pad_chars, "chunk_chars": args.chunk_chars}
+           "pad_chars": args.pad_chars, "chunk_chars": args.chunk_chars, "combine": args.combine, "positions": list(positions)}
     stamp = datetime.now(timezone.utc).isoformat(timespec="seconds")
-    summary = summarise(rows_by_task)
+    summary = summarise(rows_by_task, positions)
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps({"config": cfg, "timestamp": stamp, "summary": summary, "items": rows_by_task}, indent=1))
