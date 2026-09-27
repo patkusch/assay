@@ -92,6 +92,9 @@ def build_parser() -> argparse.ArgumentParser:
     c.add_argument("--out", required=True, help="where to write the calibration file")
     c.add_argument("--alpha", type=float, default=0.1,
                    help="miss rate you accept for the not-sure set (0.1 = right answer inside it about 90%% of the time)")
+    c.add_argument("--method", choices=["temperature", "prior"], default="temperature",
+                   help="temperature (default) rescales confidence; prior also corrects a label the model "
+                        "over-predicts (check with bench/label_bias.py first; see docs/CHOOSING_SETTINGS.md)")
     common(c)
 
     sub.add_parser("backends", help="list the available backends")
@@ -111,7 +114,8 @@ def main(argv: list[str] | None = None) -> int:
         if args.cmd == "calibrate":
             with open(args.request, encoding="utf-8") as f:
                 questions = questions_from_body(json.load(f))
-            bundle = fit_bundle(backend, questions, load_labelled(args.labelled), n_orders=args.orders, alpha=args.alpha)
+            bundle = fit_bundle(backend, questions, load_labelled(args.labelled), n_orders=args.orders, alpha=args.alpha,
+                               method=args.method)
             bundle.save(args.out)
             print(describe(bundle))
             print(f"\nSaved to {args.out}")

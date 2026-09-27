@@ -139,6 +139,36 @@ class BundleTests(unittest.TestCase):
         self.assertTrue(cal.abstain)                  # both answers stay possible
         self.assertEqual(sorted(cal.prediction_set), ["a", "b"])
 
+    def test_method_prior_fits_a_prior_calibrator_and_corrects_the_bias(self):
+        from assay.calibrate import PriorCalibrator, TemperatureCalibrator
+        backend = Overconfident()
+        rows = half_wrong_rows(40)  # the model always says 'a'; truth is 'a' only half the time: a favourite-label bias
+        temp = fit_bundle(backend, {"q": Q}, rows, n_orders=2, method="temperature")
+        prior = fit_bundle(backend, {"q": Q}, rows, n_orders=2, method="prior")
+        self.assertIsInstance(temp.calibrators["q"], TemperatureCalibrator)
+        self.assertNotIsInstance(temp.calibrators["q"], PriorCalibrator)
+        self.assertIsInstance(prior.calibrators["q"], PriorCalibrator)
+        self.assertLess(prior.calibrators["q"].label_weights["a"], 1.0)  # 'a' was over-predicted, so its weight is pulled down
+        raw = decide_one(backend, "pick:a", Q, n_orders=2)
+        via_prior = decide_one(backend, "pick:a", Q, n_orders=2, calibrator=prior.calibrators["q"])
+        self.assertLess(via_prior.probabilities["a"], raw.probabilities["a"])
+
+    def test_bad_method_is_rejected(self):
+        with self.assertRaisesRegex(ValueError, "method must be one of"):
+            fit_bundle(Overconfident(), {"q": Q}, half_wrong_rows(20), method="nope")
+
+    def test_a_prior_bundle_round_trips_and_keeps_its_kind(self):
+        from assay.calibrate import PriorCalibrator
+        b = fit_bundle(Overconfident(), {"q": Q}, half_wrong_rows(40), n_orders=2, method="prior")
+        with tempfile.TemporaryDirectory() as d:
+            path = Path(d) / "calib.json"
+            b.save(path)
+            data = json.loads(path.read_text())
+            self.assertEqual(data["questions"]["q"]["calibrator"]["kind"], "prior")
+            b2 = CalibrationBundle.load(path)
+        self.assertIsInstance(b2.calibrators["q"], PriorCalibrator)
+        self.assertEqual(b2.calibrators["q"].label_weights, b.calibrators["q"].label_weights)
+
     def test_example_labelled_file_is_valid_but_too_thin_to_fit(self):
         rows = load_labelled(EXAMPLES / "labelled_example.jsonl")
         self.assertGreaterEqual(len(rows), 20)
@@ -183,6 +213,21 @@ class CliTests(unittest.TestCase):
         self.assertEqual(bundle.backend_name, "keyword")
         self.assertEqual(list(bundle.calibrators), ["q1"])
         self.assertEqual(bundle.calibrators["q1"].alpha, 0.2)
+
+    def test_calibrate_method_prior_writes_a_prior_bundle(self):
+        from assay.calibrate import PriorCalibrator
+        rc, out, err = run_cli("calibrate", "--backend", "keyword", "--request", str(self.request),
+                               "--labelled", str(self.labelled), "--out", str(self.calib), "--orders", "2",
+                               "--method", "prior")
+        self.assertEqual((rc, err), (0, ""))
+        self.assertIsInstance(CalibrationBundle.load(self.calib).calibrators["q1"], PriorCalibrator)
+
+    def test_calibrate_bad_method_exits_2(self):
+        # an unknown --method is refused by argparse itself (a bad choice), which exits directly
+        with self.assertRaises(SystemExit) as cm, contextlib.redirect_stderr(io.StringIO()):
+            cli_main(["calibrate", "--backend", "keyword", "--request", str(self.request),
+                     "--labelled", str(self.labelled), "--out", str(self.calib), "--method", "nonsense"])
+        self.assertEqual(cm.exception.code, 2)
 
     def test_calibrate_too_few_examples_exits_2_with_message(self):
         self.labelled.write_text("\n".join(json.dumps(r) for r in keyword_rows(10)) + "\n")

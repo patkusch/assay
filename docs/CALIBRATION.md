@@ -56,7 +56,10 @@ python -m assay calibrate --backend ollama --model gemma3 \
   --request questions.json --labelled labelled.jsonl --out calib.json
 ```
 
-Optional: `--orders 3` sets how many option orders are averaged. `--alpha 0.1` sets how often you accept the true answer falling outside the "not sure" set (0.1 means about one time in ten).
+Optional: `--orders 3` sets how many option orders are averaged. `--alpha 0.1` sets how often you accept the true answer falling outside the "not sure" set (0.1 means about one time in ten). `--method` picks what gets fitted:
+
+- `temperature` (the default): rescales confidence, as above.
+- `prior`: does that, then also corrects a label the model reaches for far more than it is true. Check `bench/label_bias.py` on your task first: this is only worth turning on where it shows a real bias (see [CHOOSING_SETTINGS.md](CHOOSING_SETTINGS.md#4-check-for-a-favourite-label-not-just-accuracy) and [CALIBRATION_STUDY.md](CALIBRATION_STUDY.md#what-did-help-correcting-for-a-label-bias)).
 
 assay prints, for each question, the calibration error before and after (lower is better) and how often the true answer was inside the "not sure" set. Then it saves the file.
 

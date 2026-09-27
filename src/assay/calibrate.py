@@ -396,3 +396,14 @@ class PriorCalibrator(TemperatureCalibrator):
         cal.report = d.get("report") or {}
         cal.label_weights = d.get("label_weights") or {}
         return cal
+
+
+_KINDS: dict[str, type] = {"prior": PriorCalibrator, "shrunk": ShrunkTemperatureCalibrator, "fixed": FixedTemperatureCalibrator}
+
+
+def calibrator_from_json(text: str | dict) -> TemperatureCalibrator:
+    """Rebuild whichever calibrator kind ``to_json`` wrote: plain temperature (the default, no "kind" key),
+    or ``prior``, ``shrunk`` or ``fixed``. Use this instead of a fixed class's own ``from_json`` when the
+    kind is not known ahead of time, for example when reloading a `CalibrationBundle`."""
+    d = json.loads(text) if isinstance(text, str) else text
+    return _KINDS.get(d.get("kind"), TemperatureCalibrator).from_json(d)

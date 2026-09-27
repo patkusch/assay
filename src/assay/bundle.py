@@ -9,11 +9,15 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 
-from .calibrate import MIN_SAMPLES, TemperatureCalibrator
+from .calibrate import MIN_SAMPLES, PriorCalibrator, TemperatureCalibrator, calibrator_from_json
 from .engine import average_probs
 from .types import Backend, Question
 
 FORMAT_VERSION = 1
+
+# What `assay calibrate --method` can build. "temperature" (the default) rescales confidence.
+# "prior" also corrects a label the model reaches for too often; see docs/CHOOSING_SETTINGS.md.
+CALIBRATOR_METHODS: dict[str, type] = {"temperature": TemperatureCalibrator, "prior": PriorCalibrator}
 
 
 def score_probs(backend: Backend, state: str, q: Question, n_orders: int = 3) -> dict[str, float]:
@@ -116,7 +120,7 @@ class CalibrationBundle:
         who = d.get("backend") or {}
         qs = d["questions"]
         return cls(
-            {qid: TemperatureCalibrator.from_json(e["calibrator"]) for qid, e in qs.items()},
+            {qid: calibrator_from_json(e["calibrator"]) for qid, e in qs.items()},
             backend_name=who.get("name", "unknown"),
             model=who.get("model"),
             fitted_at=d.get("fitted_at"),
@@ -131,14 +135,21 @@ class CalibrationBundle:
 
 
 def fit_bundle(backend: Backend, questions: dict[str, Question], labelled: list[dict], n_orders: int = 3,
-               alpha: float = 0.1, seed: int = 0) -> CalibrationBundle:
+               alpha: float = 0.1, seed: int = 0, method: str = "temperature") -> CalibrationBundle:
     """Score every labelled example with the backend and fit one calibrator per question.
 
     `labelled` rows look like {"question": id, "state": text, "truth": label}. A question that appears
     with fewer than 20 rows is refused. A question with no rows is left out of the bundle.
     With 40 or more rows the report is a held-out check (fit on half, test on the rest); with fewer it
     can only be measured on the same rows it was fitted on, and the note says so.
+
+    `method` is "temperature" (the default) or "prior": see `bundle.CALIBRATOR_METHODS` and
+    docs/CHOOSING_SETTINGS.md ("Check for a favourite label"). "prior" only makes sense once
+    `bench/label_bias.py` has shown a real bias on your task; it is not a safe default.
     """
+    if method not in CALIBRATOR_METHODS:
+        raise ValueError(f"method must be one of {sorted(CALIBRATOR_METHODS)}, got {method!r}")
+    cls = CALIBRATOR_METHODS[method]
     rows: dict[str, list[dict]] = {}
     for i, row in enumerate(labelled, 1):
         if not isinstance(row, dict) or not {"question", "state", "truth"} <= set(row):
@@ -165,9 +176,9 @@ def fit_bundle(backend: Backend, questions: dict[str, Question], labelled: list[
             if truth not in labels:
                 raise ValueError(f"question {qid!r}, example {i}: truth {truth!r} is not one of {labels}")
             samples.append({"probs": score_probs(backend, str(r["state"]), q, n_orders), "truth": truth})
-        cal = TemperatureCalibrator().fit(samples, alpha)  # the one that gets used: fitted on everything
+        cal = cls().fit(samples, alpha)  # the one that gets used: fitted on everything
         if len(samples) >= 2 * MIN_SAMPLES:
-            held_out[qid] = TemperatureCalibrator().fit_holdout(samples, alpha, seed)
+            held_out[qid] = cls().fit_holdout(samples, alpha, seed)
         else:
             held_out[qid] = None
             notes[qid] = (f"only {len(samples)} examples: scores were measured on the same examples used to fit, "
