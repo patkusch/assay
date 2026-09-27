@@ -29,6 +29,8 @@ It costs one call per wording. See [examples/routing_wordings.json](../examples/
 
 A model can be wrong in an organised way: it reaches for one option far more than that option is actually true, whatever the message says. We found this on every system we tried (`python bench/label_bias.py your-receipts.json --task your-task`), most clearly on a five-option routing task, where every system over-picked one label by 1.7x to 2.7x. Rotating the option order does not fix this bias, and on our routing task it made it slightly worse. If your task has several similarly-worded options, check for this before trusting the accuracy number: [bench/receipts/bias-summary.md](../bench/receipts/bias-summary.md) has the full picture across our systems and tasks.
 
+If you find a real bias, `assay.calibrate.PriorCalibrator` corrects it and recovered 3 to 9 accuracy points on every system we tested it on, for a calibration-error cost that ranges from negligible to real: [CALIBRATION_STUDY.md](CALIBRATION_STUDY.md#what-did-help-correcting-for-a-label-bias).
+
 ## 5. Let the options rotate
 
 By default assay shows the options in three different orders and averages the results. This cut the share of answers that flipped when the options were reversed from 20.3% to 10.7% on the 4B letter run. It triples the number of model calls. Use `--orders 1` if speed matters more than stable answers.
