@@ -128,6 +128,24 @@ The first version showed each option as a letter (A, B, C) and read the odds of 
 
 Every gap with its interval: [bench/receipts/comparisons.md](bench/receipts/comparisons.md).
 
+### A hidden bias: reaching for a default label
+
+Routing's weak accuracy has a second cause, separate from wording and scoring method. A new check, [bench/label_bias.py](bench/label_bias.py), compares how often a label is predicted against how often it is actually true. Every one of our four systems (gemma3 letter, gemma3 word, von, and Verdict) reaches for one routing label far more than it should:
+
+| System | Routing's over-used label | Predicted this often, versus its true share |
+|---|---|---|
+| assay + gemma3 4B, letters | `billing` | 2.74x |
+| assay + gemma3 4B, words | `billing` | 2.50x |
+| von 1.2 | `billing` | 1.76x |
+| openJev-verdict-2.0 | `cancel` | 1.67x |
+
+- **This is not an assay bug.** It shows up in the two open clones too, run on the same items but through their own model, not gemma3. `billing` looks like a small model's "safe" default guess when a support message is ambiguous.
+- **It happens on urgency as well, more starkly.** Verdict predicts urgency level 5 (the most severe) on almost every item, regardless of the message: `bench/receipts/bias-summary.md` has the full table for both tasks and all four systems.
+- **Shuffling the option order does not fix this, and can make it worse.** On routing, gemma3's `billing` bias grew from 2.43x to 2.74x (letters) and from 2.28x to 2.50x (words) after averaging over rotated orders, and accuracy fell alongside it (letters 64.0% to 58.4%; words 68.2% to 65.4%). Order-shuffling fixes a different problem (which option is shown first); it does nothing for a label the model would reach for no matter where it sits in the list.
+- **What would fix it:** a per-label correction fitted on labelled examples, the same idea as calibration but applied per option instead of only to the top confidence, or simply favouring the plain generate-and-parse answer for tasks with several similarly-worded options. Neither is built yet.
+
+Rerun the check any time new receipts land: `python bench/bias_summary.py`. Full report: [bench/receipts/bias-summary.md](bench/receipts/bias-summary.md).
+
 ### A bigger model
 
 gemma3 12B was run on the first 80 items of each split (320 test items), so its numbers cover fewer items. The 4B run was compared on exactly the same 320 items. Letter scoring, order-shuffled:

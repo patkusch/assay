@@ -25,19 +25,23 @@ On the 4B model the answer changed with the question's wording on 27% to 37% of 
 
 It costs one call per wording. See [examples/routing_wordings.json](../examples/routing_wordings.json). Write the alternates by hand, and check each keeps the same label definitions: a reworded question that changes what a label means changes the answer for a good reason.
 
-## 4. Let the options rotate
+## 4. Check for a favourite label, not just accuracy
+
+A model can be wrong in an organised way: it reaches for one option far more than that option is actually true, whatever the message says. We found this on every system we tried (`python bench/label_bias.py your-receipts.json --task your-task`), most clearly on a five-option routing task, where every system over-picked one label by 1.7x to 2.7x. Rotating the option order does not fix this bias, and on our routing task it made it slightly worse. If your task has several similarly-worded options, check for this before trusting the accuracy number: [bench/receipts/bias-summary.md](../bench/receipts/bias-summary.md) has the full picture across our systems and tasks.
+
+## 5. Let the options rotate
 
 By default assay shows the options in three different orders and averages the results. This cut the share of answers that flipped when the options were reversed from 20.3% to 10.7% on the 4B letter run. It triples the number of model calls. Use `--orders 1` if speed matters more than stable answers.
 
-## 5. Calibrate, and fit each question on its own
+## 6. Calibrate, and fit each question on its own
 
 Raw odds from a small model are much too confident. Give assay 50 to 100 labelled examples per question and it rescales them. In our study the error stopped improving at about 80 examples. Fit each question separately: sharing one correction across questions did worse, because different questions need opposite corrections. See [CALIBRATION.md](CALIBRATION.md) and [CALIBRATION_STUDY.md](CALIBRATION_STUDY.md).
 
-## 6. Treat "not sure" as an answer
+## 7. Treat "not sure" as an answer
 
 Calibrated, the 4B model said "not sure" on about half the items and was right on 91% of the rest. The 12B model said "not sure" on 7% of items. Send those items to a person or a bigger model.
 
-## 7. Know where a plain answer is better
+## 8. Know where a plain answer is better
 
 Asking a small model to write JSON with a confidence is sometimes more accurate. On the 4B model it was 81.7% right against 74.6% (letters) or 78.0% (words), mostly on routing. At 12B that reversed: reading the odds got 90.0% against 85.0%. If you use a small model, run both on your own data.
 
