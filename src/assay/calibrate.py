@@ -321,3 +321,78 @@ class ShrunkTemperatureCalibrator(TemperatureCalibrator):
         cal.task_temperature = d.get("task_temperature")
         cal.weight_own = d.get("weight_own")
         return cal
+
+
+class PriorCalibrator(TemperatureCalibrator):
+    """Temperature scaling, then a correction for a model that reaches for one label too often.
+
+    `bench/label_bias.py` found that every model we tried over-predicts one label on some tasks (see
+    the "hidden bias" finding in README.md), and that reordering the options does not fix it. This
+    calibrator does something reordering cannot: after temperature scaling, it divides each label's
+    probability by how much more (or less) often the model gives it than it is actually true, then
+    renormalises. A label predicted twice as often as it should be gets its probability roughly halved.
+
+    The correction is a well-known trick for a "wrong prior" (the model's overall habit of reaching for
+    a label), not for judging any single example better. It is muted for rare labels, and always kept
+    inside `max_ratio`, so a handful of examples cannot force a wild swing: that would be noise, not signal.
+    """
+
+    def __init__(self, min_examples: int = 10, max_ratio: float = 5.0) -> None:
+        super().__init__()
+        if min_examples < 1:
+            raise ValueError("min_examples must be at least 1")
+        if max_ratio <= 1.0:
+            raise ValueError("max_ratio must be greater than 1.0")
+        self.min_examples = min_examples
+        self.max_ratio = max_ratio
+        self.label_weights: dict[str, float] = {}
+
+    def _pick_temperature(self, samples: list[dict]) -> float:
+        """Fits the usual temperature, then (as a side effect, like `ShrunkTemperatureCalibrator` does)
+        works out each label's correction weight from the temperature-scaled samples."""
+        t = self._best_temperature(samples)
+        t_scaled = [_apply_temperature(s["probs"], t) for s in samples]
+        truths = [s["truth"] for s in samples]
+        labels = sorted({l for p in t_scaled for l in p})
+        n = len(samples)
+        weights: dict[str, float] = {}
+        for l in labels:
+            true_count = truths.count(l)
+            predicted_mass = sum(p.get(l, 0.0) for p in t_scaled) / n
+            if true_count < self.min_examples or predicted_mass < _EPS:
+                weights[l] = 1.0  # too little evidence to trust a correction here
+                continue
+            ratio = (true_count / n) / predicted_mass
+            weights[l] = max(1.0 / self.max_ratio, min(self.max_ratio, ratio))
+        self.label_weights = weights
+        return t
+
+    def _scaled(self, sample: dict) -> dict:
+        t = _apply_temperature(sample["probs"], self.temperature)
+        corrected = {k: v * self.label_weights.get(k, 1.0) for k, v in t.items()}
+        z = sum(corrected.values()) or 1.0
+        return {"probs": {k: v / z for k, v in corrected.items()}, "truth": sample["truth"]}
+
+    def transform(self, probs: dict[str, float]) -> dict[str, float]:
+        if not self.fitted:
+            return dict(probs)
+        return self._scaled({"probs": probs, "truth": None})["probs"]
+
+    def to_json(self) -> str:
+        d = json.loads(super().to_json())
+        d.update({"kind": "prior", "min_examples": self.min_examples, "max_ratio": self.max_ratio,
+                  "label_weights": self.label_weights})
+        return json.dumps(d, indent=2)
+
+    @classmethod
+    def from_json(cls, text: str | dict) -> "PriorCalibrator":
+        d = json.loads(text) if isinstance(text, str) else text
+        cal = cls(int(d.get("min_examples", 10)), float(d.get("max_ratio", 5.0)))
+        cal.temperature = float(d["temperature"])
+        if cal.temperature <= 0:
+            raise ValueError("temperature must be positive")
+        cal.alpha = d.get("alpha")
+        cal.qhat = d.get("qhat")
+        cal.report = d.get("report") or {}
+        cal.label_weights = d.get("label_weights") or {}
+        return cal

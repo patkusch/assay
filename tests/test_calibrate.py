@@ -6,7 +6,8 @@ import tempfile
 import unittest
 
 from assay.calibrate import (
-    FixedTemperatureCalibrator, ShrunkTemperatureCalibrator, TemperatureCalibrator, _apply_temperature, pooled_temperature,
+    FixedTemperatureCalibrator, PriorCalibrator, ShrunkTemperatureCalibrator, TemperatureCalibrator,
+    _apply_temperature, pooled_temperature,
 )
 from assay.metrics import (
     accuracy, accuracy_at_coverage, brier, ece, nll, reliability_bins,
@@ -345,6 +346,87 @@ class PooledAndShrunkTests(unittest.TestCase):
             cov = sum(1 for x in test if x["truth"] in cal.prediction_set(cal.transform(x["probs"]))) / len(test)
             coverages.append(cov)
         self.assertGreaterEqual(sum(coverages) / len(coverages), 0.88)
+
+
+class PriorCalibratorTests(unittest.TestCase):
+    def _biased_samples(self, n=200, seed=0):
+        """A model that is 80% right, but every mistake lands on 'billing': a classic favourite-default bias.
+        True labels are spread evenly over 4 options; the model's raw probabilities already reflect the bias."""
+        import random as _random
+        rng = _random.Random(seed)
+        labels = ["billing", "technical", "sales", "cancel"]
+        samples = []
+        for i in range(n):
+            truth = labels[i % 4]
+            if rng.random() < 0.8:
+                top, rest = truth, [l for l in labels if l != truth]
+            else:
+                top, rest = "billing", [l for l in labels if l != "billing"] or [truth]
+            probs = {top: 0.7}
+            remaining = 0.3
+            for l in rest:
+                probs[l] = remaining / len(rest)
+            samples.append({"probs": probs, "truth": truth})
+        return samples
+
+    def test_fitted_weights_correct_an_over_predicted_label(self):
+        cal = PriorCalibrator(min_examples=5).fit(self._biased_samples())
+        self.assertLess(cal.label_weights["billing"], 1.0)          # billing was over-predicted: weight pulls it down
+        self.assertGreaterEqual(min(cal.label_weights.values()), 1.0 / cal.max_ratio)
+        self.assertLessEqual(max(cal.label_weights.values()), cal.max_ratio)
+
+    def test_correction_moves_the_predicted_probability_mass_toward_the_true_rate(self):
+        # this is exactly what _pick_temperature's weights are fitted to do, so it is the fair test of them,
+        # measured on data the correction never saw (fit on one half, checked on the other)
+        samples = self._biased_samples(n=400)
+        cal = PriorCalibrator(min_examples=5)
+        report = cal.fit_holdout(samples, alpha=0.1, seed=1)
+        self.assertIn("ece_after", report)
+        order = list(range(len(samples)))
+        random.Random(1).shuffle(order)
+        held = [samples[i] for i in order[len(samples) // 2:]]
+        true_rate = sum(1 for s in held if s["truth"] == "billing") / len(held)
+        raw_mass = sum(s["probs"].get("billing", 0.0) for s in held) / len(held)
+        corrected_mass = sum(cal.transform(s["probs"]).get("billing", 0.0) for s in held) / len(held)
+        self.assertLess(abs(corrected_mass - true_rate), abs(raw_mass - true_rate))
+
+    def test_correction_can_trade_ece_for_a_smaller_probability_bias(self):
+        # honest limit: pulling probability mass off a favourite label is not the same job as temperature
+        # scaling, and is not guaranteed to also improve top-pick calibration error on its own; both numbers
+        # are in the report so a real use should check fit_holdout before trusting either direction
+        samples = self._biased_samples(n=400)
+        report = PriorCalibrator(min_examples=5).fit_holdout(samples, alpha=0.1, seed=1)
+        for key in ("ece_before", "ece_after", "brier_before", "brier_after"):
+            self.assertIn(key, report)
+            self.assertGreaterEqual(report[key], 0.0)
+
+    def test_a_rare_label_is_not_corrected_from_too_little_evidence(self):
+        samples = self._biased_samples(n=40)
+        samples += [{"probs": {"billing": 0.1, "technical": 0.1, "sales": 0.1, "cancel": 0.1, "refund": 0.6}, "truth": "refund"}] * 2
+        cal = PriorCalibrator(min_examples=5).fit(samples)
+        self.assertEqual(cal.label_weights.get("refund"), 1.0)  # only 2 examples: too little evidence, left alone
+
+    def test_before_fitting_it_is_the_identity(self):
+        cal = PriorCalibrator()
+        probs = {"a": 0.6, "b": 0.4}
+        self.assertEqual(cal.transform(probs), probs)
+        self.assertEqual(cal.prediction_set(probs), ["a"])
+
+    def test_json_round_trip_keeps_the_weights(self):
+        cal = PriorCalibrator(min_examples=7, max_ratio=3.0).fit(self._biased_samples())
+        cal2 = PriorCalibrator.from_json(cal.to_json())
+        self.assertEqual(cal2.label_weights, cal.label_weights)
+        self.assertEqual(cal2.min_examples, 7)
+        self.assertEqual(cal2.max_ratio, 3.0)
+        probs = {"billing": 0.5, "technical": 0.3, "sales": 0.1, "cancel": 0.1}
+        self.assertEqual(cal2.transform(probs), cal.transform(probs))
+        self.assertEqual(cal2.prediction_set(cal2.transform(probs)), cal.prediction_set(cal.transform(probs)))
+
+    def test_construction_rejects_bad_arguments(self):
+        with self.assertRaises(ValueError):
+            PriorCalibrator(min_examples=0)
+        with self.assertRaises(ValueError):
+            PriorCalibrator(max_ratio=1.0)
 
 
 if __name__ == "__main__":
