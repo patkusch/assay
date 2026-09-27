@@ -60,15 +60,29 @@ and the first and last are always kept. Every call writes a note to `backend.las
 The engine asks several times with the options in different orders, so `last_trace` describes the most
 recent call.
 
-## The honest limit
+## Measured, and it did not help
 
-This is proven on mock backends only. The tests show that a decisive sentence hidden in the middle of 20 KB
-of filler is found by `max_evidence` and missed by cutting off the first few thousand characters, that
-words are never split, and that short input is unchanged. It has **not** been measured with a live model
-yet. Open questions that only a live run can answer: how well real small models score a piece that has no
-evidence in it (if they lean toward one option on empty text, `max_evidence` will pick that up), and
-whether the extra calls are worth their cost. Treat the defaults as a starting point until that
-measurement is done.
+100 real test items (gemma3 4B, word scoring), each padded with about 12,000 characters of unrelated filler
+placed before the item, after it, or on both sides. The filler has nothing to do with any label, so the
+right answer never changes. Full table: [bench/receipts/longinput-gemma3-4b-word.md](../bench/receipts/longinput-gemma3-4b-word.md).
+
+| | Short original | Padded, plain | Padded, chunked (`max_evidence`) |
+|---|---|---|---|
+| Right answers | 84.0% | 59.3% | 53.7% |
+
+- **Padding hurts a lot**, ceiling to plain: 84.0% down to 59.3%. That was expected.
+- **Chunking made it worse, not better**: 53.7% against 59.3% for the plain backend on the same padded items. That was the opposite of what this wrapper is for.
+- **The suspected reason** is the open question flagged below, now confirmed: a chunk with no real evidence in it still gets scored, and `max_evidence` takes the single highest score across all chunks. A small model given an evidence-free chunk and forced to pick one option leans toward whichever option its wording happens to favour, and if that lean is a strong `max_evidence` score, an irrelevant filler chunk can outvote the one real chunk. Splitting the text hands the model more chances to be confidently wrong, not fewer.
+- **`command_safety` was the exception**, where chunking matched or beat the plain backend in two of three positions. The other three tasks lost ground everywhere chunking was tried.
+
+**Conclusion: `max_evidence` is not recommended for real use as it stands.** The mock-backend tests below still hold; they proved the plumbing works, not that the strategy helps a real model. A calibrated abstain-on-low-confidence step per chunk, or a combine mode that discounts chunks the model itself is unsure about, is the likely fix, but that is untested. Until then, a long input is better handled by keeping the state short (summarise before calling assay) than by chunking.
+
+## What the mock-backend tests still show
+
+The tests below (mock backends only) show that a decisive sentence hidden in the middle of 20 KB of filler
+is found by `max_evidence` and missed by cutting off the first few thousand characters, that words are
+never split, and that short input is unchanged. That is the mechanism working as designed; the live result
+above shows the mechanism is not enough on its own with a real, imperfect model.
 
 ## From the command line
 

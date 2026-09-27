@@ -171,7 +171,8 @@ The first run used 30 test items per task and could not tell any of this apart f
 
 - The tasks are synthetic and labelled by construction. Blind readers checked every label, but the readers are models and may share blind spots with whoever wrote the items. The middle urgency levels lost the most items in that check, so level 3 is thin (22 items).
 - Calibration was fitted on 93 to 141 items per task. The study in [docs/CALIBRATION_STUDY.md](docs/CALIBRATION_STUDY.md) found about 50 to 100 is enough.
-- The flip check reverses the option order. The rewording test (above) is separate and shows wording matters more. Every single-wording number in this README uses the original wording of each question. Long inputs are tested separately ([docs/LONG_INPUT.md](docs/LONG_INPUT.md)), with results below when they land.
+- The flip check reverses the option order. The rewording test (above) is separate and shows wording matters more. Every single-wording number in this README uses the original wording of each question.
+- **Chunking long input does not help.** Measured on 100 padded items, it made accuracy worse than doing nothing (53.7% against 59.3%; [docs/LONG_INPUT.md](docs/LONG_INPUT.md)). Do not turn on `--chunk-chars` expecting an improvement; keep the state short instead.
 - gemma3 4B is the only model measured on the full 912 test items. gemma3 12B covers a 320-item subset. No other model family has been tried.
 - More than 36 options is not supported by the Ollama backend (Jev allows 255).
 - A probability is not a guarantee. A confident answer can still be wrong.
