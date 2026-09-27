@@ -3,10 +3,13 @@
 ## The short answer
 
 Use one temperature per task, fitted on that task's own examples. That is what assay already did.
-The fancier ideas did not beat it.
+Sharing one temperature across tasks was worse, and blending each task's temperature with a shared
+one was about the same as the plain version, and sometimes worse.
 
-Sharing one temperature across tasks was worse. Blending each task's temperature with a shared one
-was about the same as the plain version, and sometimes worse.
+One fancier idea did help: correcting a label the model reaches for too often (`PriorCalibrator`)
+recovered 3 to 9 points of accuracy on every run, on top of the per-task temperature, for a
+calibration-error cost that ranged from negligible to real. Turn it on only where `bench/label_bias.py`
+shows a real bias; see "What did help" below.
 
 You need at least 20 labelled examples to get any calibration. You need about 50 before the result stops
 jumping around, and about 80 before you can lean on it.
@@ -42,7 +45,7 @@ being in the set 90% of the time. For raw, that rule works on the untouched prob
 Three saved runs were used:
 
 - **Von** and **openJev-verdict**: two open models that give typed answers. Four tasks each, 93 to 141 dev examples per task, 186 to 280 test examples per task.
-- **gemma3 4B** (the first run): four tasks, 30 dev and 30 test examples each.
+- **gemma3 4B**, word scoring, on the full 1,370-item set: four tasks, 93 to 141 dev examples per task, 186 to 280 test examples per task. (An earlier version of this study used a 30-item-per-task run instead; that receipts file is kept at `bench/receipts/gemma3-4b.json` and its numbers are no longer in this doc.)
 
 The task answers were written by construction, not by a model. The tasks are synthetic.
 Treat the numbers as evidence about method, not as a ranking of models.
@@ -157,7 +160,30 @@ We do not think the first run showed that calibration hurts. We think it could n
 - **Pooled temperature.** Worse than per-task on both larger runs. Do not use it as the default.
 - **Shrinking toward the pooled temperature.** No better than per-task once a task had about 90 examples, and worse when tasks disagree. Only a hint of gain on one run at 20 to 30 examples.
 - **A bigger shrinking constant.** Worse. Small is safer.
-- **Per-label nudges (the bias prototype).** Mixed, so it was not added to the library. It gave the best NLL in all three runs (for example, 1.065 against 1.139 on openJev-verdict), the best Brier score, higher accuracy (42.3% to 50.1% on openJev-verdict) and smaller answer sets. But its calibration error was worse than plain per-task fitting on all three runs. The sets also fell short of 90%: 87% at 20 to 30 examples and 89% at 50. The likely cause is that it learns extra dials from the same examples that set the "not sure" threshold, so the threshold is a little too optimistic. It is worth trying again with the examples split into two groups. That was not tested.
+- **Per-label nudges (the bias prototype, `_BiasCalibrator` in `bench/calib_study.py`).** Mixed, so it was not added to the library. It gave the best NLL in all three runs (for example, 1.065 against 1.139 on openJev-verdict), the best Brier score, higher accuracy (42.3% to 50.1% on openJev-verdict) and smaller answer sets. But its calibration error was worse than plain per-task fitting on all three runs. The sets also fell short of 90%: 87% at 20 to 30 examples and 89% at 50. The likely cause is that it learns extra dials from the same examples that set the "not sure" threshold, so the threshold is a little too optimistic.
+
+## What did help: correcting for a label bias
+
+`bench/label_bias.py` found that every system we tried reaches for one label far more than it is
+actually true, most clearly on routing (see README.md, "A hidden bias"). `PriorCalibrator`
+(`src/assay/calibrate.py`) fixes the same problem as the bias prototype above, in a plainer way: after
+the usual temperature, it divides each label's probability by how much more (or less) often the model
+gives it than it is true, clipped so a handful of examples cannot force a wild swing. Unlike the
+prototype, it fits its own conformal "not sure" threshold on the corrected probabilities, and that keeps
+its coverage close to the 90% target instead of falling short.
+
+Measured the same way (fitted on dev, graded on test, averaged over the four tasks):
+
+| Run | Accuracy, task only | Accuracy, prior | Confidence error, task only | Confidence error, prior | Coverage, prior |
+|---|---|---|---|---|---|
+| gemma3 4B, word scoring | 77.6% | 81.2% (+3.6 pts) | 0.089 | 0.094 | 90.2% |
+| von | 59.1% | 62.2% (+3.1 pts) | 0.061 | 0.070 | 90.5% |
+| openJev-verdict | 42.3% | 50.9% (+8.6 pts) | 0.053 | 0.111 | 92.1% |
+
+- **The accuracy gain is real on every run**, close to (and on openJev-verdict, ahead of) the unshipped bias prototype's gain, and it lands mostly on the tasks that `label_bias.py` flagged: routing gained 6.6 points on gemma3 4B, and urgency gained 4.9.
+- **The calibration-error cost varies a lot by run.** On gemma3 4B it is close to nothing (+0.005). On openJev-verdict it roughly doubles (+0.058), because that system's plain temperature fit was already unusually good (0.053) and the correction spends some of that.
+- **Coverage held up**, staying within a couple of points of 90% at every dev size we swept, unlike the bias prototype.
+- **Recommendation: turn it on when `bench/label_bias.py` shows a real bias on your task (a ratio clearly above 1.5x), and check the accuracy-versus-confidence-error trade-off on your own held-out data first**, the same way this study did. It is not the default, because a system that is already well calibrated (like openJev-verdict here) pays the most for the least of the two.
 
 ## Recommendation
 
@@ -166,6 +192,7 @@ We do not think the first run showed that calibration hurts. We think it could n
 3. **Below 50 examples**, do not judge success by ECE alone. It is noisy at that size. Look at NLL or the Brier score, and expect the "90%" set to be somewhere between 87% and 93%.
 4. **`ShrunkTemperatureCalibrator` is available but not the default.** Consider it only when you have 20 to 40 examples per task and several related tasks. Use `pooled_temperature` for the shared value and keep the constant small (10 to 30). The evidence for it is thin.
 5. **`FixedTemperatureCalibrator`** applies a temperature you hand it and still learns the "not sure" rule. Use it only if you already have a good temperature from somewhere else.
+6. **`PriorCalibrator`, conditionally.** Check your task with `bench/label_bias.py` first. If it shows a real bias, `PriorCalibrator` recovered 3 to 9 accuracy points on every run we tried, for a calibration-error cost that ranges from negligible to real (see above). If your task shows no bias, leave it off.
 
 ## Limits of this study
 
@@ -178,7 +205,7 @@ We do not think the first run showed that calibration hurts. We think it could n
 
 ```
 python bench/calib_study.py bench/receipts/v2-von.json bench/receipts/v2-verdict.json \
-    bench/receipts/gemma3-4b.json --out bench/receipts/calib_study.md
+    bench/receipts/v2-gemma3-4b-word.json --out bench/receipts/calib_study.md
 ```
 
 It reads saved results only and calls no model. The full tables (per task, every size, coverage, set size,

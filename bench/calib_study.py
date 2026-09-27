@@ -10,6 +10,7 @@ Methods compared:
   pooled   one temperature for all tasks, fitted on every task's dev items together
   shrunk   each task's own temperature pulled toward the pooled one, weight n / (n + k) on its own
   bias     task temperature plus one adjustable nudge per answer label (a prototype, see below)
+  prior    task temperature, then PriorCalibrator's shipped label-share correction (assay.calibrate.PriorCalibrator)
 
 Then a small-data sweep: refit every method on only 20, 30, 50, 80 dev items (and all of them),
 many random subsamples each, and see how the test-half calibration error behaves.
@@ -29,20 +30,21 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 
 from assay.calibrate import (  # noqa: E402
-    FixedTemperatureCalibrator, ShrunkTemperatureCalibrator, TemperatureCalibrator,
+    FixedTemperatureCalibrator, PriorCalibrator, ShrunkTemperatureCalibrator, TemperatureCalibrator,
     _apply_temperature, _fit_temperature, pooled_temperature,
 )
 from assay.metrics import accuracy, brier, ece, nll  # noqa: E402
 
 ALPHA = 0.1
 SIZES = (20, 30, 50, 80)
-METHODS = ("raw", "task", "pooled", "shrunk", "bias")
+METHODS = ("raw", "task", "pooled", "shrunk", "bias", "prior")
 METHOD_NOTE = {
     "raw": "no temperature (T = 1)",
     "task": "own temperature per task",
     "pooled": "one shared temperature",
     "shrunk": "own temperature pulled toward the shared one",
-    "bias": "own temperature plus a nudge per answer label",
+    "bias": "own temperature plus a nudge per answer label (a prototype, see below)",
+    "prior": "own temperature, then `PriorCalibrator`'s shipped label-share correction",
 }
 
 
@@ -102,6 +104,7 @@ def make_calibrators(dev_by_task: dict[str, list[dict]], k: float) -> dict[str, 
             "pooled": FixedTemperatureCalibrator(pooled_t).fit(dev, ALPHA),
             "shrunk": ShrunkTemperatureCalibrator(pooled_t, k).fit(dev, ALPHA),
             "bias": _BiasCalibrator().fit(dev, ALPHA),
+            "prior": PriorCalibrator().fit(dev, ALPHA),
         }
     return out
 
