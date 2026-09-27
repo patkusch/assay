@@ -25,6 +25,8 @@ On the 4B model the answer changed with the question's wording on 27% to 37% of 
 
 It costs one call per wording. See [examples/routing_wordings.json](../examples/routing_wordings.json). Write the alternates by hand, and check each keeps the same label definitions: a reworded question that changes what a label means changes the answer for a good reason.
 
+Measured against asking once, averaging the odds over four wordings got 79.2% right (letters) and 81.2% (words), against 77.6% and 80.2% for a single wording. Taking the majority answer across four separate calls did a point or two better still (82.1% both ways); it costs the same four calls, just without `alternates`. Use whichever fits how you are already calling assay: `alternates` if you want one merged answer, majority voting if you are happy to run four requests and compare. Either beats asking once. See the README's "Does the wording of the question matter?" section.
+
 ## 4. Check for a favourite label, not just accuracy
 
 A model can be wrong in an organised way: it reaches for one option far more than that option is actually true, whatever the message says. We found this on every system we tried (`python bench/label_bias.py your-receipts.json --task your-task`), most clearly on a five-option routing task, where every system over-picked one label by 1.7x to 2.7x. Rotating the option order does not fix this bias, and on our routing task it made it slightly worse. If your task has several similarly-worded options, check for this before trusting the accuracy number: [bench/receipts/bias-summary.md](../bench/receipts/bias-summary.md) has the full picture across our systems and tasks.

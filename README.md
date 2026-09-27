@@ -171,15 +171,16 @@ Yes, and more than the order of the options. Each of 240 items (60 per task) was
 | Items where the answer changed with the wording | 37.1% | 27.5% |
 | Right answers by wording (original first) | 75.0%, 81.7%, 80.8%, 72.9% | 78.3%, 80.4%, 84.2%, 77.9% |
 | Majority answer across the four wordings | 82.1% | 82.1% |
+| Averaging the odds across the wordings (the real ensemble, `alternates`) | 79.2% | 81.2% |
 | Average single wording | 77.6% | 80.2% |
 
 - **Wording moved answers about three times as often as option order** (37.1% against the 10.7% that flip when the options are reversed). Word scoring helps but does not fix it.
 - **Some tasks swing hard.** Command safety went from 83% to 53% right with letters, and routing from 58% to 88%. Phishing was steady with word scoring (88% to 92%). With 60 items a task, swings of 20 points or more are well outside noise.
 - **The original wording was not the best one.** On routing it was the worst of the four for both scoring methods (58% and 63%, against 88% and 92% for the best rewording). So part of the routing weakness reported above was the wording, not only how the odds were read.
-- **Every result above uses the original wording.** Treat the single-wording numbers as one draw from a wide range.
-- **Asking several ways and combining helps.** The majority answer across wordings was as good as the best single wording with letters (82.1% against 81.7%), and it protects against an unlucky one. A question can carry `alternates` (other wordings), and assay averages the odds across them ([docs/CHOOSING_SETTINGS.md](docs/CHOOSING_SETTINGS.md)). The measured ensemble is below.
+- **Every result above (outside this section) uses the original wording.** Treat the single-wording numbers as one draw from a wide range.
+- **Asking several ways and combining helps, and we measured both ways of combining.** A question can carry `alternates` (other wordings), and assay averages the odds across them, one call per wording ([docs/CHOOSING_SETTINGS.md](docs/CHOOSING_SETTINGS.md)). Measured, that ensemble beat the average single wording on both scoring methods (79.2% and 81.2%, against 77.6% and 80.2%), but simple majority voting across four separate answers did a point or two better still (82.1% on both). Majority voting needs the same four calls but no new code; the odds ensemble is what `alternates` gives you today. Either beats asking once.
 
-Receipts: [letter](bench/receipts/rewording-gemma3-4b-letter.md), [word](bench/receipts/rewording-gemma3-4b-word.md). A 12B rewording run was attempted but the model server hung under memory pressure; it is not measured.
+Receipts: [letter](bench/receipts/rewording-gemma3-4b-letter.md), [word](bench/receipts/rewording-gemma3-4b-word.md), and the measured ensembles: [letter](bench/receipts/rewording-gemma3-4b-letter-ensemble.md), [word](bench/receipts/rewording-gemma3-4b-word-ensemble.md). A 12B rewording run was attempted but the model server hung under memory pressure; it is not measured.
 
 ### Earlier, smaller run
 
