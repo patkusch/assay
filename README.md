@@ -182,6 +182,8 @@ Yes, and more than the order of the options. Each of 240 items (60 per task) was
 
 Receipts: [letter](bench/receipts/rewording-gemma3-4b-letter.md), [word](bench/receipts/rewording-gemma3-4b-word.md), and the measured ensembles: [letter](bench/receipts/rewording-gemma3-4b-letter-ensemble.md), [word](bench/receipts/rewording-gemma3-4b-word-ensemble.md). A 12B rewording run was attempted but the model server hung under memory pressure; it is not measured.
 
+**Caught in the wild, in our own examples.** `examples/agent_command.json` used to ask a shorter version of the command-safety question than the one actually benchmarked. Run live, that shorter wording called `git push --force origin main` on a shared branch "destructive" (85.5% confident); the tested wording calls the exact same command "risky" (99.99997% confident), which is also what the benchmark's own answer key says. The three shipped examples now use the exact wording that was benchmarked, not a shorter paraphrase, so the README's own "try it" command demonstrates a tested prompt rather than an untested one.
+
 ### Earlier, smaller run
 
 The first run used 30 test items per task and could not tell any of this apart from noise. Its receipts stay in `bench/receipts/gemma3-4b.*` so the change is visible.
