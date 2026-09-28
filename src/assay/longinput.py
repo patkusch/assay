@@ -164,12 +164,12 @@ class ChunkedBackend:
     Each chunk's scores are turned into log-probabilities before combining (`normalize=True`) so a chunk
     cannot win just because the model's raw numbers happened to run high.
 
-    `confident_weighted` is untested against a real model as of this commit; the other three modes were
-    measured on real padded messages and none beat doing nothing (docs/LONG_INPUT.md). It may share their
-    problem: a chunk of irrelevant filler can look just as decisive to a small model as the one chunk with
-    real evidence, so weighting by a chunk's own confidence may not tell "confidently right" apart from
-    "confidently wrong" either. Check docs/LONG_INPUT.md for whether it has been measured yet before relying
-    on it.
+    `confident_weighted` was measured (docs/LONG_INPUT.md) and gave the exact same answer as `mean_logprob`
+    on every one of 60 real test items. The reason: with word scoring, a chunk's own top-vs-second margin is
+    almost always near 1.0, filler included, so there was nothing left for the weighting to discriminate on.
+    A chunk's own confidence carries no information here, because the model is confidently overstated on
+    almost everything it is asked to score, real evidence or not. None of the four combine modes tried beat
+    doing nothing; keep the state short instead.
     After every call `last_trace` says what happened; `last_trace["truncated"]` is True if any text was
     left unscored (only when chunks were sampled, or in first_and_last / head_tail).
     """

@@ -77,33 +77,39 @@ right answer never changes. Full table: [bench/receipts/longinput-gemma3-4b-word
 
 **Conclusion: `max_evidence` is not recommended for real use as it stands.** The mock-backend tests below still hold; they proved the plumbing works, not that the strategy helps a real model. Until a real fix is found, a long input is better handled by keeping the state short (summarise before calling assay) than by chunking.
 
-## The other combine modes were tried too, and neither fixed it
+## Three more combine modes were tried, and none fixed it
 
 60 real test items (gemma3 4B, word scoring), padding on both sides only (the filler wraps the item, which
 is the hardest case: the real content is buried in the middle, not at either end). Full tables:
 [mean_logprob](../bench/receipts/longinput-gemma3-4b-word-meanlogprob.md),
-[head_tail](../bench/receipts/longinput-gemma3-4b-word-headtail.md).
+[head_tail](../bench/receipts/longinput-gemma3-4b-word-headtail.md),
+[confident_weighted](../bench/receipts/longinput-gemma3-4b-word-confweighted.md).
 
-| | Padded, plain | `max_evidence`* | `mean_logprob` | `head_tail` |
-|---|---|---|---|---|
-| Right answers | 56.7% | ~52%* | 38.3% | 35.0% |
+| | Padded, plain | `max_evidence`* | `mean_logprob` | `head_tail` | `confident_weighted` |
+|---|---|---|---|---|---|
+| Right answers | 56.7% | ~52%* | 38.3% | 35.0% | 38.3% |
 
 \* `max_evidence`'s number here is read off the "both" column of the 100-item run above (different item
 count, so treat it as a rough guide, not a like-for-like row): on that slice alone it was roughly level
 with the plain backend, not clearly worse. The pooled 53.7% above is dragged down mainly by the "before"
 and "after" positions.
 
-- **Neither alternative helped. Both did clearly worse than `max_evidence`.** `mean_logprob` averages every
-  chunk's score, filler included, so a handful of irrelevant chunks steadily dilute the one real one.
-  `head_tail` did worst of all, and that is expected by its own design: it reads only the start and end of
-  the text and skips the middle outright, and "both" padding puts the real item exactly in that skipped
-  middle. It was never going to see the message. `head_tail` still deserves a fair test on "before" or
-  "after" padding, where the real content sits at one end within its reach; that has not been run.
-- **The "discount an unsure chunk" idea from the previous version of this doc was not built or tested.**
-  It remains the more promising direction than either mode tried here, since both `mean_logprob` and
-  `head_tail` let every chunk count (or discard chunks) without ever asking the chunk itself how sure it
-  was.
-- **The recommendation is unchanged: keep the state short.** Three combine modes have now been measured on
+- **None of the three alternatives helped. All did clearly worse than `max_evidence`.** `mean_logprob`
+  averages every chunk's score, filler included, so a handful of irrelevant chunks steadily dilute the one
+  real one. `head_tail` did worst of all, and that is expected by its own design: it reads only the start
+  and end of the text and skips the middle outright, and "both" padding puts the real item exactly in that
+  skipped middle. It was never going to see the message. `head_tail` still deserves a fair test on "before"
+  or "after" padding, where the real content sits at one end within its reach; that has not been run.
+- **`confident_weighted` was built to test the "discount an unsure chunk" idea, and it didn't work, for a
+  precise, checked reason.** It gave the exact same answer as `mean_logprob` on all 60 items. Inspecting the
+  real per-chunk scores that produced this: with word scoring, a chunk's own top-vs-second margin was above
+  0.99 on almost every chunk, filler included (checked on two items by hand, [bench/receipts](../bench/receipts/)).
+  There was nothing left for confidence-weighting to discriminate on, because the model is confidently
+  overstated on nearly everything it is asked to score in a single forward pass, whether or not the chunk
+  has real evidence in it. This is the same overconfidence problem calibration exists to fix elsewhere in
+  assay, showing up here in a form calibration cannot reach, because it happens before the chunks are ever
+  combined.
+- **The recommendation is unchanged: keep the state short.** Four combine modes have now been measured on
   real padded input and none of them beat doing nothing.
 
 ## What the mock-backend tests still show
