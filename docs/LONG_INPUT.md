@@ -110,7 +110,7 @@ and "after" positions.
   assay, showing up here in a form calibration cannot reach, because it happens before the chunks are ever
   combined.
 - **The recommendation is unchanged: keep the state short.** Four combine modes have now been measured on
-  real padded input and none of them beat doing nothing.
+  real padded input and none of them beat doing nothing. One table: [bench/receipts/longinput-summary.md](../bench/receipts/longinput-summary.md).
 
 ## What the mock-backend tests still show
 
