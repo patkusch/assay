@@ -8,6 +8,12 @@ You give assay examples where you already know the right answer.
 assay checks how often the model was right when it said "90% sure".
 It then turns the model's confidence down, or up, to match.
 
+How sure it sounds is not a reliable guide on its own.
+We checked this directly: reading a small model's raw odds on text with nothing in it at all still
+came back over 99% sure, again and again ([docs/LONG_INPUT.md](LONG_INPUT.md)).
+It was not right more often for sounding that sure.
+Treat the raw number as noise until it has been checked.
+
 It also learns when to say "not sure".
 If two answers are still possible, the answer is marked `abstain`.
 
