@@ -241,5 +241,77 @@ class ChunkedTests(unittest.TestCase):
         self.assertEqual(a, b)
 
 
+class ConfidenceWeightedTests(unittest.TestCase):
+    """`combine="confident_weighted"`: chunks are blended by their own top-vs-second-place margin.
+
+    This mode is untested against a real model (see docs/LONG_INPUT.md); these tests only check the
+    arithmetic and the plumbing, not whether it helps a real one. They call `_confidence_weighted`
+    directly on hand-built per-chunk distributions, so they do not depend on how many chunks the text
+    splitter happens to produce.
+    """
+
+    def setUp(self):
+        from assay.longinput import _confidence_weighted, _log_softmax
+        self.combine = _confidence_weighted
+        self.log_softmax = _log_softmax
+
+    @staticmethod
+    def _softmax(xs):
+        import math
+        m = max(xs)
+        es = [math.exp(x - m) for x in xs]
+        z = sum(es)
+        return [e / z for e in es]
+
+    def _weighted_by_hand(self, dists, floor=1e-3):
+        weights = []
+        for p in dists:
+            top, second = sorted(p, reverse=True)[:2]
+            weights.append(max(top - second, floor))
+        z = sum(weights)
+        n = len(dists[0])
+        return [sum(w * p[j] for w, p in zip(weights, dists)) / z for j in range(n)]
+
+    def test_matches_a_hand_computed_weighted_average(self):
+        import math
+        # three chunks, three labels, deliberately uneven confidence, none degenerate (all-zero margin)
+        raw = [[3.0, -1.0, 0.0], [0.2, 0.1, 0.0], [-0.5, 1.0, 0.3]]
+        dists = [self._softmax(r) for r in raw]
+        expected = self._weighted_by_hand(dists)
+        per_chunk = [self.log_softmax(r) for r in raw]
+        got = [math.exp(x) for x in self.combine(per_chunk)]
+        for g, e in zip(got, expected):
+            self.assertAlmostEqual(g, e, places=6)
+        self.assertAlmostEqual(sum(got), 1.0, places=6)
+
+    def test_a_decisive_chunk_survives_more_flat_filler_than_mean_logprob_allows(self):
+        """The real advantage over mean_logprob: a genuinely uninformative (flat) filler chunk should barely
+        move the answer, however many of them there are, because its own margin is near zero. mean_logprob
+        has no such protection and drifts toward uniform as filler chunks pile up."""
+        import math
+        decisive = [8.0, 0.0, 0.0]  # near-certain for label 0
+        flat = [0.0, 0.0, 0.0]      # no opinion at all
+        for n_filler in (2, 6, 20):
+            scores = [decisive] + [flat] * n_filler
+            per_chunk = [self.log_softmax(s) for s in scores]
+            weighted = math.exp(self.combine(per_chunk)[0])
+            meaned = self._softmax([sum(c[j] for c in per_chunk) / len(per_chunk) for j in range(3)])[0]
+            self.assertGreater(weighted, meaned, f"n_filler={n_filler}")
+            self.assertGreater(weighted, 0.9, f"n_filler={n_filler}")  # stays confident regardless of filler count
+
+    def test_all_flat_chunks_do_not_crash_and_stay_uniform(self):
+        per_chunk = [self.log_softmax([0.0, 0.0, 0.0])] * 4
+        out = self.combine(per_chunk)
+        self.assertAlmostEqual(out[0], out[1])
+        self.assertAlmostEqual(out[1], out[2])
+
+    def test_is_a_valid_choice_and_works_through_engine_decide(self):
+        self.assertIn("confident_weighted", COMBINE_MODES)
+        cb = ChunkedBackend(CueBackend(CUES), max_chars=3000, overlap=300, combine="confident_weighted")
+        req = Request(buried(), {"kind": Q})
+        resp = decide(cb, req, n_orders=3)
+        self.assertEqual(resp.answers["kind"].value, "scam")
+
+
 if __name__ == "__main__":
     unittest.main()

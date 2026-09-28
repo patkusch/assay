@@ -12,7 +12,7 @@ import re
 
 from .types import Backend, BackendError, Question
 
-COMBINE_MODES = ("max_evidence", "mean_logprob", "first_and_last", "head_tail")
+COMBINE_MODES = ("max_evidence", "mean_logprob", "first_and_last", "head_tail", "confident_weighted")
 HEAD_TAIL_MARK = "\n[...]\n"
 
 _WORD = re.compile(r"\S+\s*")
@@ -106,6 +106,28 @@ def _log_softmax(xs: list[float]) -> list[float]:
     return [x - z for x in xs]
 
 
+def _confidence_weighted(per_chunk: list[list[float]]) -> list[float]:
+    """Average the chunks' own probability distributions, weighted by how decisive each chunk itself was.
+
+    `per_chunk[i]` is one chunk's log-probabilities over the labels (already log-softmax'd, so
+    `exp` gives a valid distribution). A chunk's weight is its own top-vs-second-place margin, plus a
+    floor so a completely flat chunk still counts a little rather than vanishing from the average.
+    Returns log-scores the caller can hand to the engine, which will softmax them back to this same
+    weighted-average distribution.
+    """
+    floor = 1e-3
+    weights = []
+    dists = []
+    for chunk in per_chunk:
+        probs = [math.exp(x) for x in chunk]
+        dists.append(probs)
+        top, second = sorted(probs, reverse=True)[:2] if len(probs) > 1 else (probs[0], 0.0)
+        weights.append(max(top - second, floor))
+    total_w = sum(weights)
+    combined = [sum(w * p[j] for w, p in zip(weights, dists)) / total_w for j in range(len(dists[0]))]
+    return [math.log(max(p, 1e-12)) for p in combined]
+
+
 def _head_tail(text: str, max_chars: int) -> str:
     """The start and the end of the text (half the budget each), cut at word boundaries."""
     half = max(1, max_chars // 2)
@@ -134,9 +156,20 @@ class ChunkedBackend:
       mean_logprob    per label, the average score over all chunks. Use when the whole text carries the signal.
       first_and_last  only the first and last chunk, best of the two. Cheap; assumes the point is at either end.
       head_tail       one call on the start plus the end of the text, the middle is skipped. Cheapest.
+      confident_weighted  each chunk's own distribution, averaged with more weight on chunks the model
+                      itself was more decisive about (its own top-vs-second-place margin). Unlike
+                      max_evidence it never lets one chunk's score for one label win in isolation from the
+                      rest of that chunk's own opinion; see the note below.
 
     Each chunk's scores are turned into log-probabilities before combining (`normalize=True`) so a chunk
     cannot win just because the model's raw numbers happened to run high.
+
+    `confident_weighted` is untested against a real model as of this commit; the other three modes were
+    measured on real padded messages and none beat doing nothing (docs/LONG_INPUT.md). It may share their
+    problem: a chunk of irrelevant filler can look just as decisive to a small model as the one chunk with
+    real evidence, so weighting by a chunk's own confidence may not tell "confidently right" apart from
+    "confidently wrong" either. Check docs/LONG_INPUT.md for whether it has been measured yet before relying
+    on it.
     After every call `last_trace` says what happened; `last_trace["truncated"]` is True if any text was
     left unscored (only when chunks were sampled, or in first_and_last / head_tail).
     """
@@ -199,6 +232,8 @@ class ChunkedBackend:
         cols = list(zip(*per_chunk))
         if self.combine == "mean_logprob":
             out = [sum(c) / len(c) for c in cols]
+        elif self.combine == "confident_weighted":
+            out = _confidence_weighted(per_chunk)
         else:  # max_evidence and first_and_last both keep the strongest evidence per label
             out = [max(c) for c in cols]
         winners = {l: picks[max(range(len(c)), key=c.__getitem__)] for l, c in zip(labels, cols)}

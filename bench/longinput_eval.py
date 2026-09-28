@@ -141,7 +141,7 @@ def main(argv=None) -> int:
     ap.add_argument("--per-task", type=int, default=25)
     ap.add_argument("--pad-chars", type=int, default=12000)
     ap.add_argument("--chunk-chars", type=int, default=3000)
-    ap.add_argument("--combine", default="max_evidence", choices=["max_evidence", "mean_logprob", "first_and_last", "head_tail"])
+    ap.add_argument("--combine", default="max_evidence", choices=["max_evidence", "mean_logprob", "first_and_last", "head_tail", "confident_weighted"])
     ap.add_argument("--positions", default="before,after,both", help="comma-separated subset of before,after,both")
     ap.add_argument("--orders", type=int, default=3)
     ap.add_argument("--timeout", type=float, default=180.0)
