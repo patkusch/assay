@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "assay"
+abstract: "Fast, local, typed decisions with calibrated confidence. An open take on the System One / Jev idea."
+type: software
+authors:
+  - family-names: "Kusch"
+    given-names: "Patricia"
+repository-code: "https://github.com/patkusch/assay"
+license: MIT
