@@ -115,6 +115,12 @@ class BenchScript(unittest.TestCase):
         self.assertIn("| small model alone | 0.0% | 50.0% | 50.0% | 0.10 s | n/a | n/a |", md)
         self.assertIn("| big model alone | 100.0% | 100.0% | 100.0% | 0.50 s | 50.0% | 100.0% |", md)
 
+    def test_own_cutoffs(self):
+        rows = bench.sweep(self.small, self.big, (0.5, 0.95))
+        self.assertEqual([r["rule"] for r in rows], ["small model alone", "hand up when not sure", "hand up below 50%", "hand up below 95%", "big model alone"])
+        bad = bench.main([str(ROOT / "bench/receipts/v2-gemma3-4b.json"), str(ROOT / "bench/receipts/v2-gemma3-12b.json"), "--cutoffs", "1.5"])
+        self.assertEqual(bad, 2)
+
     def test_runs_on_the_real_receipts(self):
         with tempfile.TemporaryDirectory() as d:
             out = str(Path(d) / "h")

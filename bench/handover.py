@@ -14,6 +14,7 @@ carrying information; if not, you could save the calibration work and flip a coi
 
     python bench/handover.py bench/receipts/v2-gemma3-4b.json bench/receipts/v2-gemma3-12b.json
     python bench/handover.py SMALL.json BIG.json --cond calibrated --out bench/receipts/handover-4b-12b
+    python bench/handover.py SMALL.json BIG.json --cutoffs 0.65,0.7,0.75   # look closely around one cut-off
 """
 from __future__ import annotations
 
@@ -80,10 +81,10 @@ def random_hand_over(small: dict[str, dict], big: dict[str, dict], share: float,
     return total / draws
 
 
-def sweep(small: dict[str, dict], big: dict[str, dict]) -> list[dict]:
+def sweep(small: dict[str, dict], big: dict[str, dict], cutoffs=CUTOFFS) -> list[dict]:
     rows = [dict(rule="small model alone", **hand_over(small, big, lambda s: False))]
     rows.append(dict(rule="hand up when not sure", **hand_over(small, big, lambda s: s["unsure"])))
-    for c in CUTOFFS:
+    for c in cutoffs:
         rows.append(dict(rule=f"hand up below {c:.0%}", **hand_over(small, big, lambda s, c=c: s["confidence"] < c)))
     rows.append(dict(rule="big model alone", **hand_over(small, big, lambda s: True)))
     for r in rows:
@@ -123,13 +124,22 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--cond", default="calibrated", choices=["single", "shuffled", "calibrated"],
                     help="which odds to read from the small model's receipts (default calibrated)")
     ap.add_argument("--big-cond", default=None, help="odds to read from the big model (default: same as --cond)")
+    ap.add_argument("--cutoffs", default=",".join(str(c) for c in CUTOFFS),
+                    help="confidence cut-offs to try, between 0 and 1, comma-separated (default %(default)s)")
     ap.add_argument("--out", help="write OUT.json and OUT.md instead of printing")
     a = ap.parse_args(argv)
     small, big = load(a.small, a.cond), load(a.big, a.big_cond or a.cond)
     if not set(small) & set(big):
         print("the two receipts share no test items", file=sys.stderr)
         return 2
-    rows = sweep(small, big)
+    try:
+        cutoffs = tuple(float(c) for c in a.cutoffs.split(","))
+        if not cutoffs or any(not 0 < c <= 1 for c in cutoffs):
+            raise ValueError
+    except ValueError:
+        print("--cutoffs wants numbers between 0 and 1, comma-separated, like 0.6,0.7,0.8", file=sys.stderr)
+        return 2
+    rows = sweep(small, big, cutoffs)
     name = lambda p: json.load(open(p))["config"].get("model", Path(p).stem)  # noqa: E731
     small_name = name(a.small) + (" (word scoring)" if json.load(open(a.small))["config"].get("scoring") == "word" else "")
     md = markdown(rows, small_name, name(a.big), a.cond)
