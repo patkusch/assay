@@ -61,9 +61,13 @@ class Answer:
     prediction_set: list[str]          # labels the calibrator says cannot be ruled out (>=1)
     abstain: bool                      # True when the set has more than one label or confidence is under the floor
     calibrated: bool                   # whether a fitted calibrator was applied
+    answered_by: str = ""              # which model answered, when a hand-over to a bigger model is in use (else "")
 
     def to_dict(self) -> dict:
-        return asdict(self)
+        d = asdict(self)
+        if not self.answered_by:
+            d.pop("answered_by")
+        return d
 
 
 @dataclass

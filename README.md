@@ -96,6 +96,31 @@ What that says, plainly:
 
 Which gaps are outside noise, from 2,000 resamples of the test items: [bench/receipts/v2-gemma3-4b-significance.md](bench/receipts/v2-gemma3-4b-significance.md).
 
+### Asking a bigger model when unsure
+
+A small model that knows when it is unsure can hand those questions to a bigger one, and the pair gets most of the big model's accuracy for a fraction of its time. (Hightouch published the same idea for Jev and Claude Opus on 4 November 2026: [their write-up](https://hightouch.com/blog/llm-judges-identity-resolution).) We measured it from the saved receipts, on the 320 test items the 4B and 12B runs share, so no new model run was needed. An item goes to the 12B when the calibrated 4B is below the cut-off:
+
+| | Share handed up | Right answers | Time per item |
+|---|---|---|---|
+| gemma3 4B alone | 0% | 74.1% | 0.57 s |
+| 4B, hand up when it says "not sure" | 52% | 88.4% | 1.58 s |
+| 4B, hand up below 70% confidence | 49% | 89.4% | 1.55 s |
+| 4B, hand up below 80% confidence | 63% | 90.6% | 1.84 s |
+| gemma3 12B alone | 100% | 90.0% | 2.50 s |
+
+Plainly: hand up half the items and you are within a point of the 12B alone, in 38% less time. Hand up the same half picked at random and you get 81.9%, so it is the small model's calibrated confidence that does the work, not the extra calls. With word scoring, the 4B's own "not sure" hands up 45% and gets 89.1%. Full tables with every cut-off and every task: [handover-4b-12b.md](bench/receipts/handover-4b-12b.md) and [handover-4b-word-12b.md](bench/receipts/handover-4b-word-12b.md).
+
+What to keep in mind: it is 320 items, so the 80% row beating the 12B alone (90.6% against 90.0%) is inside noise. Both models run on the same laptop, so the saving is time, not money. The big model here is only 12B; a frontier model would move the right-answer ceiling, and the hand-up share, a long way.
+
+To use it, name the bigger model and the cut-off. Each answer then says which model gave it (`answered_by`):
+
+```bash
+python -m assay decide --model gemma3 --handover gemma3:12b --handover-below 0.7 \
+  --calibration my-task.calibration.json --request examples/support_ticket.json
+```
+
+Rebuild the table from any two receipts with `python bench/handover.py SMALL.json BIG.json`.
+
 ### Beside the open clones
 
 The same 912 items, with [von](https://github.com/wfzyx/von) and [openJev-verdict-2.0](https://github.com/Heman10x-NGU/openJev-verdict-2.0) run as shipped inside assay's scoring loop ([bench/adapters/](bench/adapters/)), order-shuffled:

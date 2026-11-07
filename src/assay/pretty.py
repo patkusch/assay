@@ -37,6 +37,8 @@ def format_answers(result: dict, questions: dict | None = None) -> str:
             mark = "*" if label == best else " "
             lines.append(f" {mark} {str(label)[:width]:<{width}}  {_bar(p)}  {_pct(p):>6}")
         note = f"  confidence {a['confidence'] * 100:.0f}%, stable across option orders {a['stability'] * 100:.0f}%, {tag}"
+        if a.get("answered_by"):
+            note += f", answered by {a['answered_by']}"
         lines.append(note)
         if a.get("abstain"):
             lines.append("  ⚠ not sure: " + " or ".join(str(x) for x in a.get("prediction_set", [])))

@@ -67,6 +67,11 @@ def build_parser() -> argparse.ArgumentParser:
         sp.add_argument("--calibration", help="a file made by `assay calibrate`; its rescaling is applied to answers")
         sp.add_argument("--confidence-floor", type=float, default=0.0,
                         help="mark an answer 'abstain' when its confidence is below this (0 to 1)")
+        sp.add_argument("--handover", metavar="MODEL",
+                        help="a bigger model (same backend) that answers whenever this one is not sure or under --handover-below")
+        sp.add_argument("--handover-below", type=float, default=0.8, metavar="P",
+                        help="hand a question to the --handover model when confidence is below P (default 0.8; "
+                             "0.7 measured best for gemma3 4B to 12B, see bench/receipts/handover-4b-12b.md)")
 
     d = sub.add_parser("decide", help="answer questions about a situation and print JSON (or a readable view with --format pretty)")
     d.add_argument("--state", help="the situation, as text")
@@ -127,8 +132,15 @@ def main(argv: list[str] | None = None) -> int:
             if warning:
                 print(warning, file=sys.stderr)
         calibrators = bundle.calibrators if bundle else None
+        handover = None
+        if getattr(args, "handover", None):
+            big = make_backend(args.backend, args.handover, args.host, args.timeout, getattr(args, "scoring", "letter"))
+            if getattr(args, "chunk_chars", 0):
+                from .longinput import ChunkedBackend
+                big = ChunkedBackend(big, max_chars=args.chunk_chars, overlap=min(300, args.chunk_chars // 10), combine=args.chunk_combine)
+            handover = (big, args.handover_below)
         if args.cmd == "serve":
-            serve(backend, args.bind, args.port, args.orders, calibrators, args.confidence_floor, bundle, args.cors)
+            serve(backend, args.bind, args.port, args.orders, calibrators, args.confidence_floor, bundle, args.cors, handover)
             return 0
         if args.request:
             raw = sys.stdin.read() if args.request == "-" else open(args.request, encoding="utf-8").read()
@@ -139,7 +151,7 @@ def main(argv: list[str] | None = None) -> int:
             body = {"state": args.state,
                     "questions": {f"q{i + 1}": parse_question_arg(q) for i, q in enumerate(args.question)}}
         result = run_request(backend, body, n_orders=args.orders, calibrators=calibrators,
-                             confidence_floor=args.confidence_floor, bundle=bundle)
+                             confidence_floor=args.confidence_floor, bundle=bundle, handover=handover)
         if args.format == "pretty":
             from .pretty import format_answers
             asked = {qid: q.get("instructions", "") for qid, q in body.get("questions", {}).items() if isinstance(q, dict)}

@@ -1,0 +1,317 @@
+{
+  "small": "bench/receipts/v2-gemma3-4b-word.json",
+  "big": "bench/receipts/v2-gemma3-12b.json",
+  "cond": "calibrated",
+  "rows": [
+    {
+      "rule": "small model alone",
+      "n": 320,
+      "handed": 0,
+      "share_handed": 0.0,
+      "accuracy": 0.765625,
+      "ms_per_item": 545.9715615832465,
+      "per_task": {
+        "command_safety": {
+          "n": 80,
+          "share_handed": 0.0,
+          "accuracy": 0.7625
+        },
+        "phishing": {
+          "n": 80,
+          "share_handed": 0.0,
+          "accuracy": 0.9125
+        },
+        "routing": {
+          "n": 80,
+          "share_handed": 0.0,
+          "accuracy": 0.625
+        },
+        "urgency": {
+          "n": 80,
+          "share_handed": 0.0,
+          "accuracy": 0.7625
+        }
+      },
+      "random_same_share": 0.765625
+    },
+    {
+      "rule": "hand up when not sure",
+      "n": 320,
+      "handed": 143,
+      "share_handed": 0.446875,
+      "accuracy": 0.890625,
+      "ms_per_item": 1461.1051404877799,
+      "per_task": {
+        "command_safety": {
+          "n": 80,
+          "share_handed": 0.45,
+          "accuracy": 0.775
+        },
+        "phishing": {
+          "n": 80,
+          "share_handed": 0.15,
+          "accuracy": 0.925
+        },
+        "routing": {
+          "n": 80,
+          "share_handed": 0.7625,
+          "accuracy": 0.925
+        },
+        "urgency": {
+          "n": 80,
+          "share_handed": 0.425,
+          "accuracy": 0.9375
+        }
+      },
+      "random_same_share": 0.8273593750000002
+    },
+    {
+      "rule": "hand up below 50%",
+      "n": 320,
+      "handed": 24,
+      "share_handed": 0.075,
+      "accuracy": 0.8,
+      "ms_per_item": 696.3834979022067,
+      "per_task": {
+        "command_safety": {
+          "n": 80,
+          "share_handed": 0.0125,
+          "accuracy": 0.775
+        },
+        "phishing": {
+          "n": 80,
+          "share_handed": 0.0,
+          "accuracy": 0.9125
+        },
+        "routing": {
+          "n": 80,
+          "share_handed": 0.1625,
+          "accuracy": 0.7
+        },
+        "urgency": {
+          "n": 80,
+          "share_handed": 0.125,
+          "accuracy": 0.8125
+        }
+      },
+      "random_same_share": 0.7753906249999999
+    },
+    {
+      "rule": "hand up below 60%",
+      "n": 320,
+      "handed": 45,
+      "share_handed": 0.140625,
+      "accuracy": 0.81875,
+      "ms_per_item": 822.7992284964785,
+      "per_task": {
+        "command_safety": {
+          "n": 80,
+          "share_handed": 0.1125,
+          "accuracy": 0.7625
+        },
+        "phishing": {
+          "n": 80,
+          "share_handed": 0.0375,
+          "accuracy": 0.925
+        },
+        "routing": {
+          "n": 80,
+          "share_handed": 0.1875,
+          "accuracy": 0.7
+        },
+        "urgency": {
+          "n": 80,
+          "share_handed": 0.225,
+          "accuracy": 0.8875
+        }
+      },
+      "random_same_share": 0.784453125
+    },
+    {
+      "rule": "hand up below 70%",
+      "n": 320,
+      "handed": 72,
+      "share_handed": 0.225,
+      "accuracy": 0.846875,
+      "ms_per_item": 1034.1584576686728,
+      "per_task": {
+        "command_safety": {
+          "n": 80,
+          "share_handed": 0.175,
+          "accuracy": 0.7875
+        },
+        "phishing": {
+          "n": 80,
+          "share_handed": 0.0875,
+          "accuracy": 0.925
+        },
+        "routing": {
+          "n": 80,
+          "share_handed": 0.375,
+          "accuracy": 0.775
+        },
+        "urgency": {
+          "n": 80,
+          "share_handed": 0.2625,
+          "accuracy": 0.9
+        }
+      },
+      "random_same_share": 0.7956249999999995
+    },
+    {
+      "rule": "hand up below 80%",
+      "n": 320,
+      "handed": 132,
+      "share_handed": 0.4125,
+      "accuracy": 0.884375,
+      "ms_per_item": 1393.8058067626116,
+      "per_task": {
+        "command_safety": {
+          "n": 80,
+          "share_handed": 0.3875,
+          "accuracy": 0.775
+        },
+        "phishing": {
+          "n": 80,
+          "share_handed": 0.1375,
+          "accuracy": 0.925
+        },
+        "routing": {
+          "n": 80,
+          "share_handed": 0.8125,
+          "accuracy": 0.925
+        },
+        "urgency": {
+          "n": 80,
+          "share_handed": 0.3125,
+          "accuracy": 0.9125
+        }
+      },
+      "random_same_share": 0.8218437499999999
+    },
+    {
+      "rule": "hand up below 90%",
+      "n": 320,
+      "handed": 244,
+      "share_handed": 0.7625,
+      "accuracy": 0.903125,
+      "ms_per_item": 2038.5548561225733,
+      "per_task": {
+        "command_safety": {
+          "n": 80,
+          "share_handed": 0.775,
+          "accuracy": 0.8
+        },
+        "phishing": {
+          "n": 80,
+          "share_handed": 0.7,
+          "accuracy": 0.925
+        },
+        "routing": {
+          "n": 80,
+          "share_handed": 1.0,
+          "accuracy": 0.925
+        },
+        "urgency": {
+          "n": 80,
+          "share_handed": 0.575,
+          "accuracy": 0.9625
+        }
+      },
+      "random_same_share": 0.8684218749999997
+    },
+    {
+      "rule": "hand up below 95%",
+      "n": 320,
+      "handed": 308,
+      "share_handed": 0.9625,
+      "accuracy": 0.9,
+      "ms_per_item": 2392.636954820591,
+      "per_task": {
+        "command_safety": {
+          "n": 80,
+          "share_handed": 0.975,
+          "accuracy": 0.8
+        },
+        "phishing": {
+          "n": 80,
+          "share_handed": 1.0,
+          "accuracy": 0.925
+        },
+        "routing": {
+          "n": 80,
+          "share_handed": 1.0,
+          "accuracy": 0.925
+        },
+        "urgency": {
+          "n": 80,
+          "share_handed": 0.875,
+          "accuracy": 0.95
+        }
+      },
+      "random_same_share": 0.8950624999999997
+    },
+    {
+      "rule": "hand up below 99%",
+      "n": 320,
+      "handed": 320,
+      "share_handed": 1.0,
+      "accuracy": 0.9,
+      "ms_per_item": 2478.6449825551244,
+      "per_task": {
+        "command_safety": {
+          "n": 80,
+          "share_handed": 1.0,
+          "accuracy": 0.8
+        },
+        "phishing": {
+          "n": 80,
+          "share_handed": 1.0,
+          "accuracy": 0.925
+        },
+        "routing": {
+          "n": 80,
+          "share_handed": 1.0,
+          "accuracy": 0.925
+        },
+        "urgency": {
+          "n": 80,
+          "share_handed": 1.0,
+          "accuracy": 0.95
+        }
+      },
+      "random_same_share": 0.9000000000000032
+    },
+    {
+      "rule": "big model alone",
+      "n": 320,
+      "handed": 320,
+      "share_handed": 1.0,
+      "accuracy": 0.9,
+      "ms_per_item": 2478.6449825551244,
+      "per_task": {
+        "command_safety": {
+          "n": 80,
+          "share_handed": 1.0,
+          "accuracy": 0.8
+        },
+        "phishing": {
+          "n": 80,
+          "share_handed": 1.0,
+          "accuracy": 0.925
+        },
+        "routing": {
+          "n": 80,
+          "share_handed": 1.0,
+          "accuracy": 0.925
+        },
+        "urgency": {
+          "n": 80,
+          "share_handed": 1.0,
+          "accuracy": 0.95
+        }
+      },
+      "random_same_share": 0.9000000000000032
+    }
+  ]
+}
