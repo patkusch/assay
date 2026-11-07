@@ -74,6 +74,23 @@ class Engine(unittest.TestCase):
         self.assertIn("answered by sure", format_answers(out, {"q": "Which?"}))
 
 
+    def test_each_model_gets_its_own_calibration(self):
+        class Flatten:  # a stand-in calibrator that halves every edge, so we can see it was applied
+            def transform(self, probs):
+                return {k: 0.5 * p + 0.5 / len(probs) for k, p in probs.items()}
+
+            def prediction_set(self, probs):
+                return [max(probs, key=probs.get)]
+        body = {"state": "anything", "questions": {"q": {"type": "choice", "instructions": "Which?", "options": ["a", "b", "c"]}}}
+        big_cal = {"q": Flatten()}
+        handed = run_request(Flat(), body, handover=(Sure(), 0.8, big_cal))["answers"]["q"]
+        self.assertEqual(handed["answered_by"], "sure")
+        self.assertTrue(handed["calibrated"])
+        self.assertLess(handed["confidence"], 0.95)  # the big model's odds were flattened by its own calibration
+        kept = run_request(Sure(), body, handover=(Flat(), 0.8, big_cal))["answers"]["q"]
+        self.assertFalse(kept["calibrated"])  # the small model's answer is not touched by the big model's calibration
+
+
 class Cli(unittest.TestCase):
     def test_decide_with_handover_flag(self):
         r = subprocess.run([sys.executable, "-m", "assay", "decide", "--backend", "keyword", "--handover", "keyword",
@@ -84,6 +101,26 @@ class Cli(unittest.TestCase):
         out = json.loads(r.stdout)
         self.assertEqual(out["answers"]["q1"]["answered_by"], "keyword")
         self.assertEqual(out["model"], "keyword, then keyword when unsure")
+
+    def test_handover_calibration_flag_is_accepted(self):
+        env = {"PYTHONPATH": str(ROOT / "src"), "PATH": ""}
+        with tempfile.TemporaryDirectory() as d:
+            req, labelled, cal = Path(d) / "req.json", Path(d) / "labelled.jsonl", Path(d) / "big.json"
+            req.write_text(json.dumps({"state": "spam spam", "questions": {"q1": {"type": "choice", "instructions": "Which?", "options": ["spam", "ham"]}}}))
+            rows = []
+            for i in range(30):  # the words say one thing; one row in five is labelled the other way, so the fit has work to do
+                word = "spam" if i % 2 == 0 else "ham"
+                truth = ("ham" if word == "spam" else "spam") if i % 5 == 0 else word
+                rows.append(json.dumps({"question": "q1", "state": f"{word} {word}", "truth": truth}))
+            labelled.write_text("\n".join(rows) + "\n")
+            fit = subprocess.run([sys.executable, "-m", "assay", "calibrate", "--backend", "keyword", "--request", str(req),
+                                  "--labelled", str(labelled), "--out", str(cal)], capture_output=True, text=True, env=env)
+            self.assertEqual(fit.returncode, 0, fit.stderr)
+            r = subprocess.run([sys.executable, "-m", "assay", "decide", "--backend", "keyword", "--handover", "keyword", "--handover-below", "0.99",
+                                "--handover-calibration", str(cal), "--request", str(req)], capture_output=True, text=True, env=env)
+            self.assertEqual(r.returncode, 0, r.stderr)
+            a = json.loads(r.stdout)["answers"]["q1"]
+            self.assertEqual((a["answered_by"], a["calibrated"]), ("keyword", True))  # handed up, and the big model's calibration applied
 
 
 class BenchScript(unittest.TestCase):

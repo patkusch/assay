@@ -89,8 +89,8 @@ def run_request(backend, body: object, *, n_orders: int = 3, calibrators: dict |
 
     If a `bundle` is given and the caller asked for a different model than the server's,
     and that model is not the one it was fitted with, the calibration is left out: it would be wrong for that model.
-    `handover` is `(big_backend, below)`: questions the first model is not sure about, or answers under `below`,
-    are re-asked of the big model (see assay.handover).
+    `handover` is `(big_backend, below)` or `(big_backend, below, big_calibrators)`: questions the first model is
+    not sure about, or answers under `below`, are re-asked of the big model (see assay.handover).
     """
     request, model = parse_request(body)
     used = backend_for(backend, model)
@@ -98,9 +98,9 @@ def run_request(backend, body: object, *, n_orders: int = 3, calibrators: dict |
         calibrators = None
     if handover:
         from .handover import decide_with_handover
-        big, below = handover
+        big, below, *rest = handover
         resp = decide_with_handover(used, big, request, below=below, n_orders=n_orders, calibrators=calibrators,
-                                    confidence_floor=confidence_floor)
+                                    big_calibrators=rest[0] if rest else None, confidence_floor=confidence_floor)
     else:
         resp = decide(used, request, n_orders=n_orders, calibrators=calibrators, confidence_floor=confidence_floor)
     return response_body(request, resp)

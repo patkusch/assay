@@ -72,6 +72,8 @@ def build_parser() -> argparse.ArgumentParser:
         sp.add_argument("--handover-below", type=float, default=0.8, metavar="P",
                         help="hand a question to the --handover model when confidence is below P (default 0.8; "
                              "0.7 measured best for gemma3 4B to 12B, see bench/receipts/handover-4b-12b.md)")
+        sp.add_argument("--handover-calibration", metavar="FILE",
+                        help="a calibration file fitted for the --handover model (the --calibration file is for the first model only)")
 
     d = sub.add_parser("decide", help="answer questions about a situation and print JSON (or a readable view with --format pretty)")
     d.add_argument("--state", help="the situation, as text")
@@ -138,7 +140,14 @@ def main(argv: list[str] | None = None) -> int:
             if getattr(args, "chunk_chars", 0):
                 from .longinput import ChunkedBackend
                 big = ChunkedBackend(big, max_chars=args.chunk_chars, overlap=min(300, args.chunk_chars // 10), combine=args.chunk_combine)
-            handover = (big, args.handover_below)
+            big_calibrators = None
+            if args.handover_calibration:
+                big_bundle = CalibrationBundle.load(args.handover_calibration)
+                warning = big_bundle.check(getattr(big, "name", "unknown"))
+                if warning:
+                    print(warning, file=sys.stderr)
+                big_calibrators = big_bundle.calibrators
+            handover = (big, args.handover_below, big_calibrators)
         if args.cmd == "serve":
             serve(backend, args.bind, args.port, args.orders, calibrators, args.confidence_floor, bundle, args.cors, handover)
             return 0
