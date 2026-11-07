@@ -127,5 +127,13 @@ class BenchScript(unittest.TestCase):
             self.assertTrue((ROOT / "bench/receipts/handover-4b-12b.md").read_text().startswith("# Hand-over"))
 
 
+class LiveRecord(unittest.TestCase):
+    def test_the_recorded_live_call_says_which_model_answered_each_question(self):
+        text = (ROOT / "bench/receipts/handover-live-2026-11-07.md").read_text()
+        self.assertEqual(text.count("answered by ollama:gemma3\n"), 2)
+        self.assertEqual(text.count("answered by ollama:gemma3:12b\n"), 1)
+        self.assertIn("not calibrated", text)
+
+
 if __name__ == "__main__":
     unittest.main()

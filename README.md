@@ -121,6 +121,8 @@ python -m assay decide --model gemma3 --handover gemma3:12b --handover-below 0.7
 
 Rebuild the table from any two receipts with `python bench/handover.py SMALL.json BIG.json`.
 
+One live call with both models, unedited, is in [handover-live-2026-11-07.md](bench/receipts/handover-live-2026-11-07.md). It shows the plumbing working, and why the calibration file matters: without it the 4B's raw odds say 100% on easy questions, so almost nothing gets handed up.
+
 ### Beside the open clones
 
 The same 912 items, with [von](https://github.com/wfzyx/von) and [openJev-verdict-2.0](https://github.com/Heman10x-NGU/openJev-verdict-2.0) run as shipped inside assay's scoring loop ([bench/adapters/](bench/adapters/)), order-shuffled:
