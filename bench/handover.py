@@ -58,8 +58,12 @@ def hand_over(small: dict[str, dict], big: dict[str, dict], rule) -> dict:
         t["n"] += 1
         t["handed"] += int(i in set(handed))
         t["right"] += big[i]["correct"] if i in set(handed) else small[i]["correct"]
+    hs = set(handed)
     return {"n": len(ids), "handed": len(handed), "share_handed": len(handed) / len(ids) if ids else 0.0,
             "accuracy": right / len(ids) if ids else 0.0, "ms_per_item": ms / len(ids) if ids else 0.0,
+            # how the handed-up items would have fared with the small model, and how they fared with the big one
+            "small_right_on_handed": sum(small[i]["correct"] for i in hs) / len(hs) if hs else None,
+            "big_right_on_handed": sum(big[i]["correct"] for i in hs) / len(hs) if hs else None,
             "per_task": {k: {"n": v["n"], "share_handed": v["handed"] / v["n"], "accuracy": v["right"] / v["n"]}
                          for k, v in sorted(per_task.items())}}
 
@@ -98,9 +102,13 @@ def markdown(rows: list[dict], small_name: str, big_name: str, cond: str) -> str
            "An item goes to the big model when the small model's confidence is below the cut-off. "
            "Time is the small model's call plus the big model's when it was handed up. "
            "\"Random, same share\" hands up the same number of items picked at random (mean of 200 draws).", "",
-           "| Rule | Share handed up | Right answers | Random, same share | Time per item |", "|---|---|---|---|---|"]
+           "The last two columns look only at the handed-up items: how many the small model had right, and how many the big model got right.", "",
+           "| Rule | Share handed up | Right answers | Random, same share | Time per item | Small model on handed-up | Big model on handed-up |",
+           "|---|---|---|---|---|---|---|"]
     for r in rows:
-        out.append(f"| {r['rule']} | {pct(r['share_handed'])} | {pct(r['accuracy'])} | {pct(r['random_same_share'])} | {r['ms_per_item'] / 1000:.2f} s |")
+        on = lambda k: pct(r[k]) if r[k] is not None else "n/a"  # noqa: E731
+        out.append(f"| {r['rule']} | {pct(r['share_handed'])} | {pct(r['accuracy'])} | {pct(r['random_same_share'])} | "
+                   f"{r['ms_per_item'] / 1000:.2f} s | {on('small_right_on_handed')} | {on('big_right_on_handed')} |")
     tasks = list(rows[0]["per_task"])
     out += ["", "## Per task: right answers (share handed up)", "", "| Rule | " + " | ".join(tasks) + " |", "|---|" + "---|" * len(tasks)]
     for r in rows:

@@ -100,6 +100,8 @@ class BenchScript(unittest.TestCase):
         self.assertEqual((unsure["accuracy"], unsure["share_handed"], unsure["ms_per_item"]), (0.75, 0.25, 200.0))
         below = bench.hand_over(self.small, self.big, lambda s: s["confidence"] < 0.7)
         self.assertEqual((below["accuracy"], below["share_handed"]), (1.0, 0.5))
+        self.assertEqual((below["small_right_on_handed"], below["big_right_on_handed"]), (0.0, 1.0))
+        self.assertIsNone(alone["small_right_on_handed"])
 
     def test_random_hand_over_matches_the_ends(self):
         self.assertEqual(bench.random_hand_over(self.small, self.big, 0.0), 0.5)
@@ -110,8 +112,8 @@ class BenchScript(unittest.TestCase):
         self.assertEqual([r["rule"] for r in rows][:2], ["small model alone", "hand up when not sure"])
         self.assertEqual(rows[-1]["rule"], "big model alone")
         md = bench.markdown(rows, "tiny", "huge", "calibrated")
-        self.assertIn("| small model alone | 0.0% | 50.0% | 50.0% | 0.10 s |", md)
-        self.assertIn("| big model alone | 100.0% | 100.0% | 100.0% | 0.50 s |", md)
+        self.assertIn("| small model alone | 0.0% | 50.0% | 50.0% | 0.10 s | n/a | n/a |", md)
+        self.assertIn("| big model alone | 100.0% | 100.0% | 100.0% | 0.50 s | 50.0% | 100.0% |", md)
 
     def test_runs_on_the_real_receipts(self):
         with tempfile.TemporaryDirectory() as d:

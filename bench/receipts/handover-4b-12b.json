@@ -10,6 +10,8 @@
       "share_handed": 0.0,
       "accuracy": 0.740625,
       "ms_per_item": 565.77391925548,
+      "small_right_on_handed": null,
+      "big_right_on_handed": null,
       "per_task": {
         "command_safety": {
           "n": 80,
@@ -41,6 +43,8 @@
       "share_handed": 0.525,
       "accuracy": 0.884375,
       "ms_per_item": 1579.2664111964768,
+      "small_right_on_handed": 0.6011904761904762,
+      "big_right_on_handed": 0.875,
       "per_task": {
         "command_safety": {
           "n": 80,
@@ -72,6 +76,8 @@
       "share_handed": 0.134375,
       "accuracy": 0.775,
       "ms_per_item": 839.6704281156417,
+      "small_right_on_handed": 0.627906976744186,
+      "big_right_on_handed": 0.8837209302325582,
       "per_task": {
         "command_safety": {
           "n": 80,
@@ -103,6 +109,8 @@
       "share_handed": 0.390625,
       "accuracy": 0.865625,
       "ms_per_item": 1314.180029819181,
+      "small_right_on_handed": 0.592,
+      "big_right_on_handed": 0.912,
       "per_task": {
         "command_safety": {
           "n": 80,
@@ -134,6 +142,8 @@
       "share_handed": 0.49375,
       "accuracy": 0.89375,
       "ms_per_item": 1553.383469653454,
+      "small_right_on_handed": 0.5632911392405063,
+      "big_right_on_handed": 0.8734177215189873,
       "per_task": {
         "command_safety": {
           "n": 80,
@@ -165,6 +175,8 @@
       "share_handed": 0.63125,
       "accuracy": 0.90625,
       "ms_per_item": 1837.5244984285018,
+      "small_right_on_handed": 0.6237623762376238,
+      "big_right_on_handed": 0.8861386138613861,
       "per_task": {
         "command_safety": {
           "n": 80,
@@ -196,6 +208,8 @@
       "share_handed": 0.825,
       "accuracy": 0.90625,
       "ms_per_item": 2146.771099207581,
+      "small_right_on_handed": 0.6893939393939394,
+      "big_right_on_handed": 0.8901515151515151,
       "per_task": {
         "command_safety": {
           "n": 80,
@@ -227,6 +241,8 @@
       "share_handed": 0.88125,
       "accuracy": 0.903125,
       "ms_per_item": 2239.5237314987753,
+      "small_right_on_handed": 0.7056737588652482,
+      "big_right_on_handed": 0.8900709219858156,
       "per_task": {
         "command_safety": {
           "n": 80,
@@ -258,6 +274,8 @@
       "share_handed": 0.9375,
       "accuracy": 0.9,
       "ms_per_item": 2358.762097255385,
+      "small_right_on_handed": 0.7233333333333334,
+      "big_right_on_handed": 0.8933333333333333,
       "per_task": {
         "command_safety": {
           "n": 80,
@@ -289,6 +307,8 @@
       "share_handed": 1.0,
       "accuracy": 0.9,
       "ms_per_item": 2498.447340227358,
+      "small_right_on_handed": 0.740625,
+      "big_right_on_handed": 0.9,
       "per_task": {
         "command_safety": {
           "n": 80,
