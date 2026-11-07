@@ -25,7 +25,7 @@ python -m assay decide --backend ollama --model gemma3 \
 python -m assay serve --model gemma3 --port 8787   # POST /v1/systemone, shaped like Jev's
 ```
 
-Add `--format pretty` for a readable view with a bar for every option, a confidence line and a "not sure" warning, instead of JSON:
+Add `--handover gemma3:12b` to let a bigger model take the questions the small one is not sure about (measured below). Add `--format pretty` for a readable view with a bar for every option, a confidence line and a "not sure" warning, instead of JSON:
 
 ```text
 team: billing
