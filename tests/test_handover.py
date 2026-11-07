@@ -87,7 +87,9 @@ class Engine(unittest.TestCase):
         self.assertEqual(out["handed_over"], 1)
         self.assertEqual(run_request(Sure(), body, handover=(Flat(), 0.8))["handed_over"], 0)
         self.assertNotIn("handed_over", run_request(Sure(), body))  # no hand-over in use, no count
-        self.assertIn("answered by sure", format_answers(out, {"q": "Which?"}))
+        text = format_answers(out, {"q": "Which?"})
+        self.assertIn("answered by sure", text)
+        self.assertIn("; 1 of 1 question(s) went to the bigger model", text.splitlines()[0])
 
 
     def test_each_model_gets_its_own_calibration(self):

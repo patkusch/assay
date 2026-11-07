@@ -19,6 +19,8 @@ def format_answers(result: dict, questions: dict | None = None) -> str:
     """Turn a response dict (as printed by `decide`) into text. `questions` maps id to instruction text (optional)."""
     lines = []
     head = f"answered by {result.get('model', '?')} in {result.get('latency_ms', 0):.0f} ms"
+    if "handed_over" in result:
+        head += f"; {result['handed_over']} of {len(result.get('answers', {}))} question(s) went to the bigger model"
     lines += [head, ""]
     for qid, a in result["answers"].items():
         probs = a["probabilities"]
