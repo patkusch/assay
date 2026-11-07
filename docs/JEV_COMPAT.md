@@ -20,6 +20,7 @@ assay copies the shape of Jev's request so a request written for one can be trie
 - `calibrated`: whether a fitted calibrator was applied to this answer.
 
 - `answered_by`: present when a hand-over is in use (`--handover MODEL`): which model gave this answer, the small one or the bigger one it passed the question to. Jev has no hand-over of its own; Hightouch built one around it, Jev first and Claude Opus for the unsure cases, and assay ships the same thing for two local models.
+- `handed_over` (on the response, not the answer): how many of the questions the bigger model took.
 
 ## What differs, on purpose or by limit
 
