@@ -123,6 +123,13 @@ class OverHttp(unittest.TestCase):
             srv.server_close()
 
 
+class StartupLine(unittest.TestCase):
+    def test_serve_says_which_models_it_runs(self):
+        from assay.server import describe_backends
+        self.assertEqual(describe_backends(Flat()), "flat")
+        self.assertEqual(describe_backends(Flat(), (Sure(), 0.7)), "flat, then sure when it is not sure or under 70%")
+
+
 class Cli(unittest.TestCase):
     def test_decide_with_handover_flag(self):
         r = subprocess.run([sys.executable, "-m", "assay", "decide", "--backend", "keyword", "--handover", "keyword",

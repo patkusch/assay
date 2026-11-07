@@ -193,12 +193,20 @@ def make_server(backend, host: str = "127.0.0.1", port: int = 8787, n_orders: in
     return ThreadingHTTPServer((host, port), Handler)
 
 
+def describe_backends(backend, handover=None) -> str:
+    """One line for the start-up message: which model answers, and which one takes the hand-overs."""
+    who = getattr(backend, "name", "?")
+    if handover:
+        who += f", then {getattr(handover[0], 'name', '?')} when it is not sure or under {handover[1]:.0%}"
+    return who
+
+
 def serve(backend, host: str = "127.0.0.1", port: int = 8787, n_orders: int = 3,
           calibrators: dict | None = None, confidence_floor: float = 0.0, bundle=None, cors: str | None = None,
           handover=None) -> None:
     """Run the server until interrupted."""
     srv = make_server(backend, host, port, n_orders, calibrators, confidence_floor, bundle, cors, handover)
-    print(f"assay listening on http://{host}:{srv.server_address[1]} (backend: {getattr(backend, 'name', '?')})", flush=True)
+    print(f"assay listening on http://{host}:{srv.server_address[1]} (backend: {describe_backends(backend, handover)})", flush=True)
     try:
         srv.serve_forever()
     except KeyboardInterrupt:
