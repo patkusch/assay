@@ -61,6 +61,19 @@ class Engine(unittest.TestCase):
         with self.assertRaises(ValueError):
             decide_with_handover(Flat(), Sure(), REQ, below=1.5)
 
+    def test_a_failing_big_model_says_so_plainly(self):
+        from assay.types import BackendError
+
+        class Down:
+            name = "down"
+
+            def logprobs(self, *a):
+                raise BackendError("connection refused")
+        with self.assertRaisesRegex(BackendError, "flat was not sure about 'q' and the hand-over model down failed: connection refused"):
+            decide_with_handover(Flat(), Down(), REQ)
+        # when the small model is sure, the big one is never called, so it can be down without harm
+        self.assertEqual(decide_with_handover(Sure(), Down(), REQ).answers["q"].answered_by, "sure")
+
     def test_plain_answers_do_not_carry_an_answered_by_field(self):
         d = decide(KeywordBackend(), REQ).answers["q"].to_dict()
         self.assertNotIn("answered_by", d)

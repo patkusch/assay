@@ -13,7 +13,7 @@ import time
 from dataclasses import replace
 
 from .engine import decide_one
-from .types import Backend, Calibrator, Request, Response
+from .types import Backend, BackendError, Calibrator, Request, Response
 
 
 def decide_with_handover(
@@ -41,8 +41,11 @@ def decide_with_handover(
         a = decide_one(small, request.state, q, n_orders=n_orders, calibrator=(calibrators or {}).get(qid),
                        confidence_floor=confidence_floor)
         if a.abstain or a.confidence < below:
-            a = decide_one(big, request.state, q, n_orders=n_orders, calibrator=(big_calibrators or {}).get(qid),
-                           confidence_floor=confidence_floor)
+            try:
+                a = decide_one(big, request.state, q, n_orders=n_orders, calibrator=(big_calibrators or {}).get(qid),
+                               confidence_floor=confidence_floor)
+            except BackendError as e:
+                raise BackendError(f"{small_name} was not sure about {qid!r} and the hand-over model {big_name} failed: {e}") from e
             a = replace(a, answered_by=big_name)
         else:
             a = replace(a, answered_by=small_name)
