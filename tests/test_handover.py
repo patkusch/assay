@@ -84,6 +84,9 @@ class Engine(unittest.TestCase):
         body = {"state": "anything", "questions": {"q": {"type": "choice", "instructions": "Which?", "options": ["a", "b", "c"]}}}
         out = run_request(Flat(), body, handover=(Sure(), 0.8))
         self.assertEqual(out["answers"]["q"]["answered_by"], "sure")
+        self.assertEqual(out["handed_over"], 1)
+        self.assertEqual(run_request(Sure(), body, handover=(Flat(), 0.8))["handed_over"], 0)
+        self.assertNotIn("handed_over", run_request(Sure(), body))  # no hand-over in use, no count
         self.assertIn("answered by sure", format_answers(out, {"q": "Which?"}))
 
 

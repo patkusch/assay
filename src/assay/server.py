@@ -70,6 +70,9 @@ def response_body(request: Request, response) -> dict:
     out = response.to_dict()
     for qid, q in request.questions.items():
         out["answers"][qid][q.type] = out["answers"][qid]["value"]
+    if any(a.answered_by for a in response.answers.values()):  # a hand-over was in use: how many questions the big model took
+        first = response.model.split(", then ")[0]
+        out["handed_over"] = sum(1 for a in response.answers.values() if a.answered_by and a.answered_by != first)
     return out
 
 
