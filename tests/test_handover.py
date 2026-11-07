@@ -104,6 +104,25 @@ class Engine(unittest.TestCase):
         self.assertFalse(kept["calibrated"])  # the small model's answer is not touched by the big model's calibration
 
 
+class OverHttp(unittest.TestCase):
+    def test_the_server_hands_over_too(self):
+        import threading
+        import urllib.request
+        from assay.server import make_server
+        srv = make_server(Flat(), port=0, handover=(Sure(), 0.8))
+        threading.Thread(target=srv.serve_forever, daemon=True).start()
+        try:
+            body = json.dumps({"state": "anything", "questions": {"q": {"type": "choice", "instructions": "Which?", "options": ["a", "b", "c"]}}}).encode()
+            req = urllib.request.Request(f"http://127.0.0.1:{srv.server_address[1]}/v1/systemone", data=body, headers={"Content-Type": "application/json"})
+            with urllib.request.urlopen(req, timeout=10) as r:
+                out = json.loads(r.read())
+            self.assertEqual(out["answers"]["q"]["answered_by"], "sure")
+            self.assertEqual(out["model"], "flat, then sure when unsure")
+        finally:
+            srv.shutdown()
+            srv.server_close()
+
+
 class Cli(unittest.TestCase):
     def test_decide_with_handover_flag(self):
         r = subprocess.run([sys.executable, "-m", "assay", "decide", "--backend", "keyword", "--handover", "keyword",
