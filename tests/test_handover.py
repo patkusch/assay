@@ -112,14 +112,22 @@ class BenchScript(unittest.TestCase):
         self.assertEqual([r["rule"] for r in rows][:2], ["small model alone", "hand up when not sure"])
         self.assertEqual(rows[-1]["rule"], "big model alone")
         md = bench.markdown(rows, "tiny", "huge", "calibrated")
-        self.assertIn("| small model alone | 0.0% | 50.0% | 50.0% | 0.10 s | n/a | n/a |", md)
-        self.assertIn("| big model alone | 100.0% | 100.0% | 100.0% | 0.50 s | 50.0% | 100.0% |", md)
+        self.assertIn("| small model alone | 0.0% | 50.0% | -50.0 (-100.0 to +0.0) | 50.0% | 0.10 s | n/a | n/a |", md)
+        self.assertIn("| big model alone | 100.0% | 100.0% | +0.0 (+0.0 to +0.0) | 100.0% | 0.50 s | 50.0% | 100.0% |", md)
+        self.assertEqual(rows[-1]["gap_interval"], (0.0, 0.0))
 
     def test_own_cutoffs(self):
         rows = bench.sweep(self.small, self.big, (0.5, 0.95))
         self.assertEqual([r["rule"] for r in rows], ["small model alone", "hand up when not sure", "hand up below 50%", "hand up below 95%", "big model alone"])
         bad = bench.main([str(ROOT / "bench/receipts/v2-gemma3-4b.json"), str(ROOT / "bench/receipts/v2-gemma3-12b.json"), "--cutoffs", "1.5"])
         self.assertEqual(bad, 2)
+
+    def test_gap_interval_brackets_the_gap_and_is_zero_width_for_identical_lists(self):
+        a, b = [1, 0, 1, 1, 0, 1, 1, 1], [1, 1, 1, 1, 1, 1, 1, 1]
+        lo, hi = bench.gap_interval(a, b, draws=400)
+        self.assertLessEqual(lo, -0.25)
+        self.assertLessEqual(-0.25, hi)
+        self.assertEqual(bench.gap_interval(b, b, draws=50), (0.0, 0.0))
 
     def test_runs_on_the_real_receipts(self):
         with tempfile.TemporaryDirectory() as d:

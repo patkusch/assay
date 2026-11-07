@@ -34,7 +34,12 @@
           "accuracy": 0.7875
         }
       },
-      "random_same_share": 0.7406249999999973
+      "random_same_share": 0.7406249999999973,
+      "gap_to_big": -0.15937500000000004,
+      "gap_interval": [
+        -0.20625,
+        -0.1125
+      ]
     },
     {
       "rule": "hand up when not sure",
@@ -67,7 +72,12 @@
           "accuracy": 0.9125
         }
       },
-      "random_same_share": 0.8256406249999998
+      "random_same_share": 0.8256406249999998,
+      "gap_to_big": -0.015625,
+      "gap_interval": [
+        -0.034375,
+        0.0
+      ]
     },
     {
       "rule": "hand up below 50%",
@@ -100,7 +110,12 @@
           "accuracy": 0.875
         }
       },
-      "random_same_share": 0.7627968749999997
+      "random_same_share": 0.7627968749999997,
+      "gap_to_big": -0.125,
+      "gap_interval": [
+        -0.165625,
+        -0.084375
+      ]
     },
     {
       "rule": "hand up below 60%",
@@ -133,7 +148,12 @@
           "accuracy": 0.9625
         }
       },
-      "random_same_share": 0.8018124999999994
+      "random_same_share": 0.8018124999999994,
+      "gap_to_big": -0.034375000000000044,
+      "gap_interval": [
+        -0.059375,
+        -0.009375
+      ]
     },
     {
       "rule": "hand up below 70%",
@@ -166,7 +186,12 @@
           "accuracy": 0.9625
         }
       },
-      "random_same_share": 0.8193593750000003
+      "random_same_share": 0.8193593750000003,
+      "gap_to_big": -0.006249999999999978,
+      "gap_interval": [
+        -0.021875,
+        0.009375
+      ]
     },
     {
       "rule": "hand up below 80%",
@@ -199,7 +224,12 @@
           "accuracy": 0.975
         }
       },
-      "random_same_share": 0.8415937499999993
+      "random_same_share": 0.8415937499999993,
+      "gap_to_big": 0.006249999999999978,
+      "gap_interval": [
+        0.0,
+        0.015625
+      ]
     },
     {
       "rule": "hand up below 90%",
@@ -232,7 +262,12 @@
           "accuracy": 0.975
         }
       },
-      "random_same_share": 0.8727499999999998
+      "random_same_share": 0.8727499999999998,
+      "gap_to_big": 0.006249999999999978,
+      "gap_interval": [
+        0.0,
+        0.015625
+      ]
     },
     {
       "rule": "hand up below 95%",
@@ -265,7 +300,12 @@
           "accuracy": 0.9625
         }
       },
-      "random_same_share": 0.8811562500000001
+      "random_same_share": 0.8811562500000001,
+      "gap_to_big": 0.0031249999999999334,
+      "gap_interval": [
+        0.0,
+        0.009375
+      ]
     },
     {
       "rule": "hand up below 99%",
@@ -298,7 +338,12 @@
           "accuracy": 0.95
         }
       },
-      "random_same_share": 0.8903124999999994
+      "random_same_share": 0.8903124999999994,
+      "gap_to_big": 0.0,
+      "gap_interval": [
+        0.0,
+        0.0
+      ]
     },
     {
       "rule": "big model alone",
@@ -331,7 +376,12 @@
           "accuracy": 0.95
         }
       },
-      "random_same_share": 0.9000000000000032
+      "random_same_share": 0.9000000000000032,
+      "gap_to_big": 0.0,
+      "gap_interval": [
+        0.0,
+        0.0
+      ]
     }
   ]
 }

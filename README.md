@@ -108,9 +108,9 @@ A small model that knows when it is unsure can hand those questions to a bigger 
 | 4B, hand up below 80% confidence | 63% | 90.6% | 1.84 s |
 | gemma3 12B alone | 100% | 90.0% | 2.50 s |
 
-Plainly: hand up half the items and you are within a point of the 12B alone, in 38% less time. Hand up the same half picked at random and you get 81.9%, so it is the small model's calibrated confidence that does the work, not the extra calls. With word scoring, the 4B's own "not sure" hands up 45% and gets 89.1%. Full tables with every cut-off and every task: [handover-4b-12b.md](bench/receipts/handover-4b-12b.md) and [handover-4b-word-12b.md](bench/receipts/handover-4b-word-12b.md).
+Plainly: hand up half the items and you are within a point of the 12B alone, in 38% less time. That 0.6-point gap has a 95% interval of -2.2 to +0.9 points from resampling the items, so the pair and the 12B alone cannot be told apart on this many items. Hand up the same half picked at random and you get 81.9%, so it is the small model's calibrated confidence that does the work, not the extra calls. With word scoring, the 4B's own "not sure" hands up 45% and gets 89.1%. Full tables with every cut-off and every task: [handover-4b-12b.md](bench/receipts/handover-4b-12b.md) and [handover-4b-word-12b.md](bench/receipts/handover-4b-word-12b.md).
 
-What to keep in mind: it is 320 items, so the 80% row beating the 12B alone (90.6% against 90.0%) is inside noise. Both models run on the same laptop, so the saving is time, not money. The big model here is only 12B; a frontier model would move the right-answer ceiling, and the hand-up share, a long way.
+What to keep in mind: it is 320 items, so the 80% row beating the 12B alone (90.6% against 90.0%, interval +0.0 to +1.6) is inside noise too. Both models run on the same laptop, so the saving is time, not money. The big model here is only 12B; a frontier model would move the right-answer ceiling, and the hand-up share, a long way.
 
 To use it, name the bigger model and the cut-off. Each answer then says which model gave it (`answered_by`):
 

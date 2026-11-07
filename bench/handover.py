@@ -81,14 +81,32 @@ def random_hand_over(small: dict[str, dict], big: dict[str, dict], share: float,
     return total / draws
 
 
+def per_item(small: dict[str, dict], big: dict[str, dict], rule) -> list[int]:
+    """1 or 0 per shared item, in id order: was the answer under this rule right?"""
+    return [big[i]["correct"] if rule(small[i]) else small[i]["correct"] for i in sorted(set(small) & set(big))]
+
+
+def gap_interval(a: list[int], b: list[int], draws: int = 1000, seed: int = 0) -> tuple[float, float]:
+    """95% interval for mean(a) - mean(b), from resampling the paired items. Excludes zero = outside noise."""
+    rng = random.Random(seed)
+    n = len(a)
+    gaps = sorted(sum(a[j] - b[j] for j in (rng.randrange(n) for _ in range(n))) / n for _ in range(draws))
+    return gaps[int(0.025 * draws)], gaps[int(0.975 * draws) - 1]
+
+
 def sweep(small: dict[str, dict], big: dict[str, dict], cutoffs=CUTOFFS) -> list[dict]:
-    rows = [dict(rule="small model alone", **hand_over(small, big, lambda s: False))]
-    rows.append(dict(rule="hand up when not sure", **hand_over(small, big, lambda s: s["unsure"])))
-    for c in cutoffs:
-        rows.append(dict(rule=f"hand up below {c:.0%}", **hand_over(small, big, lambda s, c=c: s["confidence"] < c)))
-    rows.append(dict(rule="big model alone", **hand_over(small, big, lambda s: True)))
-    for r in rows:
+    rules = [("small model alone", lambda s: False), ("hand up when not sure", lambda s: s["unsure"])]
+    rules += [(f"hand up below {c:.0%}", lambda s, c=c: s["confidence"] < c) for c in cutoffs]
+    rules.append(("big model alone", lambda s: True))
+    big_alone = per_item(small, big, rules[-1][1])
+    rows = []
+    for name, rule in rules:
+        r = dict(rule=name, **hand_over(small, big, rule))
         r["random_same_share"] = random_hand_over(small, big, r["share_handed"])
+        mine = per_item(small, big, rule)
+        r["gap_to_big"] = sum(mine) / len(mine) - sum(big_alone) / len(big_alone)
+        r["gap_interval"] = (0.0, 0.0) if name == "big model alone" else gap_interval(mine, big_alone)
+        rows.append(r)
     return rows
 
 
@@ -103,12 +121,16 @@ def markdown(rows: list[dict], small_name: str, big_name: str, cond: str) -> str
            "An item goes to the big model when the small model's confidence is below the cut-off. "
            "Time is the small model's call plus the big model's when it was handed up. "
            "\"Random, same share\" hands up the same number of items picked at random (mean of 200 draws).", "",
+           "\"Gap to big alone\" is the rule's right-answer rate minus the big model's, in points, with a 95% interval from 1,000 "
+           "resamples of the items: an interval that includes zero means the gap is inside noise. "
            "The last two columns look only at the handed-up items: how many the small model had right, and how many the big model got right.", "",
-           "| Rule | Share handed up | Right answers | Random, same share | Time per item | Small model on handed-up | Big model on handed-up |",
-           "|---|---|---|---|---|---|---|"]
+           "| Rule | Share handed up | Right answers | Gap to big alone | Random, same share | Time per item | Small model on handed-up | Big model on handed-up |",
+           "|---|---|---|---|---|---|---|---|"]
     for r in rows:
         on = lambda k: pct(r[k]) if r[k] is not None else "n/a"  # noqa: E731
-        out.append(f"| {r['rule']} | {pct(r['share_handed'])} | {pct(r['accuracy'])} | {pct(r['random_same_share'])} | "
+        lo, hi = r["gap_interval"]
+        gap = f"{100 * r['gap_to_big']:+.1f} ({100 * lo:+.1f} to {100 * hi:+.1f})"
+        out.append(f"| {r['rule']} | {pct(r['share_handed'])} | {pct(r['accuracy'])} | {gap} | {pct(r['random_same_share'])} | "
                    f"{r['ms_per_item'] / 1000:.2f} s | {on('small_right_on_handed')} | {on('big_right_on_handed')} |")
     tasks = list(rows[0]["per_task"])
     out += ["", "## Per task: right answers (share handed up)", "", "| Rule | " + " | ".join(tasks) + " |", "|---|" + "---|" * len(tasks)]
