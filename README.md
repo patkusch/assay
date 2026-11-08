@@ -57,7 +57,8 @@ print(answer.value, answer.confidence, answer.stability, answer.abstain)
 1. **Order-proof.** Models lean towards whichever option they see first. assay shows the options in rotated orders and averages the results. Each answer carries a `stability` number: how often the top pick survived reordering.
 2. **Calibration you can fit.** Raw model odds are far too confident. Give assay a few dozen labelled examples of your task and it rescales the odds so "80% sure" is closer to right 80% of the time (`assay.calibrate.TemperatureCalibrator`).
 3. **It can say "not sure".** The calibrator also works out which answers cannot be ruled out. If more than one remains, the answer is marked `abstain`.
-4. **A scoreboard that reports failures.** `bench/` holds four tasks (1,370 items) whose right answers were written by construction, never taken from another model, and checked by a blind reader. Every run writes raw receipts you can recompute.
+4. **A bigger model only when needed.** `--handover gemma3:12b` lets the small model answer when it is sure and passes the rest up. Measured: half the questions handed up, within a point of the big model alone, in 38% less time.
+5. **A scoreboard that reports failures.** `bench/` holds four tasks (1,370 items) whose right answers were written by construction, never taken from another model, and checked by a blind reader. Every run writes raw receipts you can recompute.
 
 ## See it
 
