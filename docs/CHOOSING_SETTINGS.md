@@ -10,7 +10,7 @@ Where to look: [bench/receipts/comparisons.md](../bench/receipts/comparisons.md)
 
 ### Or keep the small model, and hand up what it is not sure about
 
-If the big model is too slow for every call, let the small one answer when its calibrated confidence is high and pass the rest up (`--handover gemma3:12b --handover-below 0.7`). On the same 320 items that got 89.4% right against 90.0% for the 12B alone, with 49% of items handed up and 38% less time per item. It only works because the small model is calibrated: handing up the same share at random got 81.9%. Fit the calibration first (section 6).
+If the big model is too slow for every call, let the small one answer when its calibrated confidence is high and pass the rest up (`--handover gemma3:12b --handover-below 0.7`). On the same 320 items that got 89.4% right against 90.0% for the 12B alone, with 49% of items handed up and 38% less time per item. It only works because the small model is calibrated: handing up the same share at random got 81.9%. Fit the calibration first (section 6). If the big model has its own calibration file, pass it with `--handover-calibration`; the two are never shared, because a calibration fitted on one model is wrong for another.
 
 Where to look: [bench/receipts/handover-4b-12b.md](../bench/receipts/handover-4b-12b.md).
 
