@@ -117,7 +117,7 @@ def markdown(receipts: dict, summary: dict) -> str:
          f"Option order was averaged over {cfg['orders']} rotations, so only the wording changes.", "",
          f"- **The answer changed with the wording on {p['answer_changed_with_wording']:.1%} of items** (at least one wording gave a different top answer).",
          f"- **Two wordings disagreed on {p['pairwise_disagreement']:.1%} of pairs** on average.",
-         f"- **Accuracy by wording:** " + ", ".join(f"{a:.1%}" for a in p["accuracy_by_wording"]) + f" (spread {p['accuracy_spread'] * 100:.1f} points). The first is the original wording.",
+         "- **Accuracy by wording:** " + ", ".join(f"{a:.1%}" for a in p["accuracy_by_wording"]) + f" (spread {p['accuracy_spread'] * 100:.1f} points). The first is the original wording.",
          f"- **Taking the majority answer across the wordings:** {p['majority_vote_accuracy']:.1%}, against {p['mean_single_accuracy']:.1%} for the average single wording "
          f"and {max(p['accuracy_by_wording']):.1%} for the best one."]
     if "ensemble_accuracy" in p:

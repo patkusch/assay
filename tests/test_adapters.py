@@ -5,10 +5,7 @@ Two layers:
   * live tests run the real projects and skip cleanly unless the clones, their venvs and cached weights are present
     (they live in assay-clones/, or wherever ASSAY_CLONES points).
 """
-import json
 import math
-import os
-import stat
 import sys
 import tempfile
 import unittest

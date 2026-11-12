@@ -31,7 +31,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 
 from assay.calibrate import (  # noqa: E402
     FixedTemperatureCalibrator, PriorCalibrator, ShrunkTemperatureCalibrator, TemperatureCalibrator,
-    _apply_temperature, _fit_temperature, pooled_temperature,
+    _fit_temperature, pooled_temperature,
 )
 from assay.metrics import accuracy, brier, ece, nll  # noqa: E402
 

@@ -1,6 +1,6 @@
 import unittest
 
-from assay import Question, Request, decide, decide_one
+from assay import Question, decide_one
 from assay.backends.mock import KeywordBackend
 from assay.engine import average_probs
 from assay.server import BadRequest, parse_request

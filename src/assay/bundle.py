@@ -216,7 +216,7 @@ def describe(bundle: CalibrationBundle) -> str:
                          f"(aimed for {ho['target_coverage'] * 100:.0f}%).")
         else:
             r = cal.report
-            lines.append(f"  Not enough examples for a fair check, so these numbers use the same examples as the fit.")
+            lines.append("  Not enough examples for a fair check, so these numbers use the same examples as the fit.")
             lines.append(f"  Calibration error: {r['ece_before']:.3f} before, {r['ece_after']:.3f} after (lower is better).")
             lines.append(f"  Aimed for the true answer being in the not-sure set {(1 - cal.alpha) * 100:.0f}% of the time.")
     return "\n".join(lines)
