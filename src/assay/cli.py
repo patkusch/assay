@@ -5,6 +5,7 @@ import argparse
 import json
 import sys
 
+from . import __version__
 from .bundle import CalibrationBundle, describe, fit_bundle, load_labelled, questions_from_body
 from .server import BadRequest, run_request, serve
 from .types import BackendError
@@ -47,6 +48,7 @@ def parse_question_arg(spec: str) -> dict:
 
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="assay", description="Typed, calibrated decisions from a small local model.")
+    p.add_argument("--version", action="version", version=f"assay {__version__}")
     sub = p.add_subparsers(dest="cmd", required=True)
 
     def common(sp):
