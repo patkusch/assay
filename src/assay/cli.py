@@ -154,7 +154,11 @@ def main(argv: list[str] | None = None) -> int:
             serve(backend, args.bind, args.port, args.orders, calibrators, args.confidence_floor, bundle, args.cors, handover)
             return 0
         if args.request:
-            raw = sys.stdin.read() if args.request == "-" else open(args.request, encoding="utf-8").read()
+            if args.request == "-":
+                raw = sys.stdin.read()
+            else:
+                with open(args.request, encoding="utf-8") as f:
+                    raw = f.read()
             body = json.loads(raw)
         else:
             if args.state is None or not args.question:
