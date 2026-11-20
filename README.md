@@ -244,3 +244,7 @@ Run the tests: `PYTHONPATH=src python3 -m unittest discover -s tests`
 A measured test of the long-input wrapper, a rewording test (the flip check only reverses the options), word scoring on 12B, a small encoder backend to close the speed gap, and other model families.
 
 MIT licence.
+
+---
+
+[Changelog](CHANGELOG.md) · [Contributing](CONTRIBUTING.md) · [Security policy](SECURITY.md)
